@@ -43,7 +43,8 @@
 `-v2` creates a patch from the last commit and adds "v2" to the header  
 
 #### git rebase
-`git rebase -i HEAD~3` allows you to rebase (merge) the top 3 commits  
+Rebasing in interactive mode `-i` allows you to reorder, delete, edit and squash commits together  
+`git rebase -i HEAD~3` allows you to rebase the top 3 commits  
 `git rebase master` from inside a branch applies your commits on top of the master (pull the master before this)  
 
 #### git send-email
