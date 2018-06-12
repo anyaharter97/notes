@@ -10,11 +10,11 @@ Support Team: 1-919-754-4301
 * IRC: #emergency
 
 ### People
-Jaroslav (Jarda) Suchanek – jsuchane  
-Cole Robinson – crobinson  
-Pavel Hrdina – phrdina  
-Katerina Koukiou – kkoukiou  
-Karen Noel – knoel  
+* Jaroslav (Jarda) Suchanek – jsuchane  
+* Cole Robinson – crobinson  
+* Pavel Hrdina – phrdina  
+* Katerina Koukiou – kkoukiou  
+* Karen Noel – knoel  
 
 ### Terms
 RHEL – RedHat Enterprise Linux

@@ -18,6 +18,7 @@
 3. Delete old patches first to make tab-complete easier and also so you don't mess up  
 4. `git format-patch -1` or whatever is relevant (see below)  
 5. Check the file created to make sure it has the right header etc.  
+  * if sending multiple, add a subject line and blurb to cover letter and check all files
 6. `git send-email <patch-file>` with appropriate arguments if desired (see below)  
 
 ## Commands
@@ -47,5 +48,6 @@
 
 #### git send-email
 `git send-email <patch-file>` sends an email with the &lt;patch-file&gt; (interactively requests sendee)  
+`git send-email *.patch` sends all patches (make sure all old patches are deleted)  
 `--to <address>` sends patch email to &lt;address&gt;  
 `--cc <address>` sends patch email and CCs &lt;address&gt;  

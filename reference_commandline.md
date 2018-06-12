@@ -47,31 +47,31 @@ to display all of the programs installed.
 The `less` command also puts you into a sort of vim-like mode where you can search using vim hotkeys etc.
 
 ## Package Files Commands
-`rpm -ql NetworkManager` lists all of the files that are in the package NetworkManager  
-`which nmcli` tells you where it is  
-``rpm -qf `which nmcli` `` tells you which package owns it  
+* `rpm -ql NetworkManager` lists all of the files that are in the package NetworkManager  
+* `which nmcli` tells you where it is  
+* ``rpm -qf `which nmcli` `` tells you which package owns it  
 
 ## Directories
-`/etc` contains all system related configuration files in here or in its sub-directories, this is where NetworkManager lives  
-`/usr` has a lot of good stuff in it  
-`/usr/bin` and `/usr/sbin` contain mainly data and executables installed by packages (both are always in `$PATH`)  
-`/usr/include` has a bunch of header files that can be used in includes in code  
-`/usr/share` has mostly data and documentation  
-`/home` is what is more accurately "user" stuff  
-`/tmp` is like a standard temp except that it has an auto-retention policy  
-`/root` is root's home directory  
+* `/etc` contains all system related configuration files in here or in its sub-directories, this is where NetworkManager lives  
+* `/usr` has a lot of good stuff in it  
+  * `/usr/bin` and `/usr/sbin` contain mainly data and executables installed by packages (both are always in `$PATH`)  
+  * `/usr/include` has a bunch of header files that can be used in includes in code  
+  * `/usr/share` has mostly data and documentation  
+* `/home` is what is more accurately "user" stuff  
+* `/tmp` is like a standard temp except that it has an auto-retention policy  
+* `/root` is root's home directory  
 
 #### Navigation
-`cd` and `cd ~` take you home  
-`cd -` takes you back to where you were   
-`cd ..` takes you up one directory (you can move multiple levels at a time like this: `cd ../../`)  
-`pwd` is print working directory  
-`ls` shows all files in cwd (current working directory)  
-`ls -l` shows details  
-`ls -a` shows all files (including hidden files)  
+* `cd` and `cd ~` take you home  
+  * `cd -` takes you back to where you were   
+  * `cd ..` takes you up one directory (you can move multiple levels at a time with `cd ../../`)  
+* `pwd` is print working directory  
+* `ls` shows all files in cwd (current working directory)  
+  * `ls -l` shows details  
+  * `ls -a` shows all files (including hidden files)  
 
 ## Miscellaneous Commands
-`grep` helps you find things  
-`ctr` + `d` will close the terminal  
-`find . -name \*~` will find all files ending in ~ (the backslash escapes the \*)  
-`ps axww` displays details about processes
+* `git grep` helps you find things  
+* `ctr` + `d` will close the terminal  
+* `find . -name \*~` will find all files ending in ~ (the backslash escapes the \*)  
+* `ps axww` displays details about processes
