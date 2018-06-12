@@ -56,7 +56,9 @@ The key identifying files are `autogen.sh` and (`configure.ac` or `configure.in`
 #### Misc
 * `ps axwww | grep qemu` will give you the QEMU command line generated in qemu_command.c  
 * `sudo vi /var/log/libvirt/qemu/f27.log` will give you the log for the VM specified, in this case f27  
-* `qemuxml2argvtest` is one of the big test files  
+* `qemuxml2argvtest.c` is one of the big test files  
+* `name-escape.xml` is the file where we test escaping things  
+* `VIR_TEST_DEBUG=2 ./tests/qemuxml2argvtest 2>&1 | less` runs the test file with debugging so you can see the full expected and received and then redirects `stderr` output to `stdout` where you can page through it in `less` mode  
 
 
 #### Building From Source
