@@ -27,7 +27,7 @@
 #### Getting Configure System File
 1. The command `rmp --eval "%configure"` basically gives you the config stuff compatible with the distribution you're running
 2. Copy and paste it into `~/bin/configuresystem.sh` with some extra stuff (below)
-```
+```sh
 #!/bin/bash
 exec ./configure --host=x86_64-redhat-linux-gnu --build=x86_64-redhat-linux-gnu \
 >...--program-prefix= \
