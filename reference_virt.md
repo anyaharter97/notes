@@ -66,8 +66,8 @@ The key identifying files are `autogen.sh` and (`configure.ac` or `configure.in`
 2. Running `./configure` generates make files from the make file templates  
 These scripts require some packages to run. Install these by running these two commands:
   ```console
-  $  sudo yum builddep libvirt
-  $  sudo yum install libtool autoconf
+  foo@bar:~$  sudo yum builddep libvirt
+  foo@bar:~$  sudo yum install libtool autoconf
   ```
   * we created a `configuresystem.sh` script to run `./configure` with the appropriate parameters
 3. There are a couple of notable "make" commands:
