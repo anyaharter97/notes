@@ -1,0 +1,118 @@
+body {
+  --color1: #ff8d8d9e;
+  --color2: #80cdff91;
+  --color3: #9aff8b82;
+  --color4: #64847aab;
+  --color5: #b2ccc4ab;
+  --color6: #d1f1c4ab;
+  --color7: #E57A44c2;
+  --color8: #BCD8C1c2;
+  --color9: #E3D985c2;
+  --color10: #3b7161c2;
+  --color11: #6cad9ac2;
+  --color12: #96c581c2;
+  --color13: #000000;
+  --color14: #0000FF;
+  --color15: #FF0000;
+  --color16: #E57A44a1;
+  --color17: #BCD8C1a1;
+  --color18: #E3D985a1;
+}
+
+body {
+  /* dark clock */
+  --colorbkg: black;
+  --colordig: #ffffff7d;
+  --colorsec1: #ffffff6e;
+
+  /* light clock */
+  /* --colorbkg: white;
+  --colordig: #00000054;
+  --colorsec1: #00000045; */
+
+  /* original day clock */
+  /* --colorh: var(--color13);
+  --colorm: var(--color14);
+  --colors: var(--color15); */
+
+  /* original night clock */
+  /* --colorh: var(--color1);
+  --colorm: var(--color2);
+  --colors: var(--color3); */
+
+  /* tuscan day clock */
+  /* --colorh: var(--color7);
+  --colorm: var(--color8);
+  --colors: var(--color9); */
+
+  /* tuscan night clock */
+  /* --colorh: var(--color16);
+  --colorm: var(--color17);
+  --colors: var(--color18); */
+
+  /* forest day clock */
+  /* --colorh: var(--color10);
+  --colorm: var(--color11);
+  --colors: var(--color12); */
+
+  /* forest night clock */
+  --colorh: var(--color4);
+  --colorm: var(--color5);
+  --colors: var(--color6);
+
+}
+
+div.clock_container {
+  align-items: center;
+  align-content: center;
+}
+div.clock {
+  width:225px;
+  height:225px;
+  position:relative;
+  margin-left: 225px;
+  margin-top: 225px;
+}
+div.dig, div.hour, div.min, div.sec {
+    position:absolute;
+}
+div.hour, div.min, div.sec {
+    width:5px;
+    height:5px;
+    font-size:5px;
+}
+div.dig {
+    width:30px;
+    height:30px;
+    font-family:arial,verdana,sans-serif;
+    font-size:36px;
+    text-align:center;
+    padding-top:10px
+}
+body {
+  background-color: var(--colorbkg);
+}
+div.dig {
+  color: var(--colordig);
+}
+div.hour {
+  background: var(--colorh);
+}
+div.min {
+  background: var(--colorm);
+}
+div.sec {
+  background: var(--colors);
+}
+#sec1 {
+  background: var(--colorsec1);
+  width: 6px;
+  height: 6px;
+  font-size: 6px;
+}
+#min1 {
+  background: none;
+}
+#hour1 {
+  background: none;
+}
