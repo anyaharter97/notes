@@ -1,64 +1,41 @@
-body {
-  --color1: #ff8d8d9e;
-  --color2: #80cdff91;
-  --color3: #9aff8b82;
-  --color4: #64847aab;
-  --color5: #b2ccc4ab;
-  --color6: #d1f1c4ab;
-  --color7: #E57A44c2;
-  --color8: #BCD8C1c2;
-  --color9: #E3D985c2;
-  --color10: #3b7161c2;
-  --color11: #6cad9ac2;
-  --color12: #96c581c2;
-  --color13: #000000;
-  --color14: #0000FF;
-  --color15: #FF0000;
-  --color16: #E57A44a1;
-  --color17: #BCD8C1a1;
-  --color18: #E3D985a1;
-}
-
+/* light or dark clock */
 body {
   /* dark clock */
   --colorbkg: black;
   --colordig: #ffffff7d;
   --colorsec1: #ffffff6e;
+  --opacity: 0.5;
+  --filter: saturate(80%) brightness(140%);
 
   /* light clock */
   /* --colorbkg: white;
   --colordig: #00000054;
-  --colorsec1: #00000045; */
+  --colorsec1: #00000045;
+  --opacity: 0.6;
+  --filter: saturate(100%); */
+}
 
+/* clock color palette */
+body {
   /* original day clock */
-  /* --colorh: var(--color13);
-  --colorm: var(--color14);
-  --colors: var(--color15); */
+  /* --colorh: #8a8a8a;
+  --colorm: #0000FF;
+  --colors: #FF0000; */
 
   /* original night clock */
-  /* --colorh: var(--color1);
-  --colorm: var(--color2);
-  --colors: var(--color3); */
+  /* --colorh: #f97f7f;
+  --colorm: #79bae4;
+  --colors: #86ef76; */
 
-  /* tuscan day clock */
-  /* --colorh: var(--color7);
-  --colorm: var(--color8);
-  --colors: var(--color9); */
+  /* tuscan clock */
+  /* --colorh: #f38854;
+  --colorm: #7ed08a;
+  --colors: #f3e772; */
 
-  /* tuscan night clock */
-  /* --colorh: var(--color16);
-  --colorm: var(--color17);
-  --colors: var(--color18); */
-
-  /* forest day clock */
-  /* --colorh: var(--color10);
-  --colorm: var(--color11);
-  --colors: var(--color12); */
-
-  /* forest night clock */
-  --colorh: var(--color4);
-  --colorm: var(--color5);
-  --colors: var(--color6);
+  /* forest clock */
+  --colorh: #3b7161;
+  --colorm: #6cad9a;
+  --colors: #96c581;
 
 }
 
@@ -73,7 +50,7 @@ div.clock {
   margin-left: 225px;
   margin-top: 225px;
 }
-div.dig, div.hour, div.min, div.sec {
+div.dig, div.center, div.hour, div.min, div.sec {
     position:absolute;
 }
 div.hour, div.min, div.sec {
@@ -97,22 +74,34 @@ div.dig {
 }
 div.hour {
   background: var(--colorh);
+  opacity: var(--opacity);
+  filter: var(--filter);
 }
 div.min {
   background: var(--colorm);
+  opacity: var(--opacity);
+  filter: var(--filter);
 }
 div.sec {
   background: var(--colors);
+  opacity: var(--opacity);
+  filter: var(--filter);
 }
-#sec1 {
+#center {
   background: var(--colorsec1);
   width: 6px;
   height: 6px;
   font-size: 6px;
+  top: 0px;
+  left: 0px;
+  margin: 0px;
+}
+#sec1 {
+  display: none;
 }
 #min1 {
-  background: none;
+  display: none;
 }
 #hour1 {
-  background: none;
+  display: none;
 }
