@@ -15,7 +15,7 @@ If you added either `is_bool` or `is_onoff` in the device file, you must add `is
 4. Run as simple as a command as you can to verify the XML is being created correctly, for example:
   ```
   ./virt-install --connect test:///default --name foo --ram 64 --disk none --pxe --print-xml --<device> <key-value-pair>
-  ```
+  ```  
     * the end would be `--network mtu.size=1500`
 5. Edit `tests/clitest.py` to an `add_compare` call with the most attributes after that device tag to add an argument with a key-value pair matching what you just created
 6. Run `./setup.py test` and check that it failed as expected because of the line you just added and nowhere else
