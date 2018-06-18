@@ -5,21 +5,20 @@
 `~/.gitignore` contains global gitignore instructions which are the files to be untracked by git   
 `<project-directory>/git/config` contains project specific git configurations  
 
-
-## Incorporating Master Changes on Branch
-1. `git checkout master` to move to master  
-2. `git pull` from master to get all of the changes  
-3. `git checkout <branch>` to go back to the branch  
-4. `git rebase master` to apply changes branch changes on top of master within branch  
-
 ## Sending Patches to Mailing List
-1. Make sure all changes have been added and incorporated into the latest commit (or more if necessary)  
+1. Make sure the branch has all changes from master before sending patches and make sure all changes have been added and incorporated into the latest commit (or more if necessary)  
 2. `git commit --amend` change the commit message to be a good one to be sent out  
 3. Delete old patches first to make tab-complete easier and also so you don't mess up  
 4. `git format-patch -1` or whatever is relevant (see below)  
 5. Check the file created to make sure it has the right header etc.  
   * if sending multiple, add a subject line and blurb to cover letter and check all files
 6. `git send-email <patch-file>` with appropriate arguments if desired (see below)  
+
+## Incorporating Master Changes on Branch
+1. `git checkout master` to move to master  
+2. `git pull` from master to get all of the changes  
+3. `git checkout <branch>` to go back to the branch  
+4. `git rebase master` to apply changes branch changes on top of master within branch  
 
 ## Commands
 #### misc
