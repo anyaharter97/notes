@@ -82,15 +82,15 @@ These scripts require some packages to run. Install these by running these two c
 
 13. Run the command `VIR_TEST_REGENERATE_OUTPUT=1 ./tests/qemuxml2argvtest` to rewrite the `tests/qemuxml2argvdata/<test-name>.args` file to the received output
 
-14. Check the git diffs to verify that nothing unexpected was overwritten during the regeneration of the expected test output
+14. Check the diffs to verify that nothing unexpected was overwritten during the regeneration of the expected test output
 
 15. Repeat steps 11.-14. for `qemuxml2xmltest` if necessary:
     * Run `VIR_TEST_DEBUG=2 ./tests/qemuxml2xmltest 2>&1 | less` and search for "FAIL". Scroll up to verify that only the desired changes caused the failure
     * Commit all changes so the diffs will be easier to see later
     * Run the command `VIR_TEST_REGENERATE_OUTPUT=1 ./tests/qemuxml2xmltest` to rewrite the `tests/qemuxml2xmloutdata/<test-name>.xml` file to the received output
-    * Check the git diffs to verify that nothing unexpected was overwritten during the regeneration of the expected test output
+    * Check the diffs to verify that nothing unexpected was overwritten during the regeneration of the expected test output
 
-16. Run `make check` one more time to ensure that none of the tests FAIL unexpectedly, `make syntax-check` to ensure no styling errors were introduced, and check the diffs once more to confirm that no expected changes were made
+16. Run `make check` one more time to ensure that none of the tests FAIL unexpectedly and `make syntax-check` to ensure no styling errors were introduced
 
 17. Commit the changes and make a patch
 
@@ -123,15 +123,15 @@ These scripts require some packages to run. Install these by running these two c
 11. Run `make check`, and verify that only `qemuxml2argvtest` breaks
     * Other tests such as `virschema` might fail if your xml is invalid
 
-12. Run `VIR_TEST_DEBUG=2 ./tests/qemuxml2argvtest 2>&1 | less` and search for "FAIL". Scroll up to verify that only the desired changes caused the failure and ensure that the comma was escaped as expected
+12. Run `VIR_TEST_DEBUG=2 ./tests/qemuxml2argvtest 2>&1 | less` and search for "FAIL". Scroll up to verify that only the desired changes caused the failure AND ensure that the comma was escaped as expected
     * If you encounter `QEMU Driver error: unsupported configuration...`, edit `tests/qemuxml2argvtest.c` under "DO_TEST" for "name-escape" copy any configurations from failing test file from step 7., run `make check` again, and repeat 12.
 
 13. Commit all changes so the diffs will be easier to see later
 
 14. Run the command `VIR_TEST_REGENERATE_OUTPUT=1 ./tests/qemuxml2argvtest` to rewrite the `tests/qemuxml2argvdata/name-escape.args` file to the received output
 
-15. Check the git diffs to verify that nothing unexpected was overwritten during the regeneration of the expected test output
+15. Check the diffs to verify that nothing unexpected was overwritten during the regeneration of the expected test output
 
-16. Run `make check` one more time to ensure that none of the tests FAIL unexpectedly, `make syntax-check` to ensure no styling errors were introduced, and check the diffs once more to confirm that no expected changes were made
+16. Run `make check` one more time to ensure that none of the tests FAIL unexpectedly and `make syntax-check` to ensure no styling errors were introduced
 
 17. Commit the changes and make a patch
