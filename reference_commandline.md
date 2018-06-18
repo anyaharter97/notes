@@ -1,4 +1,4 @@
-# Command Line
+# Linux Command Line
 
 ## Configuration
 `~/.bashrc` contains most of the custom configuration of the terminal  

@@ -1,6 +1,6 @@
 # Virtualization
 
-## Virt Stack
+## Projects
 1. **KVM:** Kernel and CPU level, involved with optimization at the low level
   * KVM is at kernel level  
 2. **QEMU:** Hardware emulation, slightly higher level
@@ -9,6 +9,20 @@
   * LibVirt wraps an API around QEMU  
 4. **VirtManager:** User friendly non-commandline management of VMs through LibVirt
   * Virt-Manager wraps a UI around LibVirt  
+
+### Virt Stack
+* VirtManager
+	* LibVirt
+		* QEMU
+			* KVM
+
+### Cockpit (?)
+* Cockpit Machines
+	* LibVirt dbus
+		* LibVirt
+			* QEMU
+				* KVM
+
 
 ## Reference Documents
 * [Cockpit Reference](reference_virt_cockpit.md)
