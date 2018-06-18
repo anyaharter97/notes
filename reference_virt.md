@@ -26,6 +26,6 @@
 
 ## Reference Documents
 * [Cockpit Reference](reference_virt_cockpit.md)
-* [Virt Manager Reference](reference_virt_virtmanager.md)
 * [LibVirt Reference](reference_virt_libvirt.md)
 * [Virsh Reference](reference_virt_virsh.md)
+* [Virt Manager Reference](reference_virt_virtmanager.md)
