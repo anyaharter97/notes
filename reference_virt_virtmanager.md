@@ -16,9 +16,7 @@ If you added either `is_bool` or `is_onoff` in the device file, you must add `is
     * add line `ParserNetwork.add_arg("mtu_size","mtu.size")` to `cli.py`
 
 4. Run as simple as a command as you can to verify the XML is being created correctly, for example:
-  ```
-  ./virt-install --connect test:///default --name foo --ram 64 --disk none --pxe --print-xml --<device> <key-value-pair>
-  ```  
+  `./virt-install --connect test:///default --name foo --ram 64 --disk none --pxe --print-xml --<device> <key-value-pair>`. 
 
     * the end would be `--network mtu.size=1500`
 
