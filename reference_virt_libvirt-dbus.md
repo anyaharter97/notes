@@ -58,7 +58,9 @@ We will use NWFilter as an example:
      #include "secret.h"
      #include "storagepool.h"
      #include "util.h"
+    ```
 
+    ``` diff
     @@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
 
          g_free(connect->domainPath);
@@ -67,7 +69,9 @@ We will use NWFilter as an example:
          g_free(connect->secretPath);
          g_free(connect->storagePoolPath);
          g_free(connect);
+    ```
 
+    ``` diff
     @@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
          if (error && *error)
              return;
