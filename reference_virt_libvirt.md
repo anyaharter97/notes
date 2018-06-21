@@ -1,4 +1,4 @@
-# LibVirt
+# libvirt
 
 Most open source linux C projects are built using a **autotools** aka. autoconf  
 The key identifying files are `autogen.sh` and (`configure.ac` or `configure.in`)  
@@ -19,7 +19,7 @@ The key identifying files are `autogen.sh` and (`configure.ac` or `configure.in`
 * `name-escape.xml` is the file where we test escaping things  
 * `VIR_TEST_DEBUG=2 ./tests/qemuxml2argvtest 2>&1 | less` runs the test file with debugging so you can see the full expected and received and then redirects `stderr` output to `stdout` where you can page through it in `less` mode  
 
-### Building and Running LibVirt
+### Building and Running libvirt
 #### Building from Source
 1. Run `./autogen.sh` which turns the configure file into a script (and maybe runs it?)
 
@@ -40,8 +40,8 @@ These scripts require some packages to run. Install these by running these two c
   Also, NEVER install it, always just run it from source (in this case, the git repo)  
 
 #### Running from Source
-1. There is already LibVirt running on the Fedora distribution, so in order to run the version from git you have to stop the process...  
-`sudo systemctl stop libvirtd` stops the daemon LibVirt process  
+1. There is already libvirt running on the Fedora distribution, so in order to run the version from git you have to stop the process...  
+`sudo systemctl stop libvirtd` stops the daemon libvirt process  
 (`sudo systemctl start libvirtd` starts it again)  
 
     >**Note:**  
