@@ -309,7 +309,6 @@ typedef void
                            GUnixFDList **outFDs,
                            GError **error);
 ```
-<deleteme**>
 >The typedef below essentially is defining a class of function outlining an interface GetProperty method.
 
 ``` c
@@ -329,7 +328,6 @@ typedef void
                                 GVariant **value,
                                 GError **error);
 ```
-<deleteme**>
 >The typedef below essentially is defining a class of function outlining an interface SetProperty method.
 
 ``` c
@@ -349,7 +347,6 @@ typedef void
                                 gpointer userData,
                                 GError **error);
 ```
-<deleteme**>
 >The typedef below essentially is defining a class of function outlining an interface Enumerate method.
 
 ``` c
@@ -364,7 +361,6 @@ typedef void
 typedef gchar **
 (*virtDBusGDBusEnumerateFunc)(gpointer userData);
 ```
-<deleteme**>
 >The virtDBusGDBusMethodTable is defining a struct. There is an instance of this struct for every interface (including connect). The table contains an entry for every method belonging to that interface. A method belongs to an interface if it takes a pointer to that interface as its first argument.
 
 ``` c
@@ -374,7 +370,6 @@ struct _virtDBusGDBusMethodTable {
 };
 typedef struct _virtDBusGDBusMethodTable virtDBusGDBusMethodTable;
 ```
-<deleteme**>
 >The virtDBusGDBusPropertyTable is defining a struct. There is an instance of this struct for every interface (including connect). The table contains an entry for every property belonging to that interface. I have attempted to define a property as something with a corresponding method belonging to that interface which contains the word "Get" (e.g. "GetName") or "Is" (e.g. "IsActive") AND does not take any flag arguments
 
 ``` c
@@ -385,14 +380,12 @@ struct _virtDBusGDBusPropertyTable {
 };
 typedef struct _virtDBusGDBusPropertyTable virtDBusGDBusPropertyTable;
 ```
-<deleteme**>
 >Not really sure what these two typedefs below mean with regards to interfaces
 
 ``` c
 typedef guint virtDBusGDBusSource;
 typedef guint virtDBusGDBusOwner;
 ```
-<deleteme**>
 >The specification seems to explain the function below pretty well. This only has one implementation and takes interface-specific parameters.
 
 ``` c
@@ -414,7 +407,6 @@ GDBusInterfaceInfo *
 virtDBusGDBusLoadIntrospectData(gchar const *interface,
                                 GError **error);
 ```
-<deleteme**>
 >This function below is called by `connect.c` before it calls each of the interface-specific Register functions.
 
 ``` c
@@ -437,7 +429,6 @@ virtDBusGDBusRegisterObject(GDBusConnection *bus,
                             virtDBusGDBusPropertyTable *properties,
                             gpointer userData);
 ```
-<deleteme**>
 >This function below is called within the virtDBus<Interface>Register function which exists for all interfaces. Its arguments define the interface-specific objects created in the introduction of the interface such as the enumerate function and the method and property tables.
 
 ``` c
@@ -461,7 +452,6 @@ virtDBusGDBusRegisterSubtree(GDBusConnection *bus,
                              virtDBusGDBusPropertyTable *properties,
                              gpointer userData);
 ```
-<deleteme**>
 >I don't think the rest of the file is relevant with regards to interfaces.
 
 ``` c
