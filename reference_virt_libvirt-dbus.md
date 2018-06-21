@@ -286,6 +286,8 @@ We will use virtDBusConnectListNWFilters as an example.
         </method>
     ```
 
+    * the parameters for the method are defined and explained at the link in the value field (they should be the "in" direction)
+    * the name for the "out" direction argument is your choice but it should follow the specs for the return value of the method
     * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
         * `b`: gboolean
         * `i`: gint32
