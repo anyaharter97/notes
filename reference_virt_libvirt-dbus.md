@@ -31,9 +31,9 @@ These scripts require some packages to run. Install these by running these two c
 
 There are three main parts of adding an interface to libvirt-dbus: introducing the interface, implementing the properties, and implementing the methods (in the interface file and in `connect.c`).
 
-We will use NWFilter as an example:
-
 #### Introducing the Interface
+We will use NWFilter as an example.
+
 1. Create a new file `data/org.libvirt.NWFilter.xml` and add it to `data/Makefile.am`  
 
     ``` xml
@@ -273,10 +273,33 @@ k
 k
 
 #### Implementing Methods for the Connect Interface
+We will use virtDBusConnectListNWFilters as an example.
 
-k
+1. Add the corresponding xml to the `org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the methods.
 
+    ``` xml
+        <method name="ListNWFilters">
+          <annotation name="org.gtk.GDBus.DocString"
+            value="See https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virConnectListAllNWFilters"/>
+          <arg name="flags" type="u" direction="in"/>
+          <arg name="nwfilters" type="ao" direction="out"/>
+        </method>
+    ```
 
+    * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
+        * `b`: gboolean
+        * `i`: gint32
+        * `u`: guint32
+        * `t`: guint64
+        * `a`: array
+        * `o`: valid DBus object path
+        * `s`: string
+        * `&s`: pointer to a string
+        * `v`: variant
+        * `()`: tuples
+        * `{}`: dictionaries
+
+2.
 
 ### Understanding `gdbus.h` in the Context of Interfaces
 
