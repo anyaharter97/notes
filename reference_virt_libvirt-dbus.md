@@ -1,6 +1,6 @@
 # libvirt-dbus
 
-libvirt-dbus wraps libvirt API to provide a high-level object-oriented API better suited for dbus-based applications.
+libvirt-dbus wraps libvirt API to provide a high-level object-oriented API better suited for dbus-based applications
 
 ### Directories
 * `data` has the `org.libvirt.Interface.xml` file for every interface
@@ -29,7 +29,7 @@ These scripts require some packages to run. Install these by running these two c
 
 ### Adding an Interface
 
-There are three main parts of adding an interface to libvirt-dbus: introducing the interface, implementing the properties, and implementing the methods.
+There are three main parts of adding an interface to libvirt-dbus: introducing the interface, implementing the properties, and implementing the methods (in the interface file and in `connect.c`).
 
 We will use NWFilter as an example:
 
@@ -152,7 +152,7 @@ We will use NWFilter as an example:
                                      connect);
     }
     ```
-
+<deleteme**>
 5. In `src/connect.c`, mirror the following changes:
 
     ``` diff
@@ -204,7 +204,7 @@ We will use NWFilter as an example:
          virConnectPtr connection;
     ```
 
-7. In `src/util.h`, declare the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
+7. In `src/util.h`, define the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
 
     ``` c
     virNWFilterPtr
@@ -223,7 +223,7 @@ We will use NWFilter as an example:
     G_DEFINE_AUTOPTR_CLEANUP_FUNC(virNWFilterPtr, virtDBusUtilVirNWFilterListFree);
     ```
 
-8. In `src/util.c`, define the following three functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
+8. In `src/util.c`, implement the following three functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
 
     ``` c
     virNWFilterPtr
@@ -259,5 +259,157 @@ We will use NWFilter as an example:
         g_free(nwfilters);
     }
     ```
+<deleteme**>
 
-    * It appears that the default identifier used here is the UUID. In the case that there is no UUID, another unique identifier with a lookup method is used
+    * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used
+
+#### Implementing Properties
+
+k
+
+#### Implementing Methods for This Interface
+
+k
+
+#### Implementing Methods for the Connect Interface
+
+k
+
+
+
+### Understanding `gdbus.h`
+
+``` c
+#pragma once
+
+#include <gio/gio.h>
+```
+>The typedef below essentially is defining a class of function outlining an interface method. When implementing a function of this type, if a parameter is unused, it is followed by the G_GNUC_UNUSED attribute annotation.
+
+``` c
+/**
+ * virtDBusGDBusMethodFunc:
+ * @inArgs: input arguments of the method call
+ * @inFDs: list of input file descriptors
+ * @objectPath: the object path the method was called on
+ * @userData: user data passed when registering new object or subtree
+ * @outArgs: return location of output arguments
+ * @outFDs: return location of output file descriptors
+ * @error: return location for error
+ *
+ * Handles D-Bus method call.  In case of error the handler has
+ * to set an @error.
+ */
+typedef void
+(*virtDBusGDBusMethodFunc)(GVariant *inArgs,
+                           GUnixFDList *inFDs,
+                           const gchar *objectPath,
+                           gpointer userData,
+                           GVariant **outArgs,
+                           GUnixFDList **outFDs,
+                           GError **error);
+```
+<deleteme**>
+>The typedef below essentially is defining a class of function outlining an interface GetProperty method.
+
+``` c
+/**
+ * virtDBusGDBusPropertyGetFunc:
+ * @objectPath: the object path the method was called on
+ * @userData: user data passed when registering new object or subtree
+ * @value: return location for property value
+ * @error: return location for error
+ *
+ * Handles D-Bus Get action on a property.  In case of error the handler
+ * has to set an @error, otherwise @value has to be set.
+ */
+typedef void
+(*virtDBusGDBusPropertyGetFunc)(const gchar *objectPath,
+                                gpointer userData,
+                                GVariant **value,
+                                GError **error);
+```
+<deleteme**>
+>The typedef below essentially is defining a class of function outlining an interface SetProperty method.
+
+``` c
+/**
+ * virtDBusGDBusPropertySetFunc:
+ * @objectPath: the object path the method was called on
+ * @value: new value that should be set to the property
+ * @userData: user data passed when registering new object or subtree
+ * @error: return location for error
+ *
+ * Handles D-Bus Set action on a property.  In case of error the handler
+ * has to set an @error.
+ */
+typedef void
+(*virtDBusGDBusPropertySetFunc)(GVariant *value,
+                                const gchar *objectPath,
+                                gpointer userData,
+                                GError **error);
+```
+<deleteme**>
+>The typedef below essentially is defining a class of function outlining an interface Enumerate method.
+
+``` c
+/**
+ * virtDBusGDBusEnumerateFunc:
+ * @userData: user data passed when registering new subtree
+ *
+ * Handles D-Bus introspection for subtree of objects.
+ *
+ * Returns a list of objects or NULL.
+ */
+typedef gchar **
+(*virtDBusGDBusEnumerateFunc)(gpointer userData);
+```
+<deleteme**>
+>The virtDBusGDBusMethodTable is defining a struct. There is an instance of this struct for every interface (including connect)
+
+``` c
+struct _virtDBusGDBusMethodTable {
+    const gchar *name;
+    virtDBusGDBusMethodFunc methodFunc;
+};
+typedef struct _virtDBusGDBusMethodTable virtDBusGDBusMethodTable;
+
+struct _virtDBusGDBusPropertyTable {
+    const gchar *name;
+    virtDBusGDBusPropertyGetFunc getFunc;
+    virtDBusGDBusPropertySetFunc setFunc;
+};
+typedef struct _virtDBusGDBusPropertyTable virtDBusGDBusPropertyTable;
+
+typedef guint virtDBusGDBusSource;
+typedef guint virtDBusGDBusOwner;
+
+GDBusInterfaceInfo *
+virtDBusGDBusLoadIntrospectData(gchar const *interface,
+                                GError **error);
+
+void
+virtDBusGDBusRegisterObject(GDBusConnection *bus,
+                            gchar const *objectPath,
+                            GDBusInterfaceInfo *interface,
+                            virtDBusGDBusMethodTable *methods,
+                            virtDBusGDBusPropertyTable *properties,
+                            gpointer userData);
+
+void
+virtDBusGDBusRegisterSubtree(GDBusConnection *bus,
+                             gchar const *objectPath,
+                             GDBusInterfaceInfo *interface,
+                             virtDBusGDBusEnumerateFunc enumerate,
+                             virtDBusGDBusMethodTable *methods,
+                             virtDBusGDBusPropertyTable *properties,
+                             gpointer userData);
+
+gboolean
+virtDBusGDBusPrepareThreadPool(gint maxThreads,
+                               GError **error);
+
+G_DEFINE_AUTO_CLEANUP_FREE_FUNC(virtDBusGDBusSource, g_source_remove, 0);
+G_DEFINE_AUTO_CLEANUP_FREE_FUNC(virtDBusGDBusOwner, g_bus_unown_name, 0);
+
+```
