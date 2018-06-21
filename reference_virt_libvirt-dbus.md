@@ -365,7 +365,7 @@ typedef gchar **
 (*virtDBusGDBusEnumerateFunc)(gpointer userData);
 ```
 <deleteme**>
->The virtDBusGDBusMethodTable is defining a struct. There is an instance of this struct for every interface (including connect)
+>The virtDBusGDBusMethodTable is defining a struct. There is an instance of this struct for every interface (including connect).
 
 ``` c
 struct _virtDBusGDBusMethodTable {
