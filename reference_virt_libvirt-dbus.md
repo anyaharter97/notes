@@ -277,7 +277,7 @@ k
 
 
 
-### Understanding `gdbus.h`
+### Understanding `gdbus.h` in the Context of Interfaces
 
 ``` c
 #pragma once
@@ -365,7 +365,7 @@ typedef gchar **
 (*virtDBusGDBusEnumerateFunc)(gpointer userData);
 ```
 <deleteme**>
->The virtDBusGDBusMethodTable is defining a struct. There is an instance of this struct for every interface (including connect).
+>The virtDBusGDBusMethodTable is defining a struct. There is an instance of this struct for every interface (including connect). The table contains an entry for every method belonging to that interface. A method belongs to an interface if it takes a pointer to that interface as its first argument.
 
 ``` c
 struct _virtDBusGDBusMethodTable {
@@ -373,21 +373,62 @@ struct _virtDBusGDBusMethodTable {
     virtDBusGDBusMethodFunc methodFunc;
 };
 typedef struct _virtDBusGDBusMethodTable virtDBusGDBusMethodTable;
+```
+<deleteme**>
+>The virtDBusGDBusPropertyTable is defining a struct. There is an instance of this struct for every interface (including connect). The table contains an entry for every property belonging to that interface. I have attempted to define a property as something with a corresponding method belonging to that interface which contains the word "Get" (e.g. "GetName") or "Is" (e.g. "IsActive") AND does not take any flag arguments
 
+``` c
 struct _virtDBusGDBusPropertyTable {
     const gchar *name;
     virtDBusGDBusPropertyGetFunc getFunc;
     virtDBusGDBusPropertySetFunc setFunc;
 };
 typedef struct _virtDBusGDBusPropertyTable virtDBusGDBusPropertyTable;
+```
+<deleteme**>
+>Not really sure what these two typedefs below mean with regards to interfaces
 
+``` c
 typedef guint virtDBusGDBusSource;
 typedef guint virtDBusGDBusOwner;
+```
+<deleteme**>
+>The specification seems to explain the function below pretty well. This only has one implementation and takes interface-specific parameters.
 
+``` c
+/**
+ * virtDBusGDBusLoadIntrospectData:
+ * @interface: name of the interface
+ * @error: return location for error
+ *
+ * Reads an interface XML description from file and returns new
+ * interface info.  The caller owns an reference to the returned info.
+ *
+ * The file path is constructed as:
+ *
+ *  VIRT_DBUS_INTERFACES_DIR/{@interface}.xml
+ *
+ * Returns interface info on success, NULL on failure.
+ */
 GDBusInterfaceInfo *
 virtDBusGDBusLoadIntrospectData(gchar const *interface,
                                 GError **error);
+```
+<deleteme**>
+>This function below is called by `connect.c` before it calls each of the interface-specific Register functions.
 
+``` c
+/**
+ * virtDBusGDBusRegisterObject:
+ * @bus: GDBus connection
+ * @objectPath: object path
+ * @interface: interface info of the object
+ * @methods: table of method handlers
+ * @properties: table of property handlers
+ * @userData: data that are passed to method and property handlers
+ *
+ * Registers a new D-Bus object that we would like to handle.
+ */
 void
 virtDBusGDBusRegisterObject(GDBusConnection *bus,
                             gchar const *objectPath,
@@ -395,7 +436,22 @@ virtDBusGDBusRegisterObject(GDBusConnection *bus,
                             virtDBusGDBusMethodTable *methods,
                             virtDBusGDBusPropertyTable *properties,
                             gpointer userData);
+```
+<deleteme**>
+>This function below is called within the virtDBus<Interface>Register function which exists for all interfaces. Its arguments define the interface-specific objects created in the introduction of the interface such as the enumerate function and the method and property tables.
 
+``` c
+/**
+ * virtDBusGDBusRegisterSubtree:
+ * @bus: GDBus connection
+ * @objectPath: object prefix path
+ * @interface: interface info of the object
+ * @methods: table of method handlers
+ * @properties: table of property handlers
+ * @userData: data that are passed to method and property handlers
+ *
+ * Registers a new D-Bus object prefix that we would like to handle.
+ */
 void
 virtDBusGDBusRegisterSubtree(GDBusConnection *bus,
                              gchar const *objectPath,
@@ -404,7 +460,20 @@ virtDBusGDBusRegisterSubtree(GDBusConnection *bus,
                              virtDBusGDBusMethodTable *methods,
                              virtDBusGDBusPropertyTable *properties,
                              gpointer userData);
+```
+<deleteme**>
+>I don't think the rest of the file is relevant with regards to interfaces.
 
+``` c
+/**
+ * virtDBusGDBusPrepareThreadPool:
+ * @maxThreads: the number of maximum threads in thread pool
+ * @error: return location for error or NULL
+ *
+ * Initializes thread pool to be used to process D-Bus messages.
+ *
+ * Returns TRUE on success, FALSE on error and sets @error.
+ */
 gboolean
 virtDBusGDBusPrepareThreadPool(gint maxThreads,
                                GError **error);
