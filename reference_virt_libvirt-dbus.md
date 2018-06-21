@@ -36,51 +36,51 @@ We will use NWFilter as an example:
 #### Introducing the Interface
 1. Create a new file `data/org.libvirt.NWFilter.xml` and add it to `data/Makefile.am`  
 
-  ```xml
-  <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
-  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+    ```xml
+    <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+    "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
-  <node name="/org/libvirt/nwfilter">
-    <interface name="org.libvirt.NWFilter">
-    </interface>
-  </node>
-  ```
+    <node name="/org/libvirt/nwfilter">
+      <interface name="org.libvirt.NWFilter">
+      </interface>
+    </node>
+    ```
 
 2. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`
 
-3. In `src/connect.c`, include the interface header file at the top,
-``` diff
-@@ -2,6 +2,7 @@
- #include "domain.h"
- #include "events.h"
- #include "network.h"
-+#include "nwfilter.h"
- #include "secret.h"
- #include "storagepool.h"
- #include "util.h"
-```
-add the following line
-``` diff
-@@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
+3. In `src/connect.c`, mirror the following changes:
+    ``` diff
+    @@ -2,6 +2,7 @@
+     #include "domain.h"
+     #include "events.h"
+     #include "network.h"
+    +#include "nwfilter.h"
+     #include "secret.h"
+     #include "storagepool.h"
+     #include "util.h"
+    ```
 
-     g_free(connect->domainPath);
-     g_free(connect->networkPath);
-+    g_free(connect->nwfilterPath);
-     g_free(connect->secretPath);
-     g_free(connect->storagePoolPath);
-     g_free(connect);
-```
-add the following lines
-``` diff
-@@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
-     if (error && *error)
-         return;
+    ``` diff
+    @@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
 
-+    virtDBusNWFilterRegister(connect, error);
-+    if (error && *error)
-+        return;
-+
-     virtDBusSecretRegister(connect, error);
-     if (error && *error)
-         return;
-  ```
+         g_free(connect->domainPath);
+         g_free(connect->networkPath);
+    +    g_free(connect->nwfilterPath);
+         g_free(connect->secretPath);
+         g_free(connect->storagePoolPath);
+         g_free(connect);
+    ```
+
+    ``` diff
+    @@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
+         if (error && *error)
+             return;
+
+    +    virtDBusNWFilterRegister(connect, error);
+    +    if (error && *error)
+    +        return;
+    +
+         virtDBusSecretRegister(connect, error);
+         if (error && *error)
+             return;
+      ```
