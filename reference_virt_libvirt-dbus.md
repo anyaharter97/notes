@@ -60,12 +60,15 @@ We will use NWFilter as an example:
   and then add some lines to `virtDBusConnectNew(virtDBusConnect **connectp, GDBusConnection *bus, const gchar *uri, const gchar *connectPath, GError **error)`
 
 
-
+In `src/connect.c`,
   ``` diff
-  diff --git a/src/connect.c b/src/connect.c
+diff --git a/src/connect.c b/src/connect.c
 index 0b33bc5..136f7ae 100644
 --- a/src/connect.c
 +++ b/src/connect.c
+```
+include the interface header file at the top,
+``` diff
 @@ -2,6 +2,7 @@
  #include "domain.h"
  #include "events.h"
@@ -74,6 +77,9 @@ index 0b33bc5..136f7ae 100644
  #include "secret.h"
  #include "storagepool.h"
  #include "util.h"
+```
+add the following line
+``` diff
 @@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
 
      g_free(connect->domainPath);
@@ -82,6 +88,9 @@ index 0b33bc5..136f7ae 100644
      g_free(connect->secretPath);
      g_free(connect->storagePoolPath);
      g_free(connect);
+```
+add the following lines
+``` diff
 @@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
      if (error && *error)
          return;
