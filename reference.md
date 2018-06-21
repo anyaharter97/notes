@@ -8,5 +8,6 @@
 * [Virtualization Reference](reference_virt.md)
   * [Cockpit Reference](reference_virt_cockpit.md)
   * [LibVirt Reference](reference_virt_libvirt.md)
+  * [LibVirt-DBus Reference](reference_virt_libvirt-dbus.md)
   * [Virsh Reference](reference_virt_virsh.md)
   * [Virt Manager Reference](reference_virt_virtmanager.md)
