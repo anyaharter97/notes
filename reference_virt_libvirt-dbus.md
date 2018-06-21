@@ -49,25 +49,6 @@ We will use NWFilter as an example:
 2. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`
 
 3. In `src/connect.c`, include the interface header file at the top,
-
-  ```c
-  #include "nwfilter.h"
-  ```
-  add a line to free the connection in `virtDBusConnectFree(virtDBusConnect *connect)`,
-  ```c
-      g_free(connect->nwfilterPath);
-  ```
-  and then add some lines to `virtDBusConnectNew(virtDBusConnect **connectp, GDBusConnection *bus, const gchar *uri, const gchar *connectPath, GError **error)`
-
-
-In `src/connect.c`,
-  ``` diff
-diff --git a/src/connect.c b/src/connect.c
-index 0b33bc5..136f7ae 100644
---- a/src/connect.c
-+++ b/src/connect.c
-```
-include the interface header file at the top,
 ``` diff
 @@ -2,6 +2,7 @@
  #include "domain.h"
