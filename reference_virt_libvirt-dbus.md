@@ -17,7 +17,7 @@ These scripts require some packages to run. Install these by running these two c
     ```
     $  sudo yum builddep libvirt-dbus
     ```
-    * we created a `configuresystem.sh` script to run `./configure` with the appropriate parameters
+    * we created a `configuresystem.sh` script to run `./configure` with the appropriate parameters (see [Arbitrary Tasks Reference](reference_arbitrarytasks.md))
 3. There are a couple of notable "make" commands:
     * `make` just compiles all of the code
     * `make check` compiles the code and runs the test suite on it

@@ -1,5 +1,5 @@
 # Reference Documents
-* [Arbitray Tasks Reference](reference_arbitrarytasks.md)
+* [Arbitrary Tasks Reference](reference_arbitrarytasks.md)
 * [Atom Reference](reference_atom.md)
 * [Linux Command Line Reference](reference_commandline.md)
 * [Git Reference](reference_git.md)
