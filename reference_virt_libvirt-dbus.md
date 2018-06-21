@@ -29,4 +29,68 @@ These scripts require some packages to run. Install these by running these two c
 
 ### Adding an Interface
 
-There are three main parts of adding an interface to libvirt-dbus.
+There are three main parts of adding an interface to libvirt-dbus: introducing the interface, implementing the properties, and implementing the methods.
+
+We will use NWFilter as an example:
+
+#### Introducing the Interface
+1. Create a new file `data/org.libvirt.NWFilter.xml` and add it to `data/Makefile.am`  
+
+  ```xml
+  <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+  <node name="/org/libvirt/nwfilter">
+    <interface name="org.libvirt.NWFilter">
+    </interface>
+  </node>
+  ```
+
+2. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`
+
+3. In `src/connect.c`, include the interface header file at the top,
+
+  ```c
+  #include "nwfilter.h"
+  ```
+  add a line to free the connection in `virtDBusConnectFree(virtDBusConnect *connect)`,
+  ```c
+      g_free(connect->nwfilterPath);
+  ```
+  and then add some lines to `virtDBusConnectNew(virtDBusConnect **connectp, GDBusConnection *bus, const gchar *uri, const gchar *connectPath, GError **error)`
+
+
+
+  ``` diff
+  diff --git a/src/connect.c b/src/connect.c
+index 0b33bc5..136f7ae 100644
+--- a/src/connect.c
++++ b/src/connect.c
+@@ -2,6 +2,7 @@
+ #include "domain.h"
+ #include "events.h"
+ #include "network.h"
++#include "nwfilter.h"
+ #include "secret.h"
+ #include "storagepool.h"
+ #include "util.h"
+@@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
+
+     g_free(connect->domainPath);
+     g_free(connect->networkPath);
++    g_free(connect->nwfilterPath);
+     g_free(connect->secretPath);
+     g_free(connect->storagePoolPath);
+     g_free(connect);
+@@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
+     if (error && *error)
+         return;
+
++    virtDBusNWFilterRegister(connect, error);
++    if (error && *error)
++        return;
++
+     virtDBusSecretRegister(connect, error);
+     if (error && *error)
+         return;
+  ```
