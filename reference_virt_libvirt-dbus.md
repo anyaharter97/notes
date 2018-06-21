@@ -64,7 +64,7 @@ We will use NWFilter as an example:
 
 4. The contents of `src/nwfilter.c` should look like this:
 
-    ```
+    ``` c
     #include "nwfilter.h"
     #include "util.h"
 
@@ -153,7 +153,7 @@ We will use NWFilter as an example:
     }
     ```
 
-        * It appears that the default identifier used here is the UUID. In the case that there is no UUID, another unique identifier with a lookup method is used
+    * It appears that the default identifier used here is the UUID. In the case that there is no UUID, another unique identifier with a lookup method is used
 
 5. In `src/connect.c`, mirror the following changes:
 
