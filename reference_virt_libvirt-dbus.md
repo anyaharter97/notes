@@ -153,8 +153,6 @@ We will use NWFilter as an example:
     }
     ```
 
-    * It appears that the default identifier used here is the UUID. In the case that there is no UUID, another unique identifier with a lookup method is used
-
 5. In `src/connect.c`, mirror the following changes:
 
     ``` diff
@@ -261,3 +259,5 @@ We will use NWFilter as an example:
         g_free(nwfilters);
     }
     ```
+
+    * It appears that the default identifier used here is the UUID. In the case that there is no UUID, another unique identifier with a lookup method is used
