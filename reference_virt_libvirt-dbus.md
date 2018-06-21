@@ -50,6 +50,10 @@ We will use NWFilter as an example:
 
 3. In `src/connect.c`, mirror the following changes:
     ``` diff
+    diff --git a/src/connect.c b/src/connect.c
+    index 0b33bc5..136f7ae 100644
+    --- a/src/connect.c
+    +++ b/src/connect.c
     @@ -2,6 +2,7 @@
      #include "domain.h"
      #include "events.h"
