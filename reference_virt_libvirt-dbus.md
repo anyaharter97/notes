@@ -2,8 +2,12 @@
 
 libvirt-dbus wraps libvirt API to provide a high-level object-oriented API better suited for dbus-based applications
 
-
-[create an anchor](#implementing-methods-for-the-connect-interface)
+* [Adding an Interface](#adding-an-interface)
+    * [Introducing the Interface](#introducing-the-interface)
+    * [Implementing Properties](#implementing-properties)
+    * [Implementing Methods for the Connect Interface](#implementing-methods-for-the-connect-interface)
+    * [Implementing Methods for This Interface](#implementing-methods-for-this-interface)
+    * [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
 
 ### Directories
 * `data` has the `org.libvirt.Interface.xml` file for every interface
@@ -12,7 +16,7 @@ libvirt-dbus wraps libvirt API to provide a high-level object-oriented API bette
     * `gdbus.c` and `connect.c` are key files
 * `tests` has the tests
 
-#### Building from Source
+### Building from Source
 1. Run `./autogen.sh` which turns the configure file into a script (and maybe runs it?)
 
 2. Running `./configure` generates make files from the make file templates  
