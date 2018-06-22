@@ -180,7 +180,6 @@ We will use NWFilter as an example.
                                      connect);
     }
     ```
-<deleteme**>
 
 5. In `src/connect.c`, mirror the following changes:
 
@@ -291,7 +290,6 @@ We will use NWFilter as an example.
 
     * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used
 
-<deleteme**>
 #### Implementing Properties
 We will use virNWFilterGetName as an example.
 
@@ -310,16 +308,14 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
             value="See https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName"/>
           <annotation name="org.freedesktop.DBus.Property.EmitsChangedSignal" value="const"/>
         </property>
+        ...
       </interface>
     </node>
     ```
+
     * all properties are "read" by default unless there is a "Set" method in addition to the get method, in which case it is "readwrite" and the first annotation should reference both links (Domain(Get/Set)Autostart is a good example of implementing these)
-    * the second annotation line is required for all types except "b"
+    * the second annotation line is required for all types except "b" which is gboolean
     * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
-        * `b`: gboolean
-        * `i`: gint32
-        * `u`: guint32
-        * `t`: guint64
         * `s`: string
 
 2. Now we need to create a function in `nwfilter.c`. The model for implementing the method is to create a variable for the property and then call the original libvirt function. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
@@ -355,13 +351,12 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
     };
     ```
 
-<deleteme**>
-
 #### Implementing Connect Methods
 We will use virConnectListAllNWFilters as an example.
 
 The reference documentation for this function is below for reference:
   ![](images/virConnectListAllNWFilters.png)
+https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virConnectListAllNWFilters
 
 1. Add the corresponding xml to the `org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the methods.
 
@@ -379,17 +374,9 @@ The reference documentation for this function is below for reference:
     * the name for the "out" direction argument is your choice but it should follow the specs for the return value of the method
         * Note: Since what we really need is the array, that should be the "out" argument
     * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
-        * `b`: gboolean
-        * `i`: gint32
         * `u`: guint32
-        * `t`: guint64
         * `a`: array
         * `o`: valid DBus object path
-        * `s`: string
-        * `&s`: pointer to a string
-        * `v`: variant
-        * `()`: tuples
-        * `{}`: dictionaries
 
 2. Next we need to create a method in `connect.c` which is a wrapper that calls the actual libvirt function. The model for implementing the method is to create a variable for each of the parameters and one for the output. The output is a GVariant, so you will need to use a variant of the `g_variant_new` function. In the example below, a GVariantBuilder is used to form the array output from the method. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
 
@@ -442,21 +429,73 @@ The reference documentation for this function is below for reference:
     };
     ```
 
-
-<deleteme**>
-
 #### Implementing Interface Methods
+We will use virNWFilterGetXMLDesc as an example.
 
-************************************************************************
-************************************************************************
-************************************************************************
-************************************************************************
-************************************************************************
-************************************************************************
-************************************************************************
-************************************************************************
-************************************************************************
-************************************************************************
+The reference documentation for this function is below for reference:
+  ![](images/virNWFilterGetXMLDesc.png)
+https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc
+
+1. Add the corresponding xml to the `org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the methods after the properties.
+
+    ``` xml
+    <node name="/org/libvirt/nwfilter">
+      <interface name="org.libvirt.NWFilter">
+        ...
+        <method name="GetXMLDesc">
+          <annotation name="org.gtk.GDBus.DocString"
+            value="See https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc"/>
+          <arg name="flags" type="u" direction="in"/>
+          <arg name="xml" type="s" direction="out"/>
+        </method>
+      </interface>
+    </node>
+    ```
+
+    * the parameters for the method are defined and explained in the documentation and should be labeled as "in" direction
+    * the name for the "out" direction argument is your choice but it should follow the specs for the return value of the method
+    * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
+        * `u`: guint32
+        * `s`: string
+
+2. Now we need to create a function in `nwfilter.c`. The model for implementing the method is to create a variable for each of the parameters and one for the output. The output is a GVariant, so you will need to use a variant of the `g_variant_new` function. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
+
+    ``` c
+    static void
+    virtDBusNWFilterGetXMLDesc(GVariant *inArgs,
+                               GUnixFDList *inFDs G_GNUC_UNUSED,
+                               const gchar *objectPath,
+                               gpointer userData,
+                               GVariant **outArgs,
+                               GUnixFDList **outFDs G_GNUC_UNUSED,
+                               GError **error)
+    {
+        virtDBusConnect *connect = userData;
+        g_autoptr(virNWFilter) nwfilter = NULL;
+        g_autofree gchar *xml = NULL;
+        guint flags;
+
+        g_variant_get(inArgs, "(u)", &flags);
+
+        nwfilter = virtDBusNWFilterGetVirNWFilter(connect, objectPath, error);
+        if (!nwfilter)
+            return;
+
+        xml = virNWFilterGetXMLDesc(nwfilter, flags);
+        if (!xml)
+            return virtDBusUtilSetLastVirtError(error);
+
+        *outArgs = g_variant_new("(s)", xml);
+    }
+    ```
+
+3. The last step is to add a line for the function to the property table (it should be ordered alphabetically). The string is the method name as listed in `org.libvirt.NWFilter.xml`. The other half of the line is the method you just created.
+    ``` c
+    static virtDBusGDBusMethodTable virtDBusNWFilterMethodTable[] = {
+        { "GetXMLDesc", virtDBusNWFilterGetXMLDesc },
+        { 0 }
+    };
+    ```
 
 ### Understanding `gdbus.h` in the Context of Interfaces
 
