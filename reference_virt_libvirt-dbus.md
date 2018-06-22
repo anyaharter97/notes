@@ -53,6 +53,8 @@ int	virDomainSetAutostart   (virDomainPtr domain, int autostart)
 int	virDomainIsActive       (virDomainPtr dom)
 ```
 
+> **Note:** there are some properties which are defined for each interface in the libvirt source code under `src/datatypes.h``
+
 ###### Connect Methods
 The connect methods are easier to identify because they should have "Connect" in the name and their first argument should take a virConnectPtr.
 
