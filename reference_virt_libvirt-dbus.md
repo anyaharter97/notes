@@ -297,12 +297,8 @@ We will use virNWFilterGetName as an example.
 
 The reference documentation for this function is below for reference:
   ![](images/virNWFilterGetName.png)
+https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
 
-[![](images/virNWFilterGetName.png)](https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterLookupByName){:target="_blank"}
-
-<a href="https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterLookupByName" target="_blank">
-<img src="images/virNWFilterGetName.png"/>
-</a>
 
 1. Add the corresponding xml to the `org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the properties.
 
