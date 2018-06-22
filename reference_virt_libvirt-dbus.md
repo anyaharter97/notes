@@ -31,6 +31,27 @@ These scripts require some packages to run. Install these by running these two c
 
 There are three main parts of adding an interface to libvirt-dbus: introducing the interface, implementing the properties, and implementing the methods (in the interface file and in `connect.c`).
 
+Each interface module is laid out in the libvirt documentation (https://libvirt.org/html).
+
+For a given interface, these are the guidelines that I use to identify the properties, interface methods, and connect methods, all of which are represented as functions:
+
+###### Properties
+I have attempted to define a property as something with a corresponding method belonging to that interface which contains the word "Get", "Set", or "Is" AND does not take any other pointers or flags as arguments. The first argument must always be an instance of the interface pointer.
+
+
+The following are all Domain properties:
+```
+int	virDomainGetAutostart   (virDomainPtr domain, int * autostart)
+int	virDomainSetAutostart   (virDomainPtr domain, int autostart)
+int	virDomainIsActive       (virDomainPtr dom)
+```
+
+###### Connect Methods
+The connect methods are easier to identify because they should have "Connect" in the name and their first argument should take a virConnectPtr.
+
+###### Interface Methods
+The interface methods are anything that wasn't covered by the last two categories.
+
 #### Introducing the Interface
 We will use NWFilter as an example.
 
@@ -265,15 +286,73 @@ We will use NWFilter as an example.
 
 <deleteme**>
 #### Implementing Properties
+We will use virNWFilterGetName as an example.
 
-k
+The reference documentation for this function is below for reference:
+  ![](images/virNWFilterGetName.png)
 
-#### Implementing Methods for This Interface
+1. Add the corresponding xml to the `org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the properties.
 
-k
+    ``` xml
+    <node name="/org/libvirt/nwfilter">
+      <interface name="org.libvirt.NWFilter">
+        <property name="Name" type="s" access="read">
+          <annotation name="org.gtk.GDBus.DocString"
+            value="See https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName"/>
+          <annotation name="org.freedesktop.DBus.Property.EmitsChangedSignal" value="const"/>
+        </property>
+      </interface>
+    </node>
+    ```
+    * all properties are "read" by default unless there is a "Set" method in addition to the get method, in which case it is "readwrite" and the first annotation should reference both links (Domain(Get/Set)Autostart is a good example of implementing these)
+    * the second annotation line is required for all types except "b"
+    * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
+        * `b`: gboolean
+        * `i`: gint32
+        * `u`: guint32
+        * `t`: guint64
+        * `s`: string
+
+2. Now we need to create a function in `nwfilter.c`. The model for implementing the method is to create a variable for the property and then call the original libvirt function. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
+
+    ``` c
+    static void
+    virtDBusNWFilterGetName(const gchar *objectPath,
+                            gpointer userData,
+                            GVariant **value,
+                            GError **error)
+    {
+        virtDBusConnect *connect = userData;
+        g_autoptr(virNWFilter) nwfilter = NULL;
+        const gchar *name;
+
+        nwfilter = virtDBusNWFilterGetVirNWFilter(connect, objectPath, error);
+        if (!nwfilter)
+            return;
+
+        name = virNWFilterGetName(nwfilter);
+        if (!name)
+            return virtDBusUtilSetLastVirtError(error);
+
+        *value = g_variant_new("s", name);
+    }
+    ```
+
+3. The last step is to add a line for the function to the property table (it should be ordered alphabetically). The string is the property name as listed in `org.libvirt.NWFilter.xml`. The second part is the getter function. The last entry is the setter function or NULL if there is none.
+    ``` c
+    static virtDBusGDBusPropertyTable virtDBusNWFilterPropertyTable[] = {
+        { "Name", virtDBusNWFilterGetName, NULL },
+        { 0 }
+    };
+    ```
+
+<deleteme**>
 
 #### Implementing Methods for the Connect Interface
-We will use virtDBusConnectListNWFilters as an example.
+We will use virConnectListAllNWFilters as an example.
+
+The reference documentation for this function is below for reference:
+  ![](images/virConnectListAllNWFilters.png)
 
 1. Add the corresponding xml to the `org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the methods.
 
@@ -286,8 +365,10 @@ We will use virtDBusConnectListNWFilters as an example.
         </method>
     ```
 
-    * the parameters for the method are defined and explained at the link in the value field (they should be the "in" direction)
+    * the parameters for the method are defined and explained in the documentation and should be labeled as "in" direction
+        * Note: This example is a little tricky because in the documentation, there is an array passed in called "filters"; however, if you read the description you will see that it is just an empty pointer in which to store the results, so we don't have to include it in our in-direction arguments.
     * the name for the "out" direction argument is your choice but it should follow the specs for the return value of the method
+        * Note: Since what we really need is the array, that should be the "out" argument
     * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
         * `b`: gboolean
         * `i`: gint32
@@ -301,7 +382,72 @@ We will use virtDBusConnectListNWFilters as an example.
         * `()`: tuples
         * `{}`: dictionaries
 
-2.
+2. Next we need to create a method in `connect.c` which is a wrapper that calls the actual libvirt function. The model for implementing the method is to create a variable for each of the parameters and one for the output. The output is a GVariant, so you will need to use a variant of the `g_variant_new` function. In the example below, a GVariantBuilder is used to form the array output from the method. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
+
+    ``` c
+    static void
+    virtDBusConnectListNWFilters(GVariant *inArgs,
+                                 GUnixFDList *inFDs G_GNUC_UNUSED,
+                                 const gchar *objectPath G_GNUC_UNUSED,
+                                 gpointer userData,
+                                 GVariant **outArgs,
+                                 GUnixFDList **outFDs G_GNUC_UNUSED,
+                                 GError **error)
+    {
+        virtDBusConnect *connect = userData;
+        g_autoptr(virNWFilterPtr) nwfilters = NULL;
+        guint flags;
+        GVariantBuilder builder;
+        GVariant *gnwfilters;
+
+        g_variant_get(inArgs, "(u)", &flags);
+
+        if (!virtDBusConnectOpen(connect, error))
+            return;
+
+        if (virConnectListAllNWFilters(connect->connection, &nwfilters, flags) < 0)
+            return virtDBusUtilSetLastVirtError(error);
+
+        g_variant_builder_init(&builder, G_VARIANT_TYPE("ao"));
+
+        for (gint i = 0; nwfilters[i]; i++) {
+            g_autofree gchar *path = NULL;
+            path = virtDBusUtilBusPathForVirNWFilter(nwfilters[i],
+                                                     connect->nwfilterPath);
+
+            g_variant_builder_add(&builder, "o", path);
+        }
+
+        gnwfilters = g_variant_builder_end(&builder);
+        *outArgs = g_variant_new_tuple(&gnwfilters, 1);
+    }
+    ```
+
+3. The last step is to add a line for the function to the connect method table (it should be ordered alphabetically). The string is the method name as listed in `org.libvirt.Connect.xml`. The other half of the line is the method you just created which is what should be actually called when someone invokes the function name.
+    ``` c
+    static virtDBusGDBusMethodTable virtDBusConnectMethodTable[] = {
+        ...
+        { "ListNWFilters", virtDBusConnectListNWFilters },
+        ...
+        { 0 }
+    };
+    ```
+
+
+<deleteme**>
+
+#### Implementing Methods for This Interface
+
+************************************************************************
+************************************************************************
+************************************************************************
+************************************************************************
+************************************************************************
+************************************************************************
+************************************************************************
+************************************************************************
+************************************************************************
+************************************************************************
 
 ### Understanding `gdbus.h` in the Context of Interfaces
 
@@ -387,7 +533,7 @@ typedef void
 typedef gchar **
 (*virtDBusGDBusEnumerateFunc)(gpointer userData);
 ```
->The virtDBusGDBusMethodTable is defining a struct. There is an instance of this struct for every interface (including connect). The table contains an entry for every method belonging to that interface. A method belongs to an interface if it takes a pointer to that interface as its first argument.
+>The virtDBusGDBusMethodTable is defining a struct. There is an instance of this struct for every interface (including connect). The table contains an entry for every method belonging to that interface.
 
 ``` c
 struct _virtDBusGDBusMethodTable {
@@ -396,7 +542,7 @@ struct _virtDBusGDBusMethodTable {
 };
 typedef struct _virtDBusGDBusMethodTable virtDBusGDBusMethodTable;
 ```
->The virtDBusGDBusPropertyTable is defining a struct. There is an instance of this struct for every interface (including connect). The table contains an entry for every property belonging to that interface. I have attempted to define a property as something with a corresponding method belonging to that interface which contains the word "Get" (e.g. "GetName") or "Is" (e.g. "IsActive") AND does not take any flag arguments
+>The virtDBusGDBusPropertyTable is defining a struct. There is an instance of this struct for every interface (including connect). The table contains an entry for every property belonging to that interface.
 
 ``` c
 struct _virtDBusGDBusPropertyTable {
