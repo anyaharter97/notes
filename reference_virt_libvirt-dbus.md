@@ -7,7 +7,7 @@ libvirt-dbus wraps libvirt API to provide a high-level object-oriented API bette
     * [Implementing Properties](#implementing-properties)
     * [Implementing Methods for the Connect Interface](#implementing-methods-for-the-connect-interface)
     * [Implementing Methods for This Interface](#implementing-methods-for-this-interface)
-    * [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
+* [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
 
 ### Directories
 * `data` has the `org.libvirt.Interface.xml` file for every interface
