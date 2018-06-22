@@ -42,7 +42,7 @@ Each interface module is laid out in the libvirt documentation (https://libvirt.
 
 For a given interface, these are the guidelines that I use to identify the properties, interface methods, and connect methods, all of which are represented as functions:
 
-###### Properties
+##### Properties
 The properties come from two different parts of the libvirt code for the most part. But any method belonging to your interface which contains the word "Get", "Set", or "Is"; does not take any other pointers or flags as arguments; and whose first argument has type `vir<InterfaceName>Ptr` has the potential to be represented in the libvirt-dbus code as a property.
 
 To find the code for the right interface try the following two commands:  
@@ -96,10 +96,10 @@ The code segments relevant to the Network properties are below as an example...
 
     * the bool lines are really the properties that seem to be included
 
-###### Connect Methods
+##### Connect Methods
 The connect methods are easier to identify because they should have "Connect" in the name and their first argument should take a virConnectPtr.
 
-###### Interface Methods
+##### Interface Methods
 The interface methods are anything that wasn't covered by the last two categories.
 
 #### Introducing the Interface
