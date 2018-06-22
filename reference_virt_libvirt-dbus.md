@@ -43,17 +43,58 @@ Each interface module is laid out in the libvirt documentation (https://libvirt.
 For a given interface, these are the guidelines that I use to identify the properties, interface methods, and connect methods, all of which are represented as functions:
 
 ###### Properties
-I have attempted to define a property as something with a corresponding method belonging to that interface which contains the word "Get", "Set", or "Is" AND does not take any other pointers or flags as arguments. The first argument must always be an instance of the interface pointer.
+The properties come from two different parts of the libvirt code for the most part. But any method belonging to your interface which contains the word "Get", "Set", or "Is"; does not take any other pointers or flags as arguments; and whose first argument has type `vir<InterfaceName>Ptr` has the potential to be represented in the libvirt-dbus code as a property.
 
+To find the code for the right interface try the following two commands:  
+`git grep 'struct _vir<InterfaceName>'`  
+`git grep 'struct _vir<InterfaceName>Obj'`  
 
-The following are all Domain properties:
-```
-int	virDomainGetAutostart   (virDomainPtr domain, int * autostart)
-int	virDomainSetAutostart   (virDomainPtr domain, int autostart)
-int	virDomainIsActive       (virDomainPtr dom)
-```
+The code segments relevant to the Network properties are below as an example...
 
-> **Note:** there are some properties which are defined for each interface in the libvirt source code under `src/datatypes.h``
+* `src/datatypes.h` :
+
+    ``` c
+    /**
+    * _virNetwork:
+    *
+    * Internal structure associated to a domain
+    */
+    struct _virNetwork {
+        virObject parent;
+        virConnectPtr conn;                  /* pointer back to the connection */
+        char *name;                          /* the network external name */
+        unsigned char uuid[VIR_UUID_BUFLEN]; /* the network unique identifier */
+    };
+    ```
+
+    * the virObject and virConnectPtr lines are not put into the properties table referenced later
+
+* `src/conf/virnetworkobj.c` :
+
+    ``` c
+    struct _virNetworkObj {
+        virObjectLockable parent;
+
+        pid_t dnsmasqPid;
+        pid_t radvdPid;
+        bool active;
+        bool autostart;
+        bool persistent;
+
+        virNetworkDefPtr def; /* The current definition */
+        virNetworkDefPtr newDef; /* New definition to activate at shutdown */
+
+        virBitmapPtr classIdMap; /* bitmap of class IDs for QoS */
+        unsigned long long floor_sum; /* sum of all 'floor'-s of attached NICs */
+
+        unsigned int taint;
+
+        /* Immutable pointer, self locking APIs */
+        virMacMapPtr macmap;
+    };
+    ```
+
+    * the bool lines are really the properties that seem to be included
 
 ###### Connect Methods
 The connect methods are easier to identify because they should have "Connect" in the name and their first argument should take a virConnectPtr.
@@ -290,7 +331,7 @@ We will use NWFilter as an example.
     }
     ```
 
-    * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used
+    * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used (in libvirt/src/datatypes.h it has a comment saying unique next to it)
 
 #### Implementing Properties
 We will use virNWFilterGetName as an example.
