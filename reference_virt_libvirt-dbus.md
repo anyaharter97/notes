@@ -298,6 +298,8 @@ We will use virNWFilterGetName as an example.
 The reference documentation for this function is below for reference:
   ![](images/virNWFilterGetName.png)
 
+[![](images/virNWFilterGetName.png)](https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterLookupByName){:target="_blank"}
+
 <a href="https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterLookupByName" target="_blank">
 <img src="images/virNWFilterGetName.png"/>
 </a>
