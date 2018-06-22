@@ -5,8 +5,8 @@ libvirt-dbus wraps libvirt API to provide a high-level object-oriented API bette
 * [Adding an Interface](#adding-an-interface)
     * [Introducing the Interface](#introducing-the-interface)
     * [Implementing Properties](#implementing-properties)
-    * [Implementing Methods for the Connect Interface](#implementing-methods-for-the-connect-interface)
-    * [Implementing Methods for This Interface](#implementing-methods-for-this-interface)
+    * [Implementing Connect Methods](#implementing-methods-for-the-connect-interface)
+    * [Implementing Interface Methods](#implementing-methods-for-this-interface)
 * [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
 
 ### Directories
@@ -296,7 +296,7 @@ We will use NWFilter as an example.
 We will use virNWFilterGetName as an example.
 
 The reference documentation for this function is below for reference:
-  ![](images/virNWFilterGetName.png)
+  [![](images/virNWFilterGetName.png)](https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterLookupByName)
 
 1. Add the corresponding xml to the `org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the properties.
 
@@ -355,7 +355,7 @@ The reference documentation for this function is below for reference:
 
 <deleteme**>
 
-#### Implementing Methods for the Connect Interface
+#### Implementing Connect Methods
 We will use virConnectListAllNWFilters as an example.
 
 The reference documentation for this function is below for reference:
@@ -443,7 +443,7 @@ The reference documentation for this function is below for reference:
 
 <deleteme**>
 
-#### Implementing Methods for This Interface
+#### Implementing Interface Methods
 
 ************************************************************************
 ************************************************************************
