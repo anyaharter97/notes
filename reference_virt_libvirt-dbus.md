@@ -545,7 +545,6 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc
         { 0 }
     };
     ```
-<deleteme**>
 
 #### Implementing Events Methods
 We will use virConnectNodeDeviceEventLifecycleCallback as an example.
