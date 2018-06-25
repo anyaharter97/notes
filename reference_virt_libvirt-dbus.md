@@ -7,6 +7,7 @@ libvirt-dbus wraps libvirt API to provide a high-level object-oriented API bette
     * [Implementing Properties](#implementing-properties)
     * [Implementing Connect Methods](#implementing-methods-for-the-connect-interface)
     * [Implementing Interface Methods](#implementing-methods-for-this-interface)
+    * [Implementing Events Methods](#implementing-methods-for-this-interface)
 * [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
 
 ### Directories
@@ -539,9 +540,35 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc
         { 0 }
     };
     ```
+<deleteme**>
+
+#### Implementing Events Methods
+We will use virConnectNodeDeviceEventLifecycleCallback as an example.
+
+The reference documentation for this function is below for reference:
+  ![](images/virConnectNodeDeviceEventLifecycleCallback.png)
+https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventLifecycleCallback
+
+1. Add the corresponding xml to the `org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the signals (under the methods).
+
+    ``` xml
+        <signal name="NodeDeviceEvent">
+          <annotation name="org.gtk.GDBus.DocString"
+            value="See https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventLifecycleCallback"/>
+          <arg name="dev" type="o"/>
+          <arg name="event" type="i"/>
+          <arg name="detail" type="i"/>
+        </signal>
+    ```
+
+    * the parameters for the method are defined and explained in the documentation and should each have an `arg` tag
+    * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
+        * `o`: valid DBus object path
+        * `i`: gint32
+
 
 ### Understanding `gdbus.h` in the Context of Interfaces
-
+I have combined the specification comments from the header and c file in the code below...
 ``` c
 #pragma once
 
