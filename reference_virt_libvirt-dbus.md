@@ -118,62 +118,9 @@ We will use NWFilter as an example.
     </node>
     ```
 
-2. In `src/connect.h`, add this line inside `struct virtDBusConnect{}` to create a new path attribute for this interface
+2. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`
 
-    ``` diff
-    @@ -14,6 +14,7 @@ struct virtDBusConnect {
-         const gchar *connectPath;
-         gchar *domainPath;
-         gchar *networkPath;
-    +    gchar *nwfilterPath;
-         gchar *secretPath;
-         gchar *storagePoolPath;
-         virConnectPtr connection;
-    ```
-
-3. In `src/connect.c`, include the new header file
-
-    ``` diff
-    @@ -2,6 +2,7 @@
-     #include "domain.h"
-     #include "events.h"
-     #include "network.h"
-    +#include "nwfilter.h"
-     #include "secret.h"
-     #include "storagepool.h"
-     #include "util.h"
-    ```
-
-    add a line to `virtDBusConnectFree()` for the path attribute you just created in `connect.h`
-
-    ``` diff
-    @@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
-
-         g_free(connect->domainPath);
-         g_free(connect->networkPath);
-    +    g_free(connect->nwfilterPath);
-         g_free(connect->secretPath);
-         g_free(connect->storagePoolPath);
-         g_free(connect);
-    ```
-
-    and add a call to the new Register function in `virtDBusConnectNew()`
-
-    ``` diff
-    @@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
-         if (error && *error)
-             return;
-
-    +    virtDBusNWFilterRegister(connect, error);
-    +    if (error && *error)
-    +        return;
-    +
-         virtDBusSecretRegister(connect, error);
-         if (error && *error)
-             return;
-      ```
-
-4. In `src/util.h`, define the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
+3. In `src/util.h`, define the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
 
     ``` c
     virNWFilterPtr
@@ -192,7 +139,7 @@ We will use NWFilter as an example.
     G_DEFINE_AUTOPTR_CLEANUP_FUNC(virNWFilterPtr, virtDBusUtilVirNWFilterListFree);
     ```
 
-5. In `src/util.c`, implement the following three functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
+4. In `src/util.c`, implement the following three functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
 
     ``` c
     virNWFilterPtr
@@ -231,7 +178,60 @@ We will use NWFilter as an example.
 
     * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used (in libvirt/src/datatypes.h it has a comment saying unique next to it)
 
-6. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`
+5. In `src/connect.h`, add this line inside `struct virtDBusConnect{}` to create a new path attribute for this interface
+
+    ``` diff
+    @@ -14,6 +14,7 @@ struct virtDBusConnect {
+         const gchar *connectPath;
+         gchar *domainPath;
+         gchar *networkPath;
+    +    gchar *nwfilterPath;
+         gchar *secretPath;
+         gchar *storagePoolPath;
+         virConnectPtr connection;
+    ```
+
+6. In `src/connect.c`, include the new header file
+
+    ``` diff
+    @@ -2,6 +2,7 @@
+     #include "domain.h"
+     #include "events.h"
+     #include "network.h"
+    +#include "nwfilter.h"
+     #include "secret.h"
+     #include "storagepool.h"
+     #include "util.h"
+    ```
+
+    add a line to `virtDBusConnectFree()` for the path attribute you just created in `connect.h`
+
+    ``` diff
+    @@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
+
+         g_free(connect->domainPath);
+         g_free(connect->networkPath);
+    +    g_free(connect->nwfilterPath);
+         g_free(connect->secretPath);
+         g_free(connect->storagePoolPath);
+         g_free(connect);
+    ```
+
+    and add a call to a new Register function in `virtDBusConnectNew()`
+
+    ``` diff
+    @@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
+         if (error && *error)
+             return;
+
+    +    virtDBusNWFilterRegister(connect, error);
+    +    if (error && *error)
+    +        return;
+    +
+         virtDBusSecretRegister(connect, error);
+         if (error && *error)
+             return;
+      ```
 
 7. The contents of `src/nwfilter.h` should look like this:
 
@@ -571,7 +571,7 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
         * `o`: valid DBus object path
         * `i`: gint32
 
-2. In `src/connect.h`, mirror the following changes:
+2. In `src/connect.h`, add a line to create an array for the callback ids
 
     ``` diff
     @@ -24,6 +24,7 @@ struct virtDBusConnect {
@@ -584,7 +584,7 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
      };
     ```
 
-3. In `src/connect.c`, mirror the following changes:
+3. In `src/connect.c`, add a for-loop to handle the node device events in `virtDBusConnectClose()`
 
     ``` diff
     @@ -65,6 +65,16 @@ virtDBusConnectClose(virtDBusConnect *connect,
@@ -594,7 +594,7 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
     +    for (gint i = 0; i < VIR_NODE_DEVICE_EVENT_ID_LAST; i++) {
     +        if (connect->devCallbackIds[i] >= 0) {
     +            if (deregisterEvents) {
-    +                virConnectNetworkEventDeregisterAny(connect->connection,
+    +                virConnectNodeDeviceEventDeregisterAny(connect->connection,
     +                                                    connect->devCallbackIds[i]);
     +            }
     +            connect->devCallbackIds[i] = -1;
@@ -605,6 +605,8 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
              if (connect->secretCallbackIds[i] >= 0) {
                  if (deregisterEvents) {
     ```
+
+    add a for-loop to handle the node device events in `virtDBusConnectNew()`
 
     ``` diff
     @@ -1744,6 +1754,9 @@ virtDBusConnectNew(virtDBusConnect **connectp,
@@ -618,6 +620,67 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
              connect->secretCallbackIds[i] = -1;
     ```
 
+4. In `src/events.c`, create a new Event function `virtDBusEventsNodeDeviceEvent()`
+
+    ``` c
+    static gint
+    virtDBusEventsNodeDeviceEvent(virConnectPtr connection G_GNUC_UNUSED,
+                                  virNodeDevicePtr dev,
+                                  gint event,
+                                  gint detail,
+                                  gpointer opaque)
+    {
+        virtDBusConnect *connect = opaque;
+        g_autofree gchar *path = NULL;
+
+        path = virtDBusUtilBusPathForVirNodeDevice(dev, connect->nodeDevPath);
+
+        g_dbus_connection_emit_signal(connect->bus,
+                                      NULL,
+                                      connect->connectPath,
+                                      VIRT_DBUS_CONNECT_INTERFACE,
+                                      "NodeDeviceEvent",
+                                      g_variant_new("(oii)", path, event, detail),
+                                      NULL);
+
+        return 0;
+    }
+    ```
+
+    and create a new Register Event function
+
+    ``` c
+    static void
+    virtDBusEventsRegisterNodeDeviceEvent(virtDBusConnect *connect,
+                                          gint id,
+                                          virConnectNodeDeviceEventGenericCallback callback)
+    {
+        g_assert(connect->nodeDevCallbackIds[id] == -1);
+
+        connect->nodeDevCallbackIds[id] = virConnectNodeDeviceEventRegisterAny(connect->connection,
+                                                                               NULL,
+                                                                               id,
+                                                                               VIR_NODE_DEVICE_EVENT_CALLBACK(callback),
+                                                                               connect,
+                                                                               NULL);
+    }
+    ```
+
+    and add a call to the function above inside the `virtDBusEventsRegister()` function
+
+    ``` diff
+    @@ -791,6 +829,10 @@ virtDBusEventsRegister(virtDBusConnect *connect)
+                                            VIR_NETWORK_EVENT_ID_LIFECYCLE,
+                                            VIR_NETWORK_EVENT_CALLBACK(virtDBusEventsNetworkEvent));
+
+    +    virtDBusEventsRegisterNodeDeviceEvent(connect,
+    +                                          VIR_NODE_DEVICE_EVENT_ID_LIFECYCLE,
+    +                                          VIR_NODE_DEVICE_EVENT_CALLBACK(virtDBusEventsNodeDeviceEvent));
+    +
+         virtDBusEventsRegisterSecretEvent(connect,
+                                           VIR_SECRET_EVENT_ID_LIFECYCLE,
+                                           VIR_SECRET_EVENT_CALLBACK(virtDBusEventsSecretEvent));
+    ```
 
 ### Understanding `gdbus.h` in the Context of Interfaces
 I have combined the specification comments from the header and c file in the code below...
