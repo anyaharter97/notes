@@ -157,7 +157,7 @@ We will use NWFilter as an example.
          g_free(connect);
     ```
 
-and add a call to the new Register function in `virtDBusConnectNew()`
+    and add a call to the new Register function in `virtDBusConnectNew()`
 
     ``` diff
     @@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
