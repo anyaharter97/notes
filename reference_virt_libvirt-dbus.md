@@ -619,7 +619,7 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
              connect->secretCallbackIds[i] = -1;
     ```
 
-4. In `src/events.c`, create a new Event function `virtDBusEventsNodeDeviceEvent()`
+4. In `src/events.c`, create a new Event function
 
     ``` c
     static gint
@@ -646,7 +646,7 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
     }
     ```
 
-    and create a new Register Event function
+    create a new Register Event function
 
     ``` c
     static void
