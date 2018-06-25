@@ -143,7 +143,9 @@ We will use NWFilter as an example.
      #include "storagepool.h"
      #include "util.h"
     ```
-add a line to `virtDBusConnectFree()` for the path attribute you just created in `connect.h`
+
+    add a line to `virtDBusConnectFree()` for the path attribute you just created in `connect.h`
+
     ``` diff
     @@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
 
@@ -154,7 +156,9 @@ add a line to `virtDBusConnectFree()` for the path attribute you just created in
          g_free(connect->storagePoolPath);
          g_free(connect);
     ```
+
 and add a call to the new Register function in `virtDBusConnectNew()`
+
     ``` diff
     @@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
          if (error && *error)
