@@ -26,7 +26,7 @@
 
 ## Reference Documents
 * [Cockpit Reference](reference_virt_cockpit.md)
-* [LibVirt Reference](reference_virt_libvirt.md)
 * [LibVirt-DBus Reference](reference_virt_libvirt-dbus.md)
+* [LibVirt Reference](reference_virt_libvirt.md)
 * [Virsh Reference](reference_virt_virsh.md)
 * [Virt Manager Reference](reference_virt_virtmanager.md)

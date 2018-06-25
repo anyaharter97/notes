@@ -225,7 +225,20 @@ We will use NWFilter as an example.
     }
     ```
 
-5. In `src/connect.c`, mirror the following changes:
+5. In `src/connect.h`, mirror the following changes:
+
+    ``` diff
+    @@ -14,6 +14,7 @@ struct virtDBusConnect {
+         const gchar *connectPath;
+         gchar *domainPath;
+         gchar *networkPath;
+    +    gchar *nwfilterPath;
+         gchar *secretPath;
+         gchar *storagePoolPath;
+         virConnectPtr connection;
+    ```
+
+6. In `src/connect.c`, mirror the following changes:
 
     ``` diff
     @@ -2,6 +2,7 @@
@@ -262,19 +275,6 @@ We will use NWFilter as an example.
          if (error && *error)
              return;
       ```
-
-6. In `src/connect.h`, mirror the following changes:
-
-    ``` diff
-    @@ -14,6 +14,7 @@ struct virtDBusConnect {
-         const gchar *connectPath;
-         gchar *domainPath;
-         gchar *networkPath;
-    +    gchar *nwfilterPath;
-         gchar *secretPath;
-         gchar *storagePoolPath;
-         virConnectPtr connection;
-    ```
 
 7. In `src/util.h`, define the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
 
@@ -549,7 +549,7 @@ The reference documentation for this function is below for reference:
   ![](images/virConnectNodeDeviceEventLifecycleCallback.png)
 https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventLifecycleCallback
 
-1. Add the corresponding xml to the `org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the signals (under the methods).
+1. Add the corresponding xml to the `org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the signals under the methods.
 
     ``` xml
         <signal name="NodeDeviceEvent">
@@ -565,6 +565,53 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
     * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
         * `o`: valid DBus object path
         * `i`: gint32
+
+2. In `src/connect.h`, mirror the following changes:
+
+    ``` diff
+    @@ -24,6 +24,7 @@ struct virtDBusConnect {
+
+         gint domainCallbackIds[VIR_DOMAIN_EVENT_ID_LAST];
+         gint networkCallbackIds[VIR_NETWORK_EVENT_ID_LAST];
+    +    gint devCallbackIds[VIR_NODE_DEVICE_EVENT_ID_LAST];
+         gint secretCallbackIds[VIR_SECRET_EVENT_ID_LAST];
+         gint storagePoolCallbackIds[VIR_STORAGE_POOL_EVENT_ID_LAST];
+     };
+    ```
+
+3. In `src/connect.c`, mirror the following changes:
+
+    ``` diff
+    @@ -65,6 +65,16 @@ virtDBusConnectClose(virtDBusConnect *connect,
+             }
+         }
+
+    +    for (gint i = 0; i < VIR_NODE_DEVICE_EVENT_ID_LAST; i++) {
+    +        if (connect->devCallbackIds[i] >= 0) {
+    +            if (deregisterEvents) {
+    +                virConnectNetworkEventDeregisterAny(connect->connection,
+    +                                                    connect->devCallbackIds[i]);
+    +            }
+    +            connect->devCallbackIds[i] = -1;
+    +        }
+    +    }
+    +
+         for (gint i = 0; i < VIR_SECRET_EVENT_ID_LAST; i++) {
+             if (connect->secretCallbackIds[i] >= 0) {
+                 if (deregisterEvents) {
+    ```
+
+    ``` diff
+    @@ -1744,6 +1754,9 @@ virtDBusConnectNew(virtDBusConnect **connectp,
+         for (gint i = 0; i < VIR_NETWORK_EVENT_ID_LAST; i++)
+             connect->networkCallbackIds[i] = -1;
+
+    +    for (gint i = 0; i < VIR_NODE_DEVICE_EVENT_ID_LAST; i++)
+    +        connect->devCallbackIds[i] = -1;
+    +
+         for (gint i = 0; i < VIR_SECRET_EVENT_ID_LAST; i++)
+             connect->secretCallbackIds[i] = -1;
+    ```
 
 
 ### Understanding `gdbus.h` in the Context of Interfaces
