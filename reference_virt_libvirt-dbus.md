@@ -118,9 +118,118 @@ We will use NWFilter as an example.
     </node>
     ```
 
-2. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`
+2. In `src/connect.h`, add this line inside `struct virtDBusConnect{}` to create a new path attribute for this interface
 
-3. The contents of `src/nwfilter.h` should look like this:
+    ``` diff
+    @@ -14,6 +14,7 @@ struct virtDBusConnect {
+         const gchar *connectPath;
+         gchar *domainPath;
+         gchar *networkPath;
+    +    gchar *nwfilterPath;
+         gchar *secretPath;
+         gchar *storagePoolPath;
+         virConnectPtr connection;
+    ```
+
+3. In `src/connect.c`, include the new header file
+
+    ``` diff
+    @@ -2,6 +2,7 @@
+     #include "domain.h"
+     #include "events.h"
+     #include "network.h"
+    +#include "nwfilter.h"
+     #include "secret.h"
+     #include "storagepool.h"
+     #include "util.h"
+    ```
+add a line to `virtDBusConnectFree()` for the path attribute you just created in `connect.h`
+    ``` diff
+    @@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
+
+         g_free(connect->domainPath);
+         g_free(connect->networkPath);
+    +    g_free(connect->nwfilterPath);
+         g_free(connect->secretPath);
+         g_free(connect->storagePoolPath);
+         g_free(connect);
+    ```
+and add a call to the new Register function in `virtDBusConnectNew()`
+    ``` diff
+    @@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
+         if (error && *error)
+             return;
+
+    +    virtDBusNWFilterRegister(connect, error);
+    +    if (error && *error)
+    +        return;
+    +
+         virtDBusSecretRegister(connect, error);
+         if (error && *error)
+             return;
+      ```
+
+4. In `src/util.h`, define the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
+
+    ``` c
+    virNWFilterPtr
+    virtDBusUtilVirNWFilterFromBusPath(virConnectPtr connection,
+                                       const gchar *path,
+                                       const gchar *nwfilterPath);
+
+    gchar *
+    virtDBusUtilBusPathForVirNWFilter(virNWFilterPtr nwfilter,
+                                      const gchar *nwfilterPath);
+
+    void
+    virtDBusUtilVirNWFilterListFree(virNWFilterPtr *nwfilters);
+
+    G_DEFINE_AUTOPTR_CLEANUP_FUNC(virNWFilter, virNWFilterFree);
+    G_DEFINE_AUTOPTR_CLEANUP_FUNC(virNWFilterPtr, virtDBusUtilVirNWFilterListFree);
+    ```
+
+5. In `src/util.c`, implement the following three functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
+
+    ``` c
+    virNWFilterPtr
+    virtDBusUtilVirNWFilterFromBusPath(virConnectPtr connection,
+                                       const gchar *path,
+                                       const gchar *nwfilterPath)
+    {
+        g_autofree gchar *name = NULL;
+        gsize prefixLen = strlen(nwfilterPath) + 1;
+
+        name = virtDBusUtilDecodeUUID(path + prefixLen);
+
+        return virNWFilterLookupByUUIDString(connection, name);
+    }
+
+    gchar *
+    virtDBusUtilBusPathForVirNWFilter(virNWFilterPtr nwfilter,
+                                      const gchar *nwfilterPath)
+    {
+        gchar uuid[VIR_UUID_STRING_BUFLEN] = "";
+        g_autofree gchar *newUuid = NULL;
+        virNWFilterGetUUIDString(nwfilter, uuid);
+        newUuid = virtDBusUtilEncodeUUID(uuid);
+        return g_strdup_printf("%s/%s", nwfilterPath, newUuid);
+    }
+
+    void
+    virtDBusUtilVirNWFilterListFree(virNWFilterPtr *nwfilters)
+    {
+        for (gint i = 0; nwfilters[i] != NULL; i++)
+            virNWFilterFree(nwfilters[i]);
+
+        g_free(nwfilters);
+    }
+    ```
+
+    * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used (in libvirt/src/datatypes.h it has a comment saying unique next to it)
+
+6. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`
+
+7. The contents of `src/nwfilter.h` should look like this:
 
     ``` c
     #pragma once
@@ -134,7 +243,7 @@ We will use NWFilter as an example.
                              GError **error);
     ```
 
-4. The contents of `src/nwfilter.c` should look like this:
+8. The contents of `src/nwfilter.c` should look like this:
 
     ``` c
     #include "nwfilter.h"
@@ -225,114 +334,6 @@ We will use NWFilter as an example.
     }
     ```
 
-5. In `src/connect.h`, add this line inside `struct virtDBusConnect{}`:
-
-    ``` diff
-    @@ -14,6 +14,7 @@ struct virtDBusConnect {
-         const gchar *connectPath;
-         gchar *domainPath;
-         gchar *networkPath;
-    +    gchar *nwfilterPath;
-         gchar *secretPath;
-         gchar *storagePoolPath;
-         virConnectPtr connection;
-    ```
-
-6. In `src/connect.c`, mirror the following changes:
-
-    ``` diff
-    @@ -2,6 +2,7 @@
-     #include "domain.h"
-     #include "events.h"
-     #include "network.h"
-    +#include "nwfilter.h"
-     #include "secret.h"
-     #include "storagepool.h"
-     #include "util.h"
-    ```
-
-    ``` diff
-    @@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
-
-         g_free(connect->domainPath);
-         g_free(connect->networkPath);
-    +    g_free(connect->nwfilterPath);
-         g_free(connect->secretPath);
-         g_free(connect->storagePoolPath);
-         g_free(connect);
-    ```
-
-    ``` diff
-    @@ -1451,6 +1453,10 @@ virtDBusConnectNew(virtDBusConnect **connectp,
-         if (error && *error)
-             return;
-
-    +    virtDBusNWFilterRegister(connect, error);
-    +    if (error && *error)
-    +        return;
-    +
-         virtDBusSecretRegister(connect, error);
-         if (error && *error)
-             return;
-      ```
-
-7. In `src/util.h`, define the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
-
-    ``` c
-    virNWFilterPtr
-    virtDBusUtilVirNWFilterFromBusPath(virConnectPtr connection,
-                                       const gchar *path,
-                                       const gchar *nwfilterPath);
-
-    gchar *
-    virtDBusUtilBusPathForVirNWFilter(virNWFilterPtr nwfilter,
-                                      const gchar *nwfilterPath);
-
-    void
-    virtDBusUtilVirNWFilterListFree(virNWFilterPtr *nwfilters);
-
-    G_DEFINE_AUTOPTR_CLEANUP_FUNC(virNWFilter, virNWFilterFree);
-    G_DEFINE_AUTOPTR_CLEANUP_FUNC(virNWFilterPtr, virtDBusUtilVirNWFilterListFree);
-    ```
-
-8. In `src/util.c`, implement the following three functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
-
-    ``` c
-    virNWFilterPtr
-    virtDBusUtilVirNWFilterFromBusPath(virConnectPtr connection,
-                                       const gchar *path,
-                                       const gchar *nwfilterPath)
-    {
-        g_autofree gchar *name = NULL;
-        gsize prefixLen = strlen(nwfilterPath) + 1;
-
-        name = virtDBusUtilDecodeUUID(path + prefixLen);
-
-        return virNWFilterLookupByUUIDString(connection, name);
-    }
-
-    gchar *
-    virtDBusUtilBusPathForVirNWFilter(virNWFilterPtr nwfilter,
-                                      const gchar *nwfilterPath)
-    {
-        gchar uuid[VIR_UUID_STRING_BUFLEN] = "";
-        g_autofree gchar *newUuid = NULL;
-        virNWFilterGetUUIDString(nwfilter, uuid);
-        newUuid = virtDBusUtilEncodeUUID(uuid);
-        return g_strdup_printf("%s/%s", nwfilterPath, newUuid);
-    }
-
-    void
-    virtDBusUtilVirNWFilterListFree(virNWFilterPtr *nwfilters)
-    {
-        for (gint i = 0; nwfilters[i] != NULL; i++)
-            virNWFilterFree(nwfilters[i]);
-
-        g_free(nwfilters);
-    }
-    ```
-
-    * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used (in libvirt/src/datatypes.h it has a comment saying unique next to it)
 
 #### Implementing Properties
 We will use virNWFilterGetName as an example.
