@@ -225,10 +225,9 @@ We will use NWFilter as an example.
     }
     ```
 
-5. In `src/connect.h`, mirror the following changes:
+5. In `src/connect.h`, add this line inside `struct virtDBusConnect {`:
 
     ``` diff
-    @@ -14,6 +14,7 @@ struct virtDBusConnect {
          const gchar *connectPath;
          gchar *domainPath;
          gchar *networkPath;
