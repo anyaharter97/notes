@@ -21,33 +21,34 @@
 4. `git rebase master` to apply changes branch changes on top of master within branch  
 
 ## Commands
-#### Miscellaneous Commands
-`git add --patch` allows you to split commits  
-`git branch-info` returns details of all branches on master  
-`git pull` pulls all changes from whatever branch you are inside  
 
-#### git commit
+#### `commit`
 `git commit -a` stages all changes (but not for untracked files) and asks you for a commit message  
 `git commit -am "message"` commits changes using "message" as the commit message  
 `git commit --amend` allows you to change the commit message for the most recent commit  
 `git commit -a --amend` adds the most recent changes as part of the most recent commit  
 
-#### git checkout
+#### `checkout`
 `git checkout -b <name>` creates a new branch &lt;name&gt;  
 `git checkout <name>` opens branch &lt;name&gt; if it exists  
 
-#### git format-patch
+#### `format-patch`
 `git format-patch -1` creates a patch from the last commit  
 `git format-patch -6 --cover-letter` creates a patch from the last 6 commits with a cover letter  
 `-v2` creates a patch from the last commit and adds "v2" to the header  
 
-#### git rebase
+#### `rebase`
 Rebasing in interactive mode `-i` allows you to reorder, delete, edit and squash commits together  
 `git rebase -i HEAD~3` allows you to rebase the top 3 commits  
 `git rebase master` from inside a branch applies your commits on top of the master (pull the master before this)  
 
-#### git send-email
+#### `send-email`
 `git send-email <patch-file>` sends an email with the &lt;patch-file&gt; (interactively requests sendee)  
 `git send-email *.patch` sends all patches (make sure all old patches are deleted)  
 `--to <address>` sends patch email to &lt;address&gt;  
 `--cc <address>` sends patch email and CCs &lt;address&gt;  
+
+#### Miscellaneous Commands
+`git add --patch` allows you to split commits  
+`git branch-info` returns details of all branches on master  
+`git pull` pulls all changes from whatever branch you are inside  
