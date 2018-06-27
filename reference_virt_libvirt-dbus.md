@@ -6,13 +6,22 @@ There is a system bus connection which is used to communicate with system level 
 
 libvirt-dbus wraps libvirt API to provide a high-level object-oriented API better suited for dbus-based applications
 
-* [Adding an Interface](#adding-an-interface)
-    * [Introducing the Interface](#introducing-the-interface)
-    * [Implementing Properties](#implementing-properties)
-    * [Implementing Connect Methods](#implementing-connect-methods)
-    * [Implementing Interface Methods](#implementing-interface-methods)
-    * [Implementing Events Methods](#implementing-events-methods)
-* [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
+<!-- toc -->
+- [Directories](#directories)
+- [Building from Source](#building-from-source)
+- [Running from Source](#running-from-source)
+- [`busctl`](#-busctl-)
+- [Adding an Interface](#adding-an-interface)
+  * [Introducing the Interface](#introducing-the-interface)
+  * [Properties](#properties)
+  * [Connect Methods](#connect-methods)
+  * [Events](#events)
+  * [Interface Methods](#interface-methods)
+- [Understanding `gdbus.h` in the Context of Interfaces](#understanding--gdbush--in-the-context-of-interfaces)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+<!-- tocstop -->
 
 ### Directories
 * `data` has the `org.libvirt.Interface.xml` file for every interface
@@ -58,19 +67,28 @@ Put the following xml into the `/etc/dbus-1/system.d/org.libvirt.conf` file so t
 ```
 
 To run libvirt-dbus with a **system** bus connection, run the following command from inside the top directory of the git repo
-``` console
-aharter@localhost:~/git/libvirt-dbus (master)
-$ ./run src/libvirt-dbus --system
+```
+$  ./run src/libvirt-dbus --system
 ```
 
 To run libvirt-dbus with a **session** bus connection, run the following command from inside the top directory of the git repo
-``` console
-aharter@localhost:~/git/libvirt-dbus (master)
-$ ./run src/libvirt-dbus --session
+```
+$  ./run src/libvirt-dbus --session
 ```
 
-### busctl
-We will use busctl to send commands to libvirt-dbus
+### `busctl`
+We will use `busctl` to send commands to libvirt-dbus
+
+https://www.freedesktop.org/software/systemd/man/busctl.html
+
+When sending commands to busctl, you generally need to pass in
+* service name: which daemon you are interacting with
+* interface name: (ie. introspect, properties, or one of our own)
+* object path: the object pointer
+
+To send a command with the **system** connection, use the `--system` option. To send a command with the **session** connect, use the `--user` option.
+
+Some noteable methods
 
 
 ### Adding an Interface
@@ -79,67 +97,7 @@ There are three main parts of adding an interface to libvirt-dbus: introducing t
 
 Each interface module is laid out in the libvirt documentation (https://libvirt.org/html).
 
-For a given interface, these are the guidelines that I use to identify the properties, interface methods, and connect methods, all of which are represented as functions:
-
-##### Properties
-The properties come from two different parts of the libvirt code for the most part. But any method belonging to your interface which contains the word "Get", "Set", or "Is"; does not take any other pointers or flags as arguments; and whose first argument has type `vir<InterfaceName>Ptr` has the potential to be represented in the libvirt-dbus code as a property.
-
-To find the code for the right interface try the following two commands:  
-`git grep 'struct _vir<InterfaceName>'`  
-`git grep 'struct _vir<InterfaceName>Obj'`  
-
-The code segments relevant to the Network properties are below as an example...
-
-* `src/datatypes.h` :
-
-    ``` c
-    /**
-    * _virNetwork:
-    *
-    * Internal structure associated to a domain
-    */
-    struct _virNetwork {
-        virObject parent;
-        virConnectPtr conn;                  /* pointer back to the connection */
-        char *name;                          /* the network external name */
-        unsigned char uuid[VIR_UUID_BUFLEN]; /* the network unique identifier */
-    };
-    ```
-
-    * the virObject and virConnectPtr lines are not put into the properties table referenced later
-
-* `src/conf/virnetworkobj.c` :
-
-    ``` c
-    struct _virNetworkObj {
-        virObjectLockable parent;
-
-        pid_t dnsmasqPid;
-        pid_t radvdPid;
-        bool active;
-        bool autostart;
-        bool persistent;
-
-        virNetworkDefPtr def; /* The current definition */
-        virNetworkDefPtr newDef; /* New definition to activate at shutdown */
-
-        virBitmapPtr classIdMap; /* bitmap of class IDs for QoS */
-        unsigned long long floor_sum; /* sum of all 'floor'-s of attached NICs */
-
-        unsigned int taint;
-
-        /* Immutable pointer, self locking APIs */
-        virMacMapPtr macmap;
-    };
-    ```
-
-    * the bool lines are really the properties that seem to be included
-
-##### Connect Methods
-The connect methods are easier to identify because they should have "Connect" in the name and their first argument should take a virConnectPtr.
-
-##### Interface Methods
-The interface methods are anything that wasn't covered by the last two categories.
+For a given interface, these are the guidelines that I use to identify the properties, connect methods, events methods, and interface methods, all of which are represented as functions.
 
 #### Introducing the Interface
 We will use NWFilter as an example.
@@ -377,7 +335,60 @@ We will use NWFilter as an example.
     ```
 
 
-#### Implementing Properties
+#### Properties
+The properties come from two different parts of the libvirt code for the most part. But any method belonging to your interface which contains the word "Get", "Set", or "Is"; does not take any other pointers or flags as arguments; and whose first argument has type `vir<InterfaceName>Ptr` has the potential to be represented in the libvirt-dbus code as a property.
+
+To find the code for the right interface try the following two commands:  
+`git grep 'struct _vir<InterfaceName>'`  
+`git grep 'struct _vir<InterfaceName>Obj'`  
+
+The code segments relevant to the Network properties are below as an example...
+
+* `src/datatypes.h` :
+
+    ``` c
+    /**
+    * _virNetwork:
+    *
+    * Internal structure associated to a domain
+    */
+    struct _virNetwork {
+        virObject parent;
+        virConnectPtr conn;                  /* pointer back to the connection */
+        char *name;                          /* the network external name */
+        unsigned char uuid[VIR_UUID_BUFLEN]; /* the network unique identifier */
+    };
+    ```
+
+    * the virObject and virConnectPtr lines are not put into the properties table referenced later
+
+* `src/conf/virnetworkobj.c` :
+
+    ``` c
+    struct _virNetworkObj {
+        virObjectLockable parent;
+
+        pid_t dnsmasqPid;
+        pid_t radvdPid;
+        bool active;
+        bool autostart;
+        bool persistent;
+
+        virNetworkDefPtr def; /* The current definition */
+        virNetworkDefPtr newDef; /* New definition to activate at shutdown */
+
+        virBitmapPtr classIdMap; /* bitmap of class IDs for QoS */
+        unsigned long long floor_sum; /* sum of all 'floor'-s of attached NICs */
+
+        unsigned int taint;
+
+        /* Immutable pointer, self locking APIs */
+        virMacMapPtr macmap;
+    };
+    ```
+
+    * the bool lines are really the properties that seem to be included
+
 We will use virNWFilterGetName as an example.
 
 The reference documentation for this function is below for reference:
@@ -438,7 +449,10 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
     };
     ```
 
-#### Implementing Connect Methods
+#### Connect Methods
+
+The connect methods are easier to identify because their name should start with "virConnect" and their first argument should take a virConnectPtr. Methods with "Event" in the name are handled differently (see [Implementing Events Methods](#implementing-events-methods)
+
 We will use virConnectListAllNWFilters as an example.
 
 The reference documentation for this function is below for reference:
@@ -516,75 +530,10 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virConnectListAllNWFilter
     };
     ```
 
-#### Implementing Interface Methods
-We will use virNWFilterGetXMLDesc as an example.
+#### Events
 
-The reference documentation for this function is below for reference:
-  ![](images/virNWFilterGetXMLDesc.png)
-https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc
+The event methods are identified by the word "Event" in the name. They generally take a connect pointer and are under the Connect interface but are handled as "signals" rather than "methods".
 
-1. Add the corresponding xml to the `org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the methods after the properties.
-
-    ``` xml
-    <node name="/org/libvirt/nwfilter">
-      <interface name="org.libvirt.NWFilter">
-        ...
-        <method name="GetXMLDesc">
-          <annotation name="org.gtk.GDBus.DocString"
-            value="See https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc"/>
-          <arg name="flags" type="u" direction="in"/>
-          <arg name="xml" type="s" direction="out"/>
-        </method>
-      </interface>
-    </node>
-    ```
-
-    * the parameters for the method are defined and explained in the documentation and should be labeled as "in" direction
-    * the name for the "out" direction argument is your choice but it should follow the specs for the return value of the method
-    * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
-        * `u`: guint32
-        * `s`: string
-
-2. Now we need to create a function in `nwfilter.c`. The model for implementing the method is to create a variable for each of the parameters and one for the output. The output is a GVariant, so you will need to use a variant of the `g_variant_new` function. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
-
-    ``` c
-    static void
-    virtDBusNWFilterGetXMLDesc(GVariant *inArgs,
-                               GUnixFDList *inFDs G_GNUC_UNUSED,
-                               const gchar *objectPath,
-                               gpointer userData,
-                               GVariant **outArgs,
-                               GUnixFDList **outFDs G_GNUC_UNUSED,
-                               GError **error)
-    {
-        virtDBusConnect *connect = userData;
-        g_autoptr(virNWFilter) nwfilter = NULL;
-        g_autofree gchar *xml = NULL;
-        guint flags;
-
-        g_variant_get(inArgs, "(u)", &flags);
-
-        nwfilter = virtDBusNWFilterGetVirNWFilter(connect, objectPath, error);
-        if (!nwfilter)
-            return;
-
-        xml = virNWFilterGetXMLDesc(nwfilter, flags);
-        if (!xml)
-            return virtDBusUtilSetLastVirtError(error);
-
-        *outArgs = g_variant_new("(s)", xml);
-    }
-    ```
-
-3. The last step is to add a line for the function to the property table (it should be ordered alphabetically). The string is the method name as listed in `org.libvirt.NWFilter.xml`. The other half of the line is the method you just created.
-    ``` c
-    static virtDBusGDBusMethodTable virtDBusNWFilterMethodTable[] = {
-        { "GetXMLDesc", virtDBusNWFilterGetXMLDesc },
-        { 0 }
-    };
-    ```
-
-#### Implementing Events Methods
 We will use virConnectNodeDeviceEventLifecycleCallback as an example.
 
 The reference documentation for this function is below for reference:
@@ -717,6 +666,76 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
          virtDBusEventsRegisterSecretEvent(connect,
                                            VIR_SECRET_EVENT_ID_LIFECYCLE,
                                            VIR_SECRET_EVENT_CALLBACK(virtDBusEventsSecretEvent));
+    ```
+
+#### Interface Methods
+The interface methods are anything that wasn't covered by the last three categories.
+
+We will use virNWFilterGetXMLDesc as an example.
+
+The reference documentation for this function is below for reference:
+  ![](images/virNWFilterGetXMLDesc.png)
+https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc
+
+1. Add the corresponding xml to the `org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the methods after the properties.
+
+    ``` xml
+    <node name="/org/libvirt/nwfilter">
+      <interface name="org.libvirt.NWFilter">
+        ...
+        <method name="GetXMLDesc">
+          <annotation name="org.gtk.GDBus.DocString"
+            value="See https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc"/>
+          <arg name="flags" type="u" direction="in"/>
+          <arg name="xml" type="s" direction="out"/>
+        </method>
+      </interface>
+    </node>
+    ```
+
+    * the parameters for the method are defined and explained in the documentation and should be labeled as "in" direction
+    * the name for the "out" direction argument is your choice but it should follow the specs for the return value of the method
+    * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
+        * `u`: guint32
+        * `s`: string
+
+2. Now we need to create a function in `nwfilter.c`. The model for implementing the method is to create a variable for each of the parameters and one for the output. The output is a GVariant, so you will need to use a variant of the `g_variant_new` function. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
+
+    ``` c
+    static void
+    virtDBusNWFilterGetXMLDesc(GVariant *inArgs,
+                               GUnixFDList *inFDs G_GNUC_UNUSED,
+                               const gchar *objectPath,
+                               gpointer userData,
+                               GVariant **outArgs,
+                               GUnixFDList **outFDs G_GNUC_UNUSED,
+                               GError **error)
+    {
+        virtDBusConnect *connect = userData;
+        g_autoptr(virNWFilter) nwfilter = NULL;
+        g_autofree gchar *xml = NULL;
+        guint flags;
+
+        g_variant_get(inArgs, "(u)", &flags);
+
+        nwfilter = virtDBusNWFilterGetVirNWFilter(connect, objectPath, error);
+        if (!nwfilter)
+            return;
+
+        xml = virNWFilterGetXMLDesc(nwfilter, flags);
+        if (!xml)
+            return virtDBusUtilSetLastVirtError(error);
+
+        *outArgs = g_variant_new("(s)", xml);
+    }
+    ```
+
+3. The last step is to add a line for the function to the property table (it should be ordered alphabetically). The string is the method name as listed in `org.libvirt.NWFilter.xml`. The other half of the line is the method you just created.
+    ``` c
+    static virtDBusGDBusMethodTable virtDBusNWFilterMethodTable[] = {
+        { "GetXMLDesc", virtDBusNWFilterGetXMLDesc },
+        { 0 }
+    };
     ```
 
 ### Understanding `gdbus.h` in the Context of Interfaces
