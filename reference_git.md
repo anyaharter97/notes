@@ -21,7 +21,7 @@
 4. `git rebase master` to apply changes branch changes on top of master within branch  
 
 ## Commands
-#### misc
+#### Miscellaneous
 `git add --patch` allows you to split commits  
 `git branch-info` (self-defined command) returns details of all branches on master  
 `git pull` pulls all changes from whatever branch you are inside  

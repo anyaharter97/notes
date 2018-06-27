@@ -1,6 +1,6 @@
 # libvirt-dbus
 
-DBUS is a communication protocol
+D-Bus is a communication protocol
 
 There is a system bus connection which is used to communicate with system level things such as NetworkManager and processes started by systemd and a session bus connection which is dedicated to each user and communicates with user processes
 
@@ -15,6 +15,7 @@ libvirt-dbus wraps libvirt API to provide a high-level object-oriented API bette
 	- [Command Structure](#command-structure)
 	- [Notable OPTIONS](#notable-options)
 	- [Noteable COMMAND](#noteable-command)
+	- [D-Bus Types](#d-bus-types)
 - [Adding an Interface](#adding-an-interface)
 	- [Introducing the Interface](#introducing-the-interface)
 	- [Properties](#properties)
@@ -79,7 +80,7 @@ $  ./run src/libvirt-dbus --session
 ```
 
 ### busctl
-We will use busctl to send commands to libvirt-dbus
+We will use busctl to send commands to libvirt-dbus (although gdbus is what is in the reference documentation for libvirt-dbus https://libvirt.org/dbus.html)
 
 https://www.freedesktop.org/software/systemd/man/busctl.html
 
@@ -119,10 +120,35 @@ $ busctl --system call org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_
 $ busctl --system call org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain SetUserPassword ssu username password 0
 ```
 * `get-property SERVICE OBJECT INTERFACE PROPERTY...`: get property value
-``` console
-$ busctl --system get-property org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain "Name"
-s "fedora27"
 ```
+$ busctl --system get-property org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain "Name"
+```
+
+#### D-Bus Types
+The SIGNATUREs are formatted based on the D-BUS type system which is documented here:
+https://dbus.freedesktop.org/doc/dbus-specification.html#type-system
+
+I have outlined the basics here
+
+| Character | Conventional Name |
+| --------- | ----------------- |
+| `y`       | BYTE              |
+| `b`       | BOOLEAN           |
+| `n`       | INT16             |
+| `q`       | UINT16            |
+| `i`       | INT32             |
+| `u`       | UINT32            |
+| `x`       | INT64             |
+| `t`       | UINT64            |
+| `d`       | DOUBLE            |
+| `s`       | STRING            |
+| `o`       | OBJECT\_PATH      |
+| `g`       | SIGNATURE         |
+| `a`       | ARRAY             |
+| `(` `)`   | STRUCT            |
+| `v`       | VARIANT           |
+| `{` `}`   | DICT\_ENTRY       |
+| `h`       | UNIX_FD           |
 
 ### Adding an Interface
 
@@ -446,7 +472,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
 
     * all properties are "read" by default unless there is a "Set" method in addition to the get method, in which case it is "readwrite" and the first annotation should reference both links (Domain(Get/Set)Autostart is a good example of implementing these)
     * the second annotation line is required for all types except "b" which is gboolean
-    * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
+    * the type is corresponding to the [D-Bus Types](#d-bus-types)
         * `s`: string
 
 2. Now we need to create a function in `nwfilter.c`. The model for implementing the method is to create a variable for the property and then call the original libvirt function. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
@@ -484,7 +510,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
 
 #### Connect Methods
 
-The connect methods are easier to identify because their name should start with "virConnect" and their first argument should take a virConnectPtr. Methods with "Event" in the name are handled differently (see [Implementing Events Methods](#implementing-events-methods)
+The connect methods are easier to identify because their name should start with "virConnect" and their first argument should take a virConnectPtr. Methods with "Event" in the name are handled differently (see [Implementing Events Methods](#implementing-events-methods)).
 
 We will use virConnectListAllNWFilters as an example.
 
@@ -507,7 +533,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virConnectListAllNWFilter
         * Note: This example is a little tricky because in the documentation, there is an array passed in called "filters"; however, if you read the description you will see that it is just an empty pointer in which to store the results, so we don't have to include it in our in-direction arguments.
     * the name for the "out" direction argument is your choice but it should follow the specs for the return value of the method
         * Note: Since what we really need is the array, that should be the "out" argument
-    * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
+    * the type is corresponding to the [D-Bus Types](#d-bus-types)
         * `u`: guint32
         * `a`: array
         * `o`: valid DBus object path
@@ -586,7 +612,7 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
     ```
 
     * the parameters for the method are defined and explained in the documentation and should each have an `arg` tag
-    * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
+    * the type is corresponding to the [D-Bus Types](#d-bus-types)
         * `o`: valid DBus object path
         * `i`: gint32
 
@@ -728,7 +754,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc
 
     * the parameters for the method are defined and explained in the documentation and should be labeled as "in" direction
     * the name for the "out" direction argument is your choice but it should follow the specs for the return value of the method
-    * the type is corresponding to the types of GVariant format strings (https://developer.gnome.org/glib/stable/gvariant-format-strings.html)
+    * the type is corresponding to the [D-Bus Types](#d-bus-types)
         * `u`: guint32
         * `s`: string
 
