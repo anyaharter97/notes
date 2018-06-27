@@ -1,5 +1,9 @@
 # libvirt-dbus
 
+DBUS is a communication protocol
+
+There is a system bus connection which is used to communicate with system level things such as NetworkManager and processes started by systemd and a session bus connection which is dedicated to each user and communicates with user processes
+
 libvirt-dbus wraps libvirt API to provide a high-level object-oriented API better suited for dbus-based applications
 
 * [Adding an Interface](#adding-an-interface)
@@ -14,8 +18,8 @@ libvirt-dbus wraps libvirt API to provide a high-level object-oriented API bette
 * `data` has the `org.libvirt.Interface.xml` file for every interface
 * `src` is all of the source code  
     * contains a `.h` and `.c` file for every interface
-    * `gdbus.c` and `connect.c` are key files
-* `tests` has the tests
+    * `gdbus.c` and `util.c` are key files
+* `tests` has the tests (pytest)
 
 ### Building from Source
 1. Run `./autogen.sh` which turns the configure file into a script (and maybe runs it?)
@@ -34,6 +38,40 @@ These scripts require some packages to run. Install these by running these two c
   >**Note:**  
   NEVER run "sudo make" because then all of the make files will require root permissions.  
   Also, NEVER install it, always just run it from source (in this case, the git repo)  
+
+### Running from Source
+Prep Step:  
+Put the following xml into the `/etc/dbus-1/system.d/org.libvirt.conf` file so that you can run the system bus connection from your non-root account:
+``` xml
+<?xml version="1.0"?>
+<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+
+<busconfig>
+
+  <policy user="aharter">
+    <allow send_destination="org.libvirt"/>
+    <allow own="org.libvirt"/>
+  </policy>
+
+</busconfig>
+```
+
+To run libvirt-dbus with a **system** bus connection, run the following command from inside the top directory of the git repo
+``` console
+aharter@localhost:~/git/libvirt-dbus (master)
+$ ./run src/libvirt-dbus --system
+```
+
+To run libvirt-dbus with a **session** bus connection, run the following command from inside the top directory of the git repo
+``` console
+aharter@localhost:~/git/libvirt-dbus (master)
+$ ./run src/libvirt-dbus --session
+```
+
+### busctl
+We will use busctl to send commands to libvirt-dbus
+
 
 ### Adding an Interface
 
@@ -682,6 +720,8 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
     ```
 
 ### Understanding `gdbus.h` in the Context of Interfaces
+`gdbus.c` connects the APIs we implement to the standard dbus API
+
 I have combined the specification comments from the header and c file in the code below...
 ``` c
 #pragma once
