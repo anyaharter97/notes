@@ -2,13 +2,13 @@ The code for the clock has been moved to its own repository:
     https://github.com/anyaharter97/clock
 
 # Reference Document Links
-* [Arbitrary Tasks Reference](arbitrarytasks.md)
+* **[Arbitrary Tasks](arbitrarytasks.md)**
   * [Create an Email Filter](arbitrarytasks.md#create-an-email-filter)
   * [Add Linked File to "Config" Repo From Existing File](arbitrarytasks.md#add-linked-file-to-config-repo-from-existing-file)
   * [Getting Configure System File](arbitrarytasks.md#getting-configure-system-file)
-* [Atom Reference](atom.md)
+* **[Atom](atom.md)**
   * [Packages to Install on Atom](atom.md#packages-to-install-on-atom)
-* [Linux Command Line Reference](commandline.md)
+* **[Linux Command Line](commandline.md)**
   * [Configuration](commandline.md#configuration)
   * [Permissions](commandline.md#permissions)
     * [Running as Root / With Privileges](commandline.md#running-as-root-with-privileges)
@@ -20,7 +20,7 @@ The code for the clock has been moved to its own repository:
   * [Directories](commandline.md#directories)
     * [Navigation](commandline.md#navigation)
   * [Miscellaneous Commands](commandline.md#miscellaneous-commands)
-* [Git Reference](git.md)
+* **[Git](git.md)**
   * [Configuration](git.md#configuration)
   * [Commands](git.md#commands)
     * [`commit`](git.md#commit)
@@ -31,7 +31,7 @@ The code for the clock has been moved to its own repository:
     * [Miscellaneous Commands](git.md#miscellaneous-commands)
   * [Sending Patches to Mailing List](git.md#sending-patches-to-mailing-list)
   * [Incorporating Master Changes on Branch](git.md#incorporating-master-changes-on-branch)
-* [Vim Reference](vim.md)
+* **[Vim](vim.md)**
   * [Configuration](vim.md#configuration)
   * [Hot Keys](vim.md#hot-keys)
     * [Toggling Modes](vim.md#toggling-modes)
@@ -45,14 +45,14 @@ The code for the clock has been moved to its own repository:
     * [{string}](vim.md#string)
     * [\[flags\]](vim.md#flags)
     * [Examples](vim.md#examples)
-* [Virtualization Reference](virtualization.md)
+* **[Virtualization](virtualization.md)**
   * [Projects](virtualization.md#projects)
   * [VirtManager Stack](virtualization.md#virtmanager-stack)
   * [Virsh Stack](virtualization.md#virsh-stack)
   * [Cockpit Stack](virtualization.md#cockpit-stack)
-* [Cockpit Reference](cockpit.md)
+* **[Cockpit](cockpit.md)**
   * [Cockpit Machines](cockpit.md#cockpit-machines)
-* [libvirt-dbus Reference](libvirt-dbus.md)
+* **[libvirt-dbus](libvirt-dbus.md)**
   * [Directories](libvirt-dbus.md#directories)
   * [Building from Source](libvirt-dbus.md#building-from-source)
   * [Running from Source](libvirt-dbus.md#running-from-source)
@@ -68,13 +68,13 @@ The code for the clock has been moved to its own repository:
     * [Events](libvirt-dbus.md#events)
     * [Interface Methods](libvirt-dbus.md#interface-methods)
   * [Understanding `gdbus.h` in the Context of Interfaces](libvirt-dbus.md#understanding-gdbush-in-the-context-of-interfaces)
-* [VirtManager Reference](virtmanager.md)
+* **[VirtManager](virtmanager.md)**
   * [Virt Install](virtmanager.md#virt-install)
     * [Extending the Virt-Install XML Command Line](virtmanager.md#extending-the-virt-install-xml-command-line)
-* [Virt Shell Reference](virsh.md)
+* **[Virt Shell](virsh.md)**
   * [Connection](virsh.md#connection)
   * [Commands](virsh.md#commands)
-* [libvirt Reference](libvirt.md)
+* **[libvirt](libvirt.md)**
   * [Directories](libvirt.md#directories)
   * [Miscellaneous Commands](libvirt.md#miscellaneous-commands)
   * [Building and Running libvirt](libvirt.md#building-and-running-libvirt)
