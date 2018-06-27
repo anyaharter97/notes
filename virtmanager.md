@@ -1,7 +1,7 @@
-# Virt Manager
+# VirtManager
 Management of all VMs including creation, starting, stopping, destruction, and editing the configuration.
 
-## Virt Install
+## Virt Install (virtinst)
 The main job of virt-install is to serve as a command line interface which creates the XML code that defines VMs when passed in configuration details.
 
 ### Extending the Virt-Install XML Command Line
