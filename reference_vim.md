@@ -8,7 +8,7 @@ Many hotkeys let you enter a number _&lt;n&gt;_ before the command to run that c
   * [General](reference_vim.md#general)
   * [Movement](reference_vim.md#movement)
   * [Searching](reference_vim.md#searching)
-  * [Deleting, Inserting, Replacing, and Copy/Pasting](reference_vim.md#deleting-inserting-replacing-and-copy-pasting)
+  * [Deleting, Inserting, Replacing, and Copy/Pasting](reference_vim.md#deleting-inserting-replacing-and-copypasting)
 * [Find and Replace](reference_vim.md#find-and-replace)
   * [\[range\]](reference_vim.md#range)
   * [{pattern}](reference_vim.md#pattern)
