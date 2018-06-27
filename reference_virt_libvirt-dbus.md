@@ -10,14 +10,14 @@ libvirt-dbus wraps libvirt API to provide a high-level object-oriented API bette
 - [Directories](#directories)
 - [Building from Source](#building-from-source)
 - [Running from Source](#running-from-source)
-- [`busctl`](#-busctl-)
+- [`busctl`](#busctl)
 - [Adding an Interface](#adding-an-interface)
   * [Introducing the Interface](#introducing-the-interface)
   * [Properties](#properties)
   * [Connect Methods](#connect-methods)
   * [Events](#events)
   * [Interface Methods](#interface-methods)
-- [Understanding `gdbus.h` in the Context of Interfaces](#understanding--gdbush--in-the-context-of-interfaces)
+- [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
