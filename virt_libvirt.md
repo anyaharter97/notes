@@ -3,17 +3,13 @@
 Most open source linux C projects are built using a **autotools** aka. autoconf  
 The key identifying files are `autogen.sh` and (`configure.ac` or `configure.in`)  
 
-<!-- TOC depthFrom:3 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-
-- [Directories](#directories)
-- [Misc](#misc)
-- [Building and Running libvirt](#building-and-running-libvirt)
-	- [Building from Source](#building-from-source)
-	- [Running from Source](#running-from-source)
-- [Adding XML Test Cases](#adding-xml-test-cases)
-- [Comma Escaping](#comma-escaping)
-
-<!-- /TOC -->
+* [Directories](reference_virt_libvirt.md#directories)
+* [Misc](reference_virt_libvirt.md#misc)
+* [Building and Running libvirt](reference_virt_libvirt.md#building-and-running-libvirt)
+	* [Building from Source](reference_virt_libvirt.md#building-from-source)
+	* [Running from Source](reference_virt_libvirt.md#running-from-source)
+* [Adding XML Test Cases](reference_virt_libvirt.md#adding-xml-test-cases)
+* [Comma Escaping](reference_virt_libvirt.md#comma-escaping)
 
 ### Directories
 * `src` is most of the source code  
