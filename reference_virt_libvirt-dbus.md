@@ -6,19 +6,19 @@ There is a system bus connection which is used to communicate with system level 
 
 libvirt-dbus wraps libvirt API to provide a high-level object-oriented API better suited for dbus-based applications
 
-<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:0 orderedList:0 -->
 
-	- [Directories](#directories)
-	- [Building from Source](#building-from-source)
-	- [Running from Source](#running-from-source)
-	- [`busctl`](#busctl)
-	- [Adding an Interface](#adding-an-interface)
-		- [Introducing the Interface](#introducing-the-interface)
-		- [Properties](#properties)
-		- [Connect Methods](#connect-methods)
-		- [Events](#events)
-		- [Interface Methods](#interface-methods)
-	- [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
+- [Directories](#directories)
+- [Building from Source](#building-from-source)
+- [Running from Source](#running-from-source)
+- [`busctl`](#busctl)
+- [Adding an Interface](#adding-an-interface)
+	- [Introducing the Interface](#introducing-the-interface)
+	- [Properties](#properties)
+	- [Connect Methods](#connect-methods)
+	- [Events](#events)
+	- [Interface Methods](#interface-methods)
+- [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
 
 <!-- /TOC -->
 
