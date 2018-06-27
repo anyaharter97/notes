@@ -51,6 +51,7 @@ The code for the clock has been moved to its own repository:
   * [Virsh Stack](virtualization.md#virsh-stack)
   * [Cockpit Stack](virtualization.md#cockpit-stack)
 * [Cockpit Reference](cockpit.md)
+  * [Cockpit Machines](cockpit.md#cockpit-machines)
 * [libvirt-dbus Reference](libvirt-dbus.md)
   * [Directories](libvirt-dbus.md#directories)
   * [Building from Source](libvirt-dbus.md#building-from-source)

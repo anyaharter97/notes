@@ -1,4 +1,7 @@
-# Packages to Install on Atom
+# Atom
+* [Packages to Install on Atom](atom.md#packages-to-install-on-atom)
+
+## Packages to Install on Atom
 * markdown-table-editor
 * markdown-toc
 * atom-ide-ui
