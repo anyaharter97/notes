@@ -6,22 +6,21 @@ There is a system bus connection which is used to communicate with system level 
 
 libvirt-dbus wraps libvirt API to provide a high-level object-oriented API better suited for dbus-based applications
 
-<!-- toc -->
-- [Directories](#directories)
-- [Building from Source](#building-from-source)
-- [Running from Source](#running-from-source)
-- [`busctl`](#busctl)
-- [Adding an Interface](#adding-an-interface)
-  * [Introducing the Interface](#introducing-the-interface)
-  * [Properties](#properties)
-  * [Connect Methods](#connect-methods)
-  * [Events](#events)
-  * [Interface Methods](#interface-methods)
-- [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
+<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+	- [Directories](#directories)
+	- [Building from Source](#building-from-source)
+	- [Running from Source](#running-from-source)
+	- [`busctl`](#busctl)
+	- [Adding an Interface](#adding-an-interface)
+		- [Introducing the Interface](#introducing-the-interface)
+		- [Properties](#properties)
+		- [Connect Methods](#connect-methods)
+		- [Events](#events)
+		- [Interface Methods](#interface-methods)
+	- [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
 
-<!-- tocstop -->
+<!-- /TOC -->
 
 ### Directories
 * `data` has the `org.libvirt.Interface.xml` file for every interface
