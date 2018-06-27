@@ -6,7 +6,7 @@ There is a system bus connection which is used to communicate with system level 
 
 libvirt-dbus wraps libvirt API to provide a high-level object-oriented API better suited for dbus-based applications
 
-<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:0 orderedList:0 -->
+<!-- TOC depthFrom:3 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Directories](#directories)
 - [Building from Source](#building-from-source)
