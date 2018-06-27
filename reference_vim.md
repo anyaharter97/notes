@@ -2,65 +2,75 @@
 
 Many hotkeys let you enter a number _&lt;n&gt;_ before the command to run that command _&lt;n&gt;_ times.
 
+* [Configuration](reference_vim.md#configuration)
+* [Hot Keys](reference_vim.md#hot-keys)
+  * [General](reference_vim.md#general)
+* [Find and Replace](reference_vim.md#find-and-replace)
+  * [\[range\]](reference_vim.md#range)
+  * [{pattern}](reference_vim.md#pattern)
+  * [{string}](reference_vim.md#string)
+  * [\[flags\]](reference_vim.md#flags)
+  * [Examples](reference_vim.md#examples)
+
 ## Configuration
 `~/.vimrc` holds a lot of the configurations of vim   
 `~/.vim/colors` holds all colors defined for vim  
 
 ## Hot Keys
 
-| **Toggling Modes** |                                                    |
-| ------------------ | -------------------------------------------------- |
-| `i`                | toggles insert mode                                |
-| `v`                | toggles visual mode (movement = selection)         |
-| `esc`              | exits insert or visual mode                        |
-| `:`                | toggles command mode                               |
-| **General**        |                                                    |
-| `.`                | repeat previous command                            |
-| `u`                | undo                                               |
-| `ctr` + `r`        | redo                                               |
-| `:help`            | help                                               |
-| `:w`               | save                                               |
-| `:q`               | quit                                               |
-| `:q!`              | quit without saving                                |
-| **Movement**       |                                                    |
-| `h`                | left                                               |
-| `k`                | up                                                 |
-| `l`                | right                                              |
-| `j`                | down                                               |
-| `w`                | start of next word                                 |
-| `e`                | end of current word                                |
-| `b`                | beginning of current word                          |
-| `ge`               | end of previous word                               |
-| `0`                | beginning of line                                  |
-| `$`                | end of line                                        |
-| `gg`               | beginning of file                                  |
-| `G`                | end of file                                        |
-| _n_ `G`            | jumps to line _&lt;n&gt;_                          |
-| **Searching**      |                                                    |
-| `f` _c_            | finds next occurrence of character _&lt;c&gt;_     |
-| `F` _c_            | finds previous occurrence of character _&lt;c&gt;_ |
-| `*`                | find next occurrence of word under cursor          |
-| `#`                | find previous occurrence of word under cursor      |
-| `/<text>`          | finds next occurence of _&lt;text&gt;_             |
-| `n`                | forward search on _&lt;text&gt;_                   |
-| `N`                | backward search on _&lt;text&gt;_                  |
-| `%`                | find the corresponding end bracket                 |
-| **Deletion**       |                                                    |
-| `x`                | delete character under the cursor                  |
-| `X`                | delete character to the left of the cursor         |
-| `dd`               | delete line                                        |
-| _n_ `dd`           | delete _&lt;n&gt;_ lines                           |
-| `S`                | clear current line                                 |
-| `d` _m_            | delete all text covered by movement _&lt;m&gt;_    |
-| **Replacement**    |                                                    |
-| `r`                | replace character under cursor                     |
-| **Insertion**      |                                                    |
-| `o`                | insert newline below                               |
-| `O`                | insert newline above                               |
-| **Copy and Paste** |                                                    |
-| `y`                | "yank" copy selected text                          |
-| `yy`               | "yank" copy line                                   |
-| `p`                | paste copied (or `d`eleted) text                   |
+| **Toggling Modes**                |                                                    |
+| --------------------------------- | -------------------------------------------------- |
+| `i`                               | toggles insert mode                                |
+| `v`                               | toggles visual mode (movement = selection)         |
+| `esc`                             | exits insert or visual mode                        |
+| `:`                               | toggles command mode                               |
+| <a name="general">**General**</a> |                                                    |
+| `.`                               | repeat previous command                            |
+| `u`                               | undo                                               |
+| `ctr` + `r`                       | redo                                               |
+| `:help`                           | help                                               |
+| `:w`                              | save                                               |
+| `:q`                              | quit                                               |
+| `:q!`                             | quit without saving                                |
+| **Movement**                      |                                                    |
+| `h`                               | left                                               |
+| `k`                               | up                                                 |
+| `l`                               | right                                              |
+| `j`                               | down                                               |
+| `w`                               | start of next word                                 |
+| `e`                               | end of current word                                |
+| `b`                               | beginning of current word                          |
+| `ge`                              | end of previous word                               |
+| `0`                               | beginning of line                                  |
+| `$`                               | end of line                                        |
+| `gg`                              | beginning of file                                  |
+| `G`                               | end of file                                        |
+| _n_ `G`                           | jumps to line _&lt;n&gt;_                          |
+| **Searching**                     |                                                    |
+| `f` _c_                           | finds next occurrence of character _&lt;c&gt;_     |
+| `F` _c_                           | finds previous occurrence of character _&lt;c&gt;_ |
+| `*`                               | find next occurrence of word under cursor          |
+| `#`                               | find previous occurrence of word under cursor      |
+| `/<text>`                         | finds next occurence of _&lt;text&gt;_             |
+| `n`                               | forward search on _&lt;text&gt;_                   |
+| `N`                               | backward search on _&lt;text&gt;_                  |
+| `%`                               | find the corresponding end bracket                 |
+| **Deletion**                      |                                                    |
+| `x`                               | delete character under the cursor                  |
+| `X`                               | delete character to the left of the cursor         |
+| `dd`                              | delete line                                        |
+| _n_ `dd`                          | delete _&lt;n&gt;_ lines                           |
+| `S`                               | clear current line                                 |
+| `d` _m_                           | delete all text covered by movement _&lt;m&gt;_    |
+| **Replacement**                   |                                                    |
+| `r`                               | replace character under cursor                     |
+| **Insertion**                     |                                                    |
+| `o`                               | insert newline below                               |
+| `O`                               | insert newline above                               |
+| **Copy and Paste**                |                                                    |
+| `y`                               | "yank" copy selected text                          |
+| `yy`                              | "yank" copy line                                   |
+| `p`                               | paste copied (or `d`eleted) text                   |
 
 ## Find and Replace
 
