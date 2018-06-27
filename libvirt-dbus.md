@@ -1,30 +1,25 @@
 # libvirt-dbus
+* [Directories](libvirt-dbus.md#directories)
+* [Building from Source](libvirt-dbus.md#building-from-source)
+* [Running from Source](libvirt-dbus.md#running-from-source)
+* [busctl](libvirt-dbus.md#busctl)
+	* [Command Structure](libvirt-dbus.md#command-structure)
+	* [Notable OPTIONS](libvirt-dbus.md#notable-options)
+	* [Noteable COMMAND](libvirt-dbus.md#noteable-command)
+	* [D-Bus Types](libvirt-dbus.md#d-bus-types)
+* [Adding an Interface](libvirt-dbus.md#adding-an-interface)
+	* [Introducing the Interface](libvirt-dbus.md#introducing-the-interface)
+	* [Properties](libvirt-dbus.md#properties)
+	* [Connect Methods](libvirt-dbus.md#connect-methods)
+	* [Events](libvirt-dbus.md#events)
+	* [Interface Methods](libvirt-dbus.md#interface-methods)
+* [Understanding `gdbus.h` in the Context of Interfaces](libvirt-dbus.md#understanding-gdbush-in-the-context-of-interfaces)
 
 D-Bus is a communication protocol
 
 There is a system bus connection which is used to communicate with system level things such as NetworkManager and processes started by systemd and a session bus connection which is dedicated to each user and communicates with user processes
 
 libvirt-dbus wraps libvirt API to provide a high-level object-oriented API better suited for dbus-based applications
-
-<!-- TOC depthFrom:3 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-
-- [Directories](#directories)
-- [Building from Source](#building-from-source)
-- [Running from Source](#running-from-source)
-- [busctl](#busctl)
-	- [Command Structure](#command-structure)
-	- [Notable OPTIONS](#notable-options)
-	- [Noteable COMMAND](#noteable-command)
-	- [D-Bus Types](#d-bus-types)
-- [Adding an Interface](#adding-an-interface)
-	- [Introducing the Interface](#introducing-the-interface)
-	- [Properties](#properties)
-	- [Connect Methods](#connect-methods)
-	- [Events](#events)
-	- [Interface Methods](#interface-methods)
-- [Understanding `gdbus.h` in the Context of Interfaces](#understanding-gdbush-in-the-context-of-interfaces)
-
-<!-- /TOC -->
 
 ### Directories
 * `data` has the `org.libvirt.Interface.xml` file for every interface

@@ -1,15 +1,14 @@
 # libvirt
+* [Directories](libvirt.md#directories)
+* [Miscellaneous Commands](libvirt.md#miscellaneous-commands)
+* [Building and Running libvirt](libvirt.md#building-and-running-libvirt)
+	* [Building from Source](libvirt.md#building-from-source)
+	* [Running from Source](libvirt.md#running-from-source)
+* [Adding XML Test Cases](libvirt.md#adding-xml-test-cases)
+* [Comma Escaping](libvirt.md#comma-escaping)
 
 Most open source linux C projects are built using a **autotools** aka. autoconf  
 The key identifying files are `autogen.sh` and (`configure.ac` or `configure.in`)  
-
-* [Directories](reference_virt_libvirt.md#directories)
-* [Misc](reference_virt_libvirt.md#misc)
-* [Building and Running libvirt](reference_virt_libvirt.md#building-and-running-libvirt)
-	* [Building from Source](reference_virt_libvirt.md#building-from-source)
-	* [Running from Source](reference_virt_libvirt.md#running-from-source)
-* [Adding XML Test Cases](reference_virt_libvirt.md#adding-xml-test-cases)
-* [Comma Escaping](reference_virt_libvirt.md#comma-escaping)
 
 ### Directories
 * `src` is most of the source code  

@@ -1,4 +1,6 @@
-# virsh (Virt Shell)
+# Virt Shell (virsh)
+* [Connection](virsh.md#connection)
+* [Commands](virsh.md#commands)
 Main use is to start, stop, etc. VMs from a command line interface for the LibVirt API.
 
 To use, run `sudo virsh` from inside the cloned `virt-manager` or `libvirt` repos.  

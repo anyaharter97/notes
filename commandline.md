@@ -1,4 +1,15 @@
 # Linux Command Line
+* [Configuration](commandline.md#configuration)
+* [Permissions](commandline.md#permissions)
+  * [Running as Root / With Privileges](commandline.md#running-as-root-with-privileges)
+* [Installing Software](commandline.md#installing-software)
+  * [Gnome](commandline.md#gnome)
+  * [Installing](commandline.md#installing)
+* [The `Less` Command](commandline.md#the-less-command)
+* [Package Files Commands](commandline.md#package-files-commands)
+* [Directories](commandline.md#directories)
+  * [Navigation](commandline.md#navigation)
+* [Miscellaneous Commands](commandline.md#miscellaneous-commands)
 
 ## Configuration
 `~/.bashrc` contains most of the custom configuration of the terminal  

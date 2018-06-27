@@ -1,4 +1,8 @@
 # Virtualization
+* [Projects](virtualization.md#projects)
+* [VirtManager Stack](virtualization.md#virtmanager-stack)
+* [Virt Shell Stack](virtualization.md#virsh-stack)
+* [Cockpit Stack](virtualization.md#cockpit-stack)
 
 ## Projects
 1. **KVM:** Kernel and CPU level, involved with optimization at the low level
@@ -19,8 +23,8 @@
 		* QEMU
 			* KVM
 
-### Virsh Stack
-* Virsh
+### Virt Shell Stack
+* Virt Shell
 	* libvirt
 		* QEMU
 			* KVM

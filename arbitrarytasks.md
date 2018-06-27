@@ -1,4 +1,7 @@
 # Arbitrary Tasks
+* [Create an Email Filter](arbitrarytasks.md#create-an-email-filter)
+* [Add Linked File to "Config" Repo From Existing File](arbitrarytasks.md#add-linked-file-to-config-repo-from-existing-file)
+* [Getting Configure System File](arbitrarytasks.md#getting-configure-system-file)
 
 #### Create an Email Filter
 1. Create a new folder on the Zimbra web interface

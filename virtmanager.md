@@ -1,4 +1,7 @@
 # VirtManager
+* [Virt Install](virtmanager.md#virt-install)
+  * [Extending the Virt-Install XML Command Line](virtmanager.md#extending-the-virt-install-xml-command-line)
+
 Management of all VMs including creation, starting, stopping, destruction, and editing the configuration.
 
 ## Virt Install (virtinst)
