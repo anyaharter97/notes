@@ -1,7 +1,5 @@
 # vim
 
-Many hotkeys let you enter a number _&lt;n&gt;_ before the command to run that command _&lt;n&gt;_ times.
-
 * [Configuration](reference_vim.md#configuration)
 * [Hot Keys](reference_vim.md#hot-keys)
   * [Toggling Modes](reference_vim.md#toggling-modes)
@@ -21,6 +19,9 @@ Many hotkeys let you enter a number _&lt;n&gt;_ before the command to run that c
 `~/.vim/colors` holds all colors defined for vim  
 
 ## Hot Keys
+
+Many hotkeys let you enter a number _&lt;n&gt;_ before the command to run that command _&lt;n&gt;_ times.
+
 #### Toggling Modes
 | key   | action                                     |
 | ----- | ------------------------------------------ |
