@@ -11,7 +11,10 @@ libvirt-dbus wraps libvirt API to provide a high-level object-oriented API bette
 - [Directories](#directories)
 - [Building from Source](#building-from-source)
 - [Running from Source](#running-from-source)
-- [`busctl`](#busctl)
+- [busctl](#busctl)
+	- [Command Structure](#command-structure)
+	- [Notable OPTIONS](#notable-options)
+	- [Noteable COMMAND](#noteable-command)
 - [Adding an Interface](#adding-an-interface)
 	- [Introducing the Interface](#introducing-the-interface)
 	- [Properties](#properties)
@@ -75,20 +78,51 @@ To run libvirt-dbus with a **session** bus connection, run the following command
 $  ./run src/libvirt-dbus --session
 ```
 
-### `busctl`
-We will use `busctl` to send commands to libvirt-dbus
+### busctl
+We will use busctl to send commands to libvirt-dbus
 
 https://www.freedesktop.org/software/systemd/man/busctl.html
 
-When sending commands to busctl, you generally need to pass in
-* service name: which daemon you are interacting with
-* interface name: (ie. introspect, properties, or one of our own)
-* object path: the object pointer
+#### Command Structure
 
-To send a command with the **system** connection, use the `--system` option. To send a command with the **session** connect, use the `--user` option.
+```
+busctl [OPTIONS...] {COMMAND} ...
+```
 
-Some noteable methods
+The COMMAND part of the string is usually made up of the name of the busctl command followed by a series of required and optional parameters:
+* `SERVICE`: which daemon you are interacting with (in this case `org.libvirt`)
+* `OBJECT`: the object path (`/org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b`)
+* `INTERFACE`: introspect, properties, or one of our own such as `org.libvirt.Domain`
+* `METHOD`: method name
+* `SIGNATURE`: type of argument
+* `ARGUMENT`: argument
+* `PROPERTY`: property name in string format
 
+#### Notable OPTIONS
+* `--system`: connect to system bus
+* `--user`: connect to user (session) bus
+
+#### Noteable COMMAND
+* `tree [SERVICE...]`: show object tree of service
+```
+$ busctl --system tree org.libvirt
+```
+* `introspect SERVICE OBJECT [INTERFACE]`: show interfaces, methods, properties and signals of the object
+```
+$ busctl --system introspect org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b
+```
+* `call SERVICE OBJECT INTERFACE METHOD [SIGNATURE [ARGUMENT...]]`: call a method
+```
+$ busctl --system call org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain GetXMLDesc u 0
+```
+```
+$ busctl --system call org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain SetUserPassword ssu username password 0
+```
+* `get-property SERVICE OBJECT INTERFACE PROPERTY...`: get property value
+``` console
+$ busctl --system get-property org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain "Name"
+s "fedora27"
+```
 
 ### Adding an Interface
 
