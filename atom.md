@@ -5,6 +5,7 @@
 * markdown-table-editor
 * markdown-toc
 * atom-ide-ui
+* atom-html-preview
 * ide-css
 * ide-html
 * ide-php
