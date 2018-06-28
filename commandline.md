@@ -82,7 +82,6 @@ The `less` command also puts you into a sort of vim-like mode where you can sear
   * `ls -a` shows all files (including hidden files)  
 
 ## Miscellaneous Commands
-* `git grep` helps you find things  
 * `ctr` + `d` will close the terminal  
 * `find . -name \*~` will find all files ending in ~ (the backslash escapes the \*)  
 * `ps axww` displays details about processes

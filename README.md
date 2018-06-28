@@ -26,6 +26,7 @@ The code for the clock has been moved to its own repository:
     * [`commit`](git.md#commit)
     * [`checkout`](git.md#checkout)
     * [`format-patch`](git.md#format-patch)
+    * [`grep`](git.md#grep)
     * [`rebase`](git.md#rebase)
     * [`send-email`](git.md#send-email)
     * [Miscellaneous Commands](git.md#miscellaneous-commands)

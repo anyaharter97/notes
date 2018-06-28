@@ -32,6 +32,11 @@
 `git format-patch -6 --cover-letter` creates a patch from the last 6 commits with a cover letter  
 `-v2` creates a patch from the last commit and adds "v2" to the header  
 
+#### `grep`
+* `git grep <string>` searches for the string recursively (case sensitive)
+* `git grep -A4 <string>` displays 4 lines of context after line with string
+* `git grep -B4 <string>` displays 4 lines of context before line with string
+
 #### `rebase`
 Rebasing in interactive mode `-i` allows you to reorder, delete, edit and squash commits together  
 `git rebase -i HEAD~3` allows you to rebase the top 3 commits  
