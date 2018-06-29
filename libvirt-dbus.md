@@ -156,7 +156,7 @@ For a given interface, these are the guidelines that I use to identify the prope
 #### Introducing the Interface
 We will use NWFilter as an example.
 
-1. Create a new file `data/org.libvirt.NWFilter.xml` and add it to `data/Makefile.am`  
+1. Create a new file `data/org.libvirt.NWFilter.xml`
 
     ``` xml
     <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
@@ -168,7 +168,32 @@ We will use NWFilter as an example.
     </node>
     ```
 
-2. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`
+		and add it to `data/Makefile.am`
+
+		``` diff
+		@@ -22,7 +22,8 @@ interfaces_files = \
+		 		 org.libvirt.Connect.xml \
+				 org.libvirt.Domain.xml \
+		 	 	 org.libvirt.Network.xml \
+		+	 	 org.libvirt.NWFilter.xml \
+		 		 org.libvirt.Secret.xml \
+				 org.libvirt.StoragePool.xml \
+				 $(NULL)
+		 interfacesdir = $(DBUS_INTERFACES_DIR)
+		```
+
+2. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`:
+
+		``` diff
+		@@ -10,6 +10,7 @@ DAEMON_SOURCES = \
+		 			events.c events.h \
+		 			gdbus.c gdbus.h \
+		 			network.c network.h \
+		+			nwfilter.c nwfilter.h \
+		 			secret.c secret.h \
+		 			storagepool.c storagepool.h \
+		 			$(NULL)
+		```
 
 3. In `src/util.h`, define the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
 
