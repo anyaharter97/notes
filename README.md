@@ -8,18 +8,6 @@ The code for the clock has been moved to its own repository:
   * [Getting Configure System File](arbitrarytasks.md#getting-configure-system-file)
 * **[Atom](atom.md)**
   * [Packages to Install on Atom](atom.md#packages-to-install-on-atom)
-* **[Linux Command Line](commandline.md)**
-  * [Configuration](commandline.md#configuration)
-  * [Permissions](commandline.md#permissions)
-    * [Running as Root / With Privileges](commandline.md#running-as-root-with-privileges)
-  * [Installing Software](commandline.md#installing-software)
-    * [Gnome](commandline.md#gnome)
-    * [Installing](commandline.md#installing)
-  * [The `Less` Command](commandline.md#the-less-command)
-  * [Package Files Commands](commandline.md#package-files-commands)
-  * [Directories](commandline.md#directories)
-    * [Navigation](commandline.md#navigation)
-  * [Miscellaneous Commands](commandline.md#miscellaneous-commands)
 * **[Git](git.md)**
   * [Configuration](git.md#configuration)
   * [Commands](git.md#commands)
@@ -34,6 +22,18 @@ The code for the clock has been moved to its own repository:
     * [Miscellaneous Commands](git.md#miscellaneous-commands)
   * [Sending Patches to Mailing List](git.md#sending-patches-to-mailing-list)
   * [Incorporating Master Changes on Branch](git.md#incorporating-master-changes-on-branch)
+* **[Linux Command Line](commandline.md)**
+  * [Configuration](commandline.md#configuration)
+  * [Permissions](commandline.md#permissions)
+    * [Running as Root / With Privileges](commandline.md#running-as-root-with-privileges)
+  * [Installing Software](commandline.md#installing-software)
+    * [Gnome](commandline.md#gnome)
+    * [Installing](commandline.md#installing)
+  * [The `Less` Command](commandline.md#the-less-command)
+  * [Package Files Commands](commandline.md#package-files-commands)
+  * [Directories](commandline.md#directories)
+    * [Navigation](commandline.md#navigation)
+  * [Miscellaneous Commands](commandline.md#miscellaneous-commands)
 * **[Vim](vim.md)**
   * [Configuration](vim.md#configuration)
   * [Hot Keys](vim.md#hot-keys)
