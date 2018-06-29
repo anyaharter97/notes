@@ -23,10 +23,12 @@ The code for the clock has been moved to its own repository:
 * **[Git](git.md)**
   * [Configuration](git.md#configuration)
   * [Commands](git.md#commands)
+    * [`bisect`](git.md#bisect)
     * [`commit`](git.md#commit)
     * [`checkout`](git.md#checkout)
     * [`format-patch`](git.md#format-patch)
     * [`grep`](git.md#grep)
+    * [`log`](git.md#log)
     * [`rebase`](git.md#rebase)
     * [`send-email`](git.md#send-email)
     * [Miscellaneous Commands](git.md#miscellaneous-commands)

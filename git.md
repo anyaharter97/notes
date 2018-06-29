@@ -1,9 +1,12 @@
 # Git
 * [Configuration](git.md#configuration)
 * [Commands](git.md#commands)
+  * [`bisect`](git.md#bisect)
   * [`commit`](git.md#commit)
   * [`checkout`](git.md#checkout)
   * [`format-patch`](git.md#format-patch)
+  * [`grep`](git.md#grep)
+  * [`log`](git.md#log)
   * [`rebase`](git.md#rebase)
   * [`send-email`](git.md#send-email)
   * [Miscellaneous Commands](git.md#miscellaneous-commands)
@@ -16,6 +19,19 @@
 `<project-directory>/git/config` contains project specific git configurations  
 
 ## Commands
+
+#### `bisect`
+1. `git bisect start` start git bisect
+2. Give a good and bad commit as a starting point
+    * `git bisect bad <commit number>` instance of a bad commit (omitting commit is current commit)
+    * `git bisect good <commit number>` instance of a good commit (omitting commit is current commit)
+3. Then it drops you halfway between the good and bad commits
+4. Run some diagnostic to tell if the commit is good or bad (git grep, make check, test bug etc.)  
+5. Say the status of the commit
+    * `git bisect bad` if current commit is bad
+    * `git biesct good` if current commit is good
+6. Repeat steps 4. and 5. until it shows the commit message
+7. `git bisect reset` return to the commit checked out before the git bisect start
 
 #### `commit`
 `git commit -a` stages all changes (but not for untracked files) and asks you for a commit message  
@@ -36,6 +52,10 @@
 * `git grep <string>` searches for the string recursively (case sensitive)
 * `git grep -A4 <string>` displays 4 lines of context after line with string
 * `git grep -B4 <string>` displays 4 lines of context before line with string
+
+#### `log`
+* `git log` show the git log
+* `git log -S<string>` show commits where the number of occurrences change
 
 #### `rebase`
 Rebasing in interactive mode `-i` allows you to reorder, delete, edit and squash commits together  
