@@ -158,15 +158,15 @@ We will use NWFilter as an example.
 
 1. Create a new file `data/org.libvirt.NWFilter.xml`
 
-    ``` xml
-    <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
-    "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+		``` xml
+		<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+		"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
-    <node name="/org/libvirt/nwfilter">
-      <interface name="org.libvirt.NWFilter">
-      </interface>
-    </node>
-    ```
+		<node name="/org/libvirt/nwfilter">
+		  <interface name="org.libvirt.NWFilter">
+		  </interface>
+		</node>
+		```
 
 		and add it to `data/Makefile.am`
 
@@ -195,78 +195,7 @@ We will use NWFilter as an example.
 		 			$(NULL)
 		```
 
-3. In `src/util.h`, define the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
-
-    ``` c
-    virNWFilterPtr
-    virtDBusUtilVirNWFilterFromBusPath(virConnectPtr connection,
-                                       const gchar *path,
-                                       const gchar *nwfilterPath);
-
-    gchar *
-    virtDBusUtilBusPathForVirNWFilter(virNWFilterPtr nwfilter,
-                                      const gchar *nwfilterPath);
-
-    void
-    virtDBusUtilVirNWFilterListFree(virNWFilterPtr *nwfilters);
-
-    G_DEFINE_AUTOPTR_CLEANUP_FUNC(virNWFilter, virNWFilterFree);
-    G_DEFINE_AUTOPTR_CLEANUP_FUNC(virNWFilterPtr, virtDBusUtilVirNWFilterListFree);
-    ```
-
-4. In `src/util.c`, implement the following three functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
-
-    ``` c
-    virNWFilterPtr
-    virtDBusUtilVirNWFilterFromBusPath(virConnectPtr connection,
-                                       const gchar *path,
-                                       const gchar *nwfilterPath)
-    {
-        g_autofree gchar *name = NULL;
-        gsize prefixLen = strlen(nwfilterPath) + 1;
-
-        name = virtDBusUtilDecodeUUID(path + prefixLen);
-
-        return virNWFilterLookupByUUIDString(connection, name);
-    }
-
-    gchar *
-    virtDBusUtilBusPathForVirNWFilter(virNWFilterPtr nwfilter,
-                                      const gchar *nwfilterPath)
-    {
-        gchar uuid[VIR_UUID_STRING_BUFLEN] = "";
-        g_autofree gchar *newUuid = NULL;
-        virNWFilterGetUUIDString(nwfilter, uuid);
-        newUuid = virtDBusUtilEncodeUUID(uuid);
-        return g_strdup_printf("%s/%s", nwfilterPath, newUuid);
-    }
-
-    void
-    virtDBusUtilVirNWFilterListFree(virNWFilterPtr *nwfilters)
-    {
-        for (gint i = 0; nwfilters[i] != NULL; i++)
-            virNWFilterFree(nwfilters[i]);
-
-        g_free(nwfilters);
-    }
-    ```
-
-    * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used (in libvirt/src/datatypes.h it has a comment saying unique next to it)
-
-5. In `src/connect.h`, add this line inside `struct virtDBusConnect{}` to create a new path attribute for this interface
-
-    ``` diff
-    @@ -14,6 +14,7 @@ struct virtDBusConnect {
-         const gchar *connectPath;
-         gchar *domainPath;
-         gchar *networkPath;
-    +    gchar *nwfilterPath;
-         gchar *secretPath;
-         gchar *storagePoolPath;
-         virConnectPtr connection;
-    ```
-
-6. In `src/connect.c`, include the new header file
+3. In `src/connect.c`, include the new header file
 
     ``` diff
     @@ -2,6 +2,7 @@
@@ -279,7 +208,7 @@ We will use NWFilter as an example.
      #include "util.h"
     ```
 
-    add a line to `virtDBusConnectFree()` for the path attribute you just created in `connect.h`
+    add a line to `virtDBusConnectFree()` for the path attribute you will create in `connect.h`
 
     ``` diff
     @@ -1394,6 +1395,7 @@ virtDBusConnectFree(virtDBusConnect *connect)
@@ -306,23 +235,22 @@ We will use NWFilter as an example.
          virtDBusSecretRegister(connect, error);
          if (error && *error)
              return;
-      ```
-
-7. The contents of `src/nwfilter.h` should look like this:
-
-    ``` c
-    #pragma once
-
-    #include "connect.h"
-
-    #define VIRT_DBUS_NWFILTER_INTERFACE "org.libvirt.NWFilter"
-
-    void
-    virtDBusNWFilterRegister(virtDBusConnect *connect,
-                             GError **error);
     ```
 
-8. The contents of `src/nwfilter.c` should look like this:
+4. In `src/connect.h`, add this line inside `struct virtDBusConnect{}` to create a new path attribute for this interface
+
+    ``` diff
+    @@ -14,6 +14,7 @@ struct virtDBusConnect {
+         const gchar *connectPath;
+         gchar *domainPath;
+         gchar *networkPath;
+    +    gchar *nwfilterPath;
+         gchar *secretPath;
+         gchar *storagePoolPath;
+         virConnectPtr connection;
+    ```
+
+5. The contents of `src/nwfilter.c` should look like this:
 
     ``` c
     #include "nwfilter.h"
@@ -413,6 +341,77 @@ We will use NWFilter as an example.
     }
     ```
 
+6. The contents of `src/nwfilter.h` should look like this:
+
+		``` c
+		#pragma once
+
+		#include "connect.h"
+
+		#define VIRT_DBUS_NWFILTER_INTERFACE "org.libvirt.NWFilter"
+
+		void
+		virtDBusNWFilterRegister(virtDBusConnect *connect,
+														 GError **error);
+		```
+
+7. In `src/util.c`, implement the following three functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
+
+    ``` c
+    virNWFilterPtr
+    virtDBusUtilVirNWFilterFromBusPath(virConnectPtr connection,
+                                       const gchar *path,
+                                       const gchar *nwfilterPath)
+    {
+        g_autofree gchar *name = NULL;
+        gsize prefixLen = strlen(nwfilterPath) + 1;
+
+        name = virtDBusUtilDecodeUUID(path + prefixLen);
+
+        return virNWFilterLookupByUUIDString(connection, name);
+    }
+
+    gchar *
+    virtDBusUtilBusPathForVirNWFilter(virNWFilterPtr nwfilter,
+                                      const gchar *nwfilterPath)
+    {
+        gchar uuid[VIR_UUID_STRING_BUFLEN] = "";
+        g_autofree gchar *newUuid = NULL;
+        virNWFilterGetUUIDString(nwfilter, uuid);
+        newUuid = virtDBusUtilEncodeUUID(uuid);
+        return g_strdup_printf("%s/%s", nwfilterPath, newUuid);
+    }
+
+    void
+    virtDBusUtilVirNWFilterListFree(virNWFilterPtr *nwfilters)
+    {
+        for (gint i = 0; nwfilters[i] != NULL; i++)
+            virNWFilterFree(nwfilters[i]);
+
+        g_free(nwfilters);
+    }
+    ```
+
+    * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used (in libvirt/src/datatypes.h it has a comment saying unique next to it)
+
+8. In `src/util.h`, define the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
+
+    ``` c
+    virNWFilterPtr
+    virtDBusUtilVirNWFilterFromBusPath(virConnectPtr connection,
+                                       const gchar *path,
+                                       const gchar *nwfilterPath);
+
+    gchar *
+    virtDBusUtilBusPathForVirNWFilter(virNWFilterPtr nwfilter,
+                                      const gchar *nwfilterPath);
+
+    void
+    virtDBusUtilVirNWFilterListFree(virNWFilterPtr *nwfilters);
+
+    G_DEFINE_AUTOPTR_CLEANUP_FUNC(virNWFilter, virNWFilterFree);
+    G_DEFINE_AUTOPTR_CLEANUP_FUNC(virNWFilterPtr, virtDBusUtilVirNWFilterListFree);
+    ```
 
 #### Properties
 The properties come from two different parts of the libvirt code for the most part. But any method belonging to your interface which contains the word "Get", "Set", or "Is"; does not take any other pointers or flags as arguments; and whose first argument has type `vir<InterfaceName>Ptr` has the potential to be represented in the libvirt-dbus code as a property.
