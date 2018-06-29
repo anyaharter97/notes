@@ -1,13 +1,15 @@
-# VirtManager
-* [Virt Install](virtmanager.md#virt-install)
-  * [Extending the Virt-Install XML Command Line](virtmanager.md#extending-the-virt-install-xml-command-line)
+# virt-manager
+* [virt-install](virt-manager.md#virt-install)
+  * [Extending the virt-install XML Command Line](virt-manager.md#extending-the-virt-install-xml-command-line)
+
+The virt-manager application is a desktop user interface for managing virtual machines through libvirt. It primarily targets KVM VMs, but also manages Xen and LXC (linux containers). It presents a summary view of running domains, their live performance & resource utilization statistics. Wizards enable the creation of new domains, and configuration & adjustment of a domain’s resource allocation & virtual hardware. An embedded VNC and SPICE client viewer presents a full graphical console to the guest domain.
 
 Management of all VMs including creation, starting, stopping, destruction, and editing the configuration.
 
-## Virt Install (virtinst)
+## virt-install
 The main job of virt-install is to serve as a command line interface which creates the XML code that defines VMs when passed in configuration details.
 
-### Extending the Virt-Install XML Command Line
+### Extending the virt-install XML Command Line
 1. Create a new branch to isolate the changes
 
 2. Add XMLProperty to the appropriate .py file in `/virt-manager/virtinst/devices`. The main argument to the XMLProperty function is the _XPath_ to the attribute. This could be simple or could involve creating a class and having a ChildXMLProperty.  

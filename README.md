@@ -50,8 +50,8 @@ The code for the clock has been moved to its own repository:
     * [Examples](vim.md#examples)
 * **[Virtualization](virtualization.md)**
   * [Projects](virtualization.md#projects)
-  * [VirtManager Stack](virtualization.md#virtmanager-stack)
-  * [Virsh Stack](virtualization.md#virsh-stack)
+  * [virt-manager Stack](virtualization.md#virt-manager-stack)
+  * [virsh Stack](virtualization.md#virsh-stack)
   * [Cockpit Stack](virtualization.md#cockpit-stack)
 * **[Cockpit](cockpit.md)**
   * [Cockpit Machines](cockpit.md#cockpit-machines)
@@ -71,10 +71,10 @@ The code for the clock has been moved to its own repository:
     * [Events](libvirt-dbus.md#events)
     * [Interface Methods](libvirt-dbus.md#interface-methods)
   * [Understanding `gdbus.h` in the Context of Interfaces](libvirt-dbus.md#understanding-gdbush-in-the-context-of-interfaces)
-* **[VirtManager](virtmanager.md)**
-  * [Virt Install](virtmanager.md#virt-install)
-    * [Extending the Virt-Install XML Command Line](virtmanager.md#extending-the-virt-install-xml-command-line)
-* **[Virt Shell](virsh.md)**
+* **[virt-manager](virt-manager.md)**
+  * [virt-install](virt-manager.md#virt-install)
+    * [Extending the virt-install XML Command Line](virt-manager.md#extending-the-virt-install-xml-command-line)
+* **[virsh](virsh.md)**
   * [Connection](virsh.md#connection)
   * [Commands](virsh.md#commands)
 * **[libvirt](libvirt.md)**

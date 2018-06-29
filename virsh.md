@@ -1,7 +1,10 @@
-# Virt Shell (virsh)
+# virsh
 * [Connection](virsh.md#connection)
 * [Commands](virsh.md#commands)
-Main use is to start, stop, etc. VMs from a command line interface for the LibVirt API.
+
+An interactive shell, and batch scriptable tool for performing management tasks on all libvirt managed domains, networks and storage. This is part of the libvirt core distribution.
+
+Main use is to start, stop, etc. VMs from a command line interface for the libvirt API.
 
 To use, run `sudo virsh` from inside the cloned `virt-manager` or `libvirt` repos.  
 
