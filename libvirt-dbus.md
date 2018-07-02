@@ -100,24 +100,24 @@ The COMMAND part of the string is usually made up of the name of the busctl comm
 
 #### Noteable COMMAND
 * `tree [SERVICE...]`: show object tree of service
-```
-$ busctl --system tree org.libvirt
-```
+	```
+	$ busctl --system tree org.libvirt
+	```
 * `introspect SERVICE OBJECT [INTERFACE]`: show interfaces, methods, properties and signals of the object
-```
-$ busctl --system introspect org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b
-```
+	```
+	$ busctl --system introspect org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b
+	```
 * `call SERVICE OBJECT INTERFACE METHOD [SIGNATURE [ARGUMENT...]]`: call a method
-```
-$ busctl --system call org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain GetXMLDesc u 0
-```
-```
-$ busctl --system call org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain SetUserPassword ssu username password 0
-```
+	```
+	$ busctl --system call org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain GetXMLDesc u 0
+	```
+	```
+	$ busctl --system call org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain SetUserPassword ssu username password 0
+	```
 * `get-property SERVICE OBJECT INTERFACE PROPERTY...`: get property value
-```
-$ busctl --system get-property org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain "Name"
-```
+	```
+	$ busctl --system get-property org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain "Name"
+	```
 
 #### D-Bus Types
 The SIGNATUREs are formatted based on the D-BUS type system which is documented here:
@@ -342,17 +342,17 @@ We will use NWFilter as an example.
 
 6. The contents of `src/nwfilter.h` should look like this:
 
-		``` c
-		#pragma once
+	``` c
+	#pragma once
 
-		#include "connect.h"
+	#include "connect.h"
 
-		#define VIRT_DBUS_NWFILTER_INTERFACE "org.libvirt.NWFilter"
+	#define VIRT_DBUS_NWFILTER_INTERFACE "org.libvirt.NWFilter"
 
-		void
-		virtDBusNWFilterRegister(virtDBusConnect *connect,
-														 GError **error);
-		```
+	void
+	virtDBusNWFilterRegister(virtDBusConnect *connect,
+													 GError **error);
+	```
 
 7. In `src/util.c`, implement the following three functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
 
