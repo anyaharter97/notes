@@ -502,12 +502,10 @@ The code segments relevant to the Network properties are below as an example...
 
     * the bool lines are really the properties that seem to be included
 
-We will use virNWFilterGetName as an example.
+We will use [virNWFilterGetName](https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName) as an example.
 
 The reference documentation for this function is below for reference:
   ![](images/virNWFilterGetName.png)
-https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
-
 
 1. Add the corresponding xml to the `data/org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the properties.
 
@@ -566,11 +564,10 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
 
 The connect methods are easier to identify because their first argument should be of type virConnectPtr and sometimes their name starts with "virConnect". Methods with "Event" in the name are handled differently (see [Implementing Events Methods](#implementing-events-methods)).
 
-We will use virConnectListAllNWFilters as an example.
+We will use [virConnectListAllNWFilters](https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virConnectListAllNWFilters) as an example.
 
 The reference documentation for this function is below for reference:
   ![](images/virConnectListAllNWFilters.png)
-https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virConnectListAllNWFilters
 
 1. Add the corresponding xml to the `data/org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the methods.
 
@@ -647,11 +644,10 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virConnectListAllNWFilter
 
 The event methods are identified by the word "Event" in the name. They generally take a connect pointer and are under the Connect interface but are handled as "signals" rather than "methods".
 
-We will use virConnectNodeDeviceEventLifecycleCallback as an example.
+We will use [virConnectNodeDeviceEventLifecycleCallback](https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventLifecycleCallback) as an example.
 
 The reference documentation for this function is below for reference:
   ![](images/virConnectNodeDeviceEventLifecycleCallback.png)
-https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventLifecycleCallback
 
 1. Add the corresponding xml to the `data/org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the signals under the methods.
 
@@ -784,11 +780,10 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
 #### Interface Methods
 The interface methods are anything that wasn't covered by the last three categories.
 
-We will use virNWFilterGetXMLDesc as an example.
+We will use [virNWFilterGetXMLDesc](https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc) as an example.
 
 The reference documentation for this function is below for reference:
   ![](images/virNWFilterGetXMLDesc.png)
-https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc
 
 1. Add the corresponding xml to the `data/org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the methods after the properties.
 
