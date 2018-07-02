@@ -192,13 +192,13 @@ We will use NWFilter as an example.
 2. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`:
 	``` diff
 	@@ -44,6 +44,8 @@ DAEMON_SOURCES = \
-			 main.c \
+	     main.c \
 	     network.c \
-			 network.h \
+	     network.h \
 	+    nwfilter.c \
-	+		 nwfilter.h \
+	+    nwfilter.h \
 	     secret.c \
-			 secret.h \
+	     secret.h \
 	     storagepool.c \
 	```
 
