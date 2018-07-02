@@ -100,27 +100,34 @@ The COMMAND part of the string is usually made up of the name of the busctl comm
 
 #### Noteable COMMAND
 * `tree [SERVICE...]`: show object tree of service
+
 	```
 	$ busctl --system tree org.libvirt
 	```
+
 * `introspect SERVICE OBJECT [INTERFACE]`: show interfaces, methods, properties and signals of the object
+
 	```
 	$ busctl --system introspect org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b
 	```
+
 * `call SERVICE OBJECT INTERFACE METHOD [SIGNATURE [ARGUMENT...]]`: call a method
+
 	```
 	$ busctl --system call org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain GetXMLDesc u 0
 	```
 	```
 	$ busctl --system call org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain SetUserPassword ssu username password 0
 	```
+
 * `get-property SERVICE OBJECT INTERFACE PROPERTY...`: get property value
+
 	```
 	$ busctl --system get-property org.libvirt /org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b org.libvirt.Domain "Name"
 	```
 
 #### D-Bus Types
-The SIGNATUREs are formatted based on the D-BUS type system which is documented here:
+The SIGNATUREs are formatted based on the D-Bus type system which is documented here:
 https://dbus.freedesktop.org/doc/dbus-specification.html#type-system
 
 I have outlined the basics here
