@@ -191,14 +191,15 @@ We will use NWFilter as an example.
 
 2. Create files `src/nwfilter.c` and `src/nwfilter.h` and add them to `src/Makefile.am`:
 	``` diff
-	@@ -10,6 +10,7 @@ DAEMON_SOURCES = \
-	     events.c events.h \
-	     gdbus.c gdbus.h \
-	     network.c network.h \
-	+    nwfilter.c nwfilter.h \
-	     secret.c secret.h \
-	     storagepool.c storagepool.h \
-	     $(NULL)
+	@@ -44,6 +44,8 @@ DAEMON_SOURCES = \
+			 main.c \
+	     network.c \
+			 network.h \
+	+    nwfilter.c \
+	+		 nwfilter.h \
+	     secret.c \
+			 secret.h \
+	     storagepool.c \
 	```
 
 3. In `src/connect.c`, include the new header file
