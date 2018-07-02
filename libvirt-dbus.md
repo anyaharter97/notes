@@ -359,7 +359,7 @@ We will use NWFilter as an example.
 
 	void
 	virtDBusNWFilterRegister(virtDBusConnect *connect,
-													 GError **error);
+							 GError **error);
 	```
 
 7. In `src/util.c`, implement the following three functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
@@ -666,7 +666,7 @@ https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventL
     +        if (connect->devCallbackIds[i] >= 0) {
     +            if (deregisterEvents) {
     +                virConnectNodeDeviceEventDeregisterAny(connect->connection,
-    +                                                    connect->devCallbackIds[i]);
+    +                                                       connect->devCallbackIds[i]);
     +            }
     +            connect->devCallbackIds[i] = -1;
     +        }
