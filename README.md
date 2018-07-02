@@ -12,6 +12,7 @@ The code for the clock has been moved to its own repository:
   * [Configuration](git.md#configuration)
   * [Commands](git.md#commands)
     * [`bisect`](git.md#bisect)
+    * [`branch`](git.md#branch)
     * [`commit`](git.md#commit)
     * [`checkout`](git.md#checkout)
     * [`format-patch`](git.md#format-patch)

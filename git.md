@@ -2,6 +2,7 @@
 * [Configuration](git.md#configuration)
 * [Commands](git.md#commands)
   * [`bisect`](git.md#bisect)
+  * [`branch`](git.md#branch)
   * [`commit`](git.md#commit)
   * [`checkout`](git.md#checkout)
   * [`format-patch`](git.md#format-patch)
@@ -32,6 +33,11 @@
     * `git biesct good` if current commit is good
 6. Repeat steps 4. and 5. until it shows the commit message
 7. `git bisect reset` return to the commit checked out before the git bisect start
+
+#### `branch`
+`git branch <branch-name>` creates a new branch named &lt;branch-name&gt; from the current branch but does not switch to new branch
+`git branch -D <branch-name>` deletes branch
+`git branch -m <old-name> <new-name>` renames branch &lt;old-name&gt; to &lt;new-name&gt; (inside a branch, the &lt;old-name&gt; argument is unnecessary)
 
 #### `commit`
 `git commit -a` stages all changes (but not for untracked files) and asks you for a commit message  
