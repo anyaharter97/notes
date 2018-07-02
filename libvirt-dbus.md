@@ -564,7 +564,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
 
 #### Connect Methods
 
-The connect methods are easier to identify because their name should start with "virConnect" and their first argument should take a virConnectPtr. Methods with "Event" in the name are handled differently (see [Implementing Events Methods](#implementing-events-methods)).
+The connect methods are easier to identify because their first argument should be of type virConnectPtr and sometimes their name starts with "virConnect". Methods with "Event" in the name are handled differently (see [Implementing Events Methods](#implementing-events-methods)).
 
 We will use virConnectListAllNWFilters as an example.
 
