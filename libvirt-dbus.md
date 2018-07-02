@@ -5,7 +5,7 @@
 * [busctl](libvirt-dbus.md#busctl)
 	* [Command Structure](libvirt-dbus.md#command-structure)
 	* [Notable OPTIONS](libvirt-dbus.md#notable-options)
-	* [Noteable COMMAND](libvirt-dbus.md#noteable-command)
+	* [Noteable COMMANDs](libvirt-dbus.md#noteable-commands)
 	* [D-Bus Types](libvirt-dbus.md#d-bus-types)
 * [Adding an Interface](libvirt-dbus.md#adding-an-interface)
 	* [Introducing the Interface](libvirt-dbus.md#introducing-the-interface)
@@ -98,7 +98,7 @@ The COMMAND part of the string is usually made up of the name of the busctl comm
 * `--system`: connect to system bus
 * `--user`: connect to user (session) bus
 
-#### Noteable COMMAND
+#### Noteable COMMANDs
 * `tree [SERVICE...]`: show object tree of service
 
 	```
