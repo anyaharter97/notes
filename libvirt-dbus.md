@@ -451,13 +451,13 @@ We will use NWFilter as an example.
 #### Properties
 The properties come from two different parts of the libvirt code for the most part. But any method belonging to your interface which contains the word "Get", "Set", or "Is"; does not take any other pointers or flags as arguments; and whose first argument has type `vir<InterfaceName>Ptr` has the potential to be represented in the libvirt-dbus code as a property.
 
-To find the code for the right interface try the following two commands:  
+To find the code for the right interface try the following two commands from inside the libvirt source code:  
 `git grep 'struct _vir<InterfaceName>'`  
 `git grep 'struct _vir<InterfaceName>Obj'`  
 
 The code segments relevant to the Network properties are below as an example...
 
-* `src/datatypes.h` :
+* `libvirt/src/datatypes.h` :
 
     ``` c
     /**
@@ -475,7 +475,7 @@ The code segments relevant to the Network properties are below as an example...
 
     * the virObject and virConnectPtr lines are not put into the properties table referenced later
 
-* `src/conf/virnetworkobj.c` :
+* `libvirt/src/conf/virnetworkobj.c` :
 
     ``` c
     struct _virNetworkObj {
@@ -509,7 +509,7 @@ The reference documentation for this function is below for reference:
 https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
 
 
-1. Add the corresponding xml to the `org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the properties.
+1. Add the corresponding xml to the `data/org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the properties.
 
     ``` xml
     <node name="/org/libvirt/nwfilter">
@@ -529,7 +529,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
     * the type is corresponding to the [D-Bus Types](#d-bus-types)
         * `s`: string
 
-2. Now we need to create a function in `nwfilter.c`. The model for implementing the method is to create a variable for the property and then call the original libvirt function. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
+2. Now we need to create a function in `src/nwfilter.c`. The model for implementing the method is to create a variable for the property and then call the original libvirt function. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
 
     ``` c
     static void
@@ -554,7 +554,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetName
     }
     ```
 
-3. The last step is to add a line for the function to the property table (it should be ordered alphabetically). The string is the property name as listed in `org.libvirt.NWFilter.xml`. The second part is the getter function. The last entry is the setter function or NULL if there is none.
+3. The last step is to add a line for the function to the property table (it should be ordered alphabetically). The string is the property name as listed in `data/org.libvirt.NWFilter.xml`. The second part is the getter function. The last entry is the setter function or NULL if there is none.
     ``` c
     static virtDBusGDBusPropertyTable virtDBusNWFilterPropertyTable[] = {
         { "Name", virtDBusNWFilterGetName, NULL },
@@ -572,7 +572,7 @@ The reference documentation for this function is below for reference:
   ![](images/virConnectListAllNWFilters.png)
 https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virConnectListAllNWFilters
 
-1. Add the corresponding xml to the `org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the methods.
+1. Add the corresponding xml to the `data/org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the methods.
 
     ``` xml
         <method name="ListNWFilters">
@@ -592,7 +592,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virConnectListAllNWFilter
         * `a`: array
         * `o`: valid DBus object path
 
-2. Next we need to create a method in `connect.c` which is a wrapper that calls the actual libvirt function. The model for implementing the method is to create a variable for each of the parameters and one for the output. The output is a GVariant, so you will need to use a variant of the `g_variant_new` function. In the example below, a GVariantBuilder is used to form the array output from the method. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
+2. Next we need to create a method in `src/connect.c` which is a wrapper that calls the actual libvirt function. The model for implementing the method is to create a variable for each of the parameters and one for the output. The output is a GVariant, so you will need to use a variant of the `g_variant_new` function. In the example below, a GVariantBuilder is used to form the array output from the method. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
 
     ``` c
     static void
@@ -633,7 +633,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virConnectListAllNWFilter
     }
     ```
 
-3. The last step is to add a line for the function to the connect method table (it should be ordered alphabetically). The string is the method name as listed in `org.libvirt.Connect.xml`. The other half of the line is the method you just created which is what should be actually called when someone invokes the function name.
+3. The last step is to add a line for the function to the connect method table (it should be ordered alphabetically). The string is the method name as listed in `data/org.libvirt.Connect.xml`. The other half of the line is the method you just created which is what should be actually called when someone invokes the function name.
     ``` c
     static virtDBusGDBusMethodTable virtDBusConnectMethodTable[] = {
         ...
@@ -653,7 +653,7 @@ The reference documentation for this function is below for reference:
   ![](images/virConnectNodeDeviceEventLifecycleCallback.png)
 https://libvirt.org/html/libvirt-libvirt-nodedev.html#virConnectNodeDeviceEventLifecycleCallback
 
-1. Add the corresponding xml to the `org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the signals under the methods.
+1. Add the corresponding xml to the `data/org.libvirt.Connect.xml` file inside the interface tag alphabetically with the rest of the signals under the methods.
 
     ``` xml
         <signal name="NodeDeviceEvent">
@@ -790,7 +790,7 @@ The reference documentation for this function is below for reference:
   ![](images/virNWFilterGetXMLDesc.png)
 https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc
 
-1. Add the corresponding xml to the `org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the methods after the properties.
+1. Add the corresponding xml to the `data/org.libvirt.NWFilter.xml` file inside the interface tag alphabetically with the rest of the methods after the properties.
 
     ``` xml
     <node name="/org/libvirt/nwfilter">
@@ -812,7 +812,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc
         * `u`: guint32
         * `s`: string
 
-2. Now we need to create a function in `nwfilter.c`. The model for implementing the method is to create a variable for each of the parameters and one for the output. The output is a GVariant, so you will need to use a variant of the `g_variant_new` function. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
+2. Now we need to create a function in `src/nwfilter.c`. The model for implementing the method is to create a variable for each of the parameters and one for the output. The output is a GVariant, so you will need to use a variant of the `g_variant_new` function. Each will be slightly different, but if you find a similar function, perhaps for a different interface, that can provide a good model.
 
     ``` c
     static void
@@ -843,7 +843,7 @@ https://libvirt.org/html/libvirt-libvirt-nwfilter.html#virNWFilterGetXMLDesc
     }
     ```
 
-3. The last step is to add a line for the function to the property table (it should be ordered alphabetically). The string is the method name as listed in `org.libvirt.NWFilter.xml`. The other half of the line is the method you just created.
+3. The last step is to add a line for the function to the property table (it should be ordered alphabetically). The string is the method name as listed in `data/org.libvirt.NWFilter.xml`. The other half of the line is the method you just created.
     ``` c
     static virtDBusGDBusMethodTable virtDBusNWFilterMethodTable[] = {
         { "GetXMLDesc", virtDBusNWFilterGetXMLDesc },
