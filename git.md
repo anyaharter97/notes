@@ -1,6 +1,7 @@
 # Git
 * [Configuration](git.md#configuration)
 * [Commands](git.md#commands)
+  * [`apply`](git.md#apply)
   * [`bisect`](git.md#bisect)
   * [`branch`](git.md#branch)
   * [`commit`](git.md#commit)
@@ -21,6 +22,10 @@
 
 ## Commands
 
+#### `apply`
+`git apply <patch>` applies the patch file to the current branch  
+`git apply --reverse <patch>` undoes the application of the patch file to that branch
+
 #### `bisect`
 1. `git bisect start` start git bisect
 2. Give a good and bad commit as a starting point
@@ -35,8 +40,8 @@
 7. `git bisect reset` return to the commit checked out before the git bisect start
 
 #### `branch`
-`git branch <branch-name>` creates a new branch named &lt;branch-name&gt; from the current branch but does not switch to new branch
-`git branch -D <branch-name>` deletes branch
+`git branch <branch-name>` creates a new branch named &lt;branch-name&gt; from the current branch but does not switch to new branch  
+`git branch -D <branch-name>` deletes branch  
 `git branch -m <old-name> <new-name>` renames branch &lt;old-name&gt; to &lt;new-name&gt; (inside a branch, the &lt;old-name&gt; argument is unnecessary)
 
 #### `commit`
