@@ -452,8 +452,8 @@ We will use NWFilter as an example.
 The properties come from two different parts of the libvirt code for the most part. But any method belonging to your interface which contains the word "Get", "Set", or "Is"; does not take any other pointers or flags as arguments; and whose first argument has type `vir<InterfaceName>Ptr` has the potential to be represented in the libvirt-dbus code as a property.
 
 To find the code for the right interface try the following two commands from inside the libvirt source code:  
-`git grep 'struct _vir<InterfaceName>'`  
-`git grep 'struct _vir<InterfaceName>Obj'`  
+`git grep 'struct _vir<InterfaceName> '`  
+`git grep 'struct _vir<InterfaceName>Obj '`  
 
 The code segments relevant to the Network properties are below as an example...
 
