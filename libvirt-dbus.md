@@ -399,7 +399,35 @@ We will use NWFilter as an example.
     }
     ```
 
-    * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used (in libvirt/src/datatypes.h it has a comment saying unique next to it)
+    * It appears that the default identifier used here is the UUID. In the case that the interface does not have a UUID property, another unique identifier with a lookup method is used (in libvirt/src/datatypes.h it has a comment saying unique next to it). For example, StorageVol uses a key so the two functions change as follows:
+
+	``` c
+	virStorageVolPtr
+	virtDBusUtilVirStorageVolFromBusPath(virConnectPtr connection,
+	                                     const gchar *path,
+	                                     const gchar *storageVolPath)
+	{
+	    g_autofree gchar *key = NULL;
+	    gsize prefixLen = strlen(storageVolPath) + 1;
+
+	    key = virtDBusUtilDecodeStr(path + prefixLen);
+
+	    return virStorageVolLookupByKey(connection, key);
+	}
+
+	gchar *
+	virtDBusUtilBusPathForVirStorageVol(virStorageVolPtr storageVol,
+	                                    const gchar *storageVolPath)
+	{
+	    const gchar *key = NULL;
+	    g_autofree const gchar *encodedKey = NULL;
+
+	    key = virStorageVolGetKey(storageVol);
+	    encodedKey = virtDBusUtilEncodeStr(key);
+
+	    return g_strdup_printf("%s/%s", storageVolPath, encodedKey);
+	}
+	```
 
 8. In `src/util.h`, define the following five functions (this block of code occurs in a series of similar blocks, one for each interface, in alphabetical order):
 
