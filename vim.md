@@ -1,17 +1,17 @@
 # vim
 * [Configuration](vim.md#configuration)
 * [Hot Keys](vim.md#hot-keys)
-  * [Toggling Modes](vim.md#toggling-modes)
-  * [General](vim.md#general)
-  * [Movement](vim.md#movement)
-  * [Searching](vim.md#searching)
-  * [Deleting, Inserting, Replacing, and Copy/Pasting](vim.md#deleting-inserting-replacing-and-copy-pasting)
+    * [Toggling Modes](vim.md#toggling-modes)
+    * [General](vim.md#general)
+    * [Movement](vim.md#movement)
+    * [Searching](vim.md#searching)
+    * [Deleting, Inserting, Replacing, and Copy/Pasting](vim.md#deleting-inserting-replacing-and-copy-pasting)
 * [Find and Replace](vim.md#find-and-replace)
-  * [\[range\]](vim.md#range)
-  * [{pattern}](vim.md#pattern)
-  * [{string}](vim.md#string)
-  * [\[flags\]](vim.md#flags)
-  * [Examples](vim.md#examples)
+    * [\[range\]](vim.md#range)
+    * [{pattern}](vim.md#pattern)
+    * [{string}](vim.md#string)
+    * [\[flags\]](vim.md#flags)
+    * [Examples](vim.md#examples)
 
 ## Configuration
 `~/.vimrc` holds a lot of the configurations of vim   
