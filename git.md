@@ -1,19 +1,22 @@
 # Git
 * [Configuration](git.md#configuration)
 * [Commands](git.md#commands)
-  * [`apply`](git.md#apply)
-  * [`bisect`](git.md#bisect)
-  * [`branch`](git.md#branch)
-  * [`commit`](git.md#commit)
-  * [`checkout`](git.md#checkout)
-  * [`format-patch`](git.md#format-patch)
-  * [`grep`](git.md#grep)
-  * [`log`](git.md#log)
-  * [`rebase`](git.md#rebase)
-  * [`send-email`](git.md#send-email)
-  * [Miscellaneous Commands](git.md#miscellaneous-commands)
+    * [`add`](git.md#add)
+    * [`apply`](git.md#apply)
+    * [`bisect`](git.md#bisect)
+    * [`branch`](git.md#branch)
+    * [`branch-info`](git.mid#branch-info)
+    * [`commit`](git.md#commit)
+    * [`checkout`](git.md#checkout)
+    * [`format-patch`](git.md#format-patch)
+    * [`grep`](git.md#grep)
+    * [`log`](git.md#log)
+    * [`pull`](git.md#pull)
+    * [`rebase`](git.md#rebase)
+    * [`send-email`](git.md#send-email)
 * [Sending Patches to Mailing List](git.md#sending-patches-to-mailing-list)
 * [Incorporating Master Changes on Branch](git.md#incorporating-master-changes-on-branch)
+* [Splitting Commits](git.md#splitting-commits)
 
 ## Configuration
 `~/.gitconfig` contains global git configurations  
@@ -22,9 +25,14 @@
 
 ## Commands
 
+#### `add`
+* `git add <filename>` stages the changes for that filename  
+* `git add .` stages all changes  
+* `git add --patch` allows you to stage changes by hunk rather than by file    
+
 #### `apply`
-`git apply <patch>` applies the patch file to the current branch  
-`git apply --reverse <patch>` undoes the application of the patch file to that branch
+* `git apply <patch>` applies the patch file to the current branch  
+* `git apply --reverse <patch>` undoes the application of the patch file to that branch
 
 #### `bisect`
 1. `git bisect start` start git bisect
@@ -40,24 +48,38 @@
 7. `git bisect reset` return to the commit checked out before the git bisect start
 
 #### `branch`
-`git branch <branch-name>` creates a new branch named &lt;branch-name&gt; from the current branch but does not switch to new branch  
-`git branch -D <branch-name>` deletes branch  
-`git branch -m <old-name> <new-name>` renames branch &lt;old-name&gt; to &lt;new-name&gt; (inside a branch, the &lt;old-name&gt; argument is unnecessary)
+* `git branch` lists all of the branches
+* `git branch <branch-name>` creates a new branch named &lt;branch-name&gt; from the current branch but does not switch to new branch  
+* `git branch -D <branch-name>` deletes branch  
+* `git branch -m <old-name> <new-name>` renames branch &lt;old-name&gt; to &lt;new-name&gt; (inside a branch, the &lt;old-name&gt; argument is unnecessary)
+
+#### `branch-info`
+* `git branch-info` returns details of all branches on master (alias configured in gitconfig)
+
+    ```
+    [alias]
+        branch-info = "!sh -c ' \
+    git branch --list --no-color | sed -e \"s/*/ /\" | \
+    while read branch; do \
+        fmt=\"%Cred$branch:%Cblue %s %Cgreen%h%Creset (%ar)\"; \
+        git --no-pager log -1 --format=format:\"$fmt\" $branch -- ; echo;\
+    done'"
+    ```
 
 #### `commit`
-`git commit -a` stages all changes (but not for untracked files) and asks you for a commit message  
-`git commit -am "message"` commits changes using "message" as the commit message  
-`git commit --amend` allows you to change the commit message for the most recent commit  
-`git commit -a --amend` adds the most recent changes as part of the most recent commit  
+* `git commit -a` stages all changes (but not for untracked files) and asks you for a commit message  
+* `git commit -am "message"` commits changes using "message" as the commit message  
+* `git commit --amend` allows you to change the commit message for the most recent commit  
+* `git commit -a --amend` adds the most recent changes as part of the most recent commit  
 
 #### `checkout`
-`git checkout -b <name>` creates a new branch &lt;name&gt;  
-`git checkout <name>` opens branch &lt;name&gt; if it exists  
+* `git checkout -b <name>` creates a new branch &lt;name&gt;  
+* `git checkout <name>` opens branch &lt;name&gt; if it exists  
 
 #### `format-patch`
-`git format-patch -1` creates a patch from the last commit  
-`git format-patch -6 --cover-letter` creates a patch from the last 6 commits with a cover letter  
-`-v2` creates a patch from the last commit and adds "v2" to the header  
+* `git format-patch -1` creates a patch from the last commit  
+* `git format-patch -6 --cover-letter` creates a patch from the last 6 commits with a cover letter  
+* `-v2` creates a patch from the last commit and adds "v2" to the header  
 
 #### `grep`
 * `git grep <string>` searches for the string recursively (case sensitive)
@@ -67,22 +89,23 @@
 #### `log`
 * `git log` show the git log
 * `git log -S<string>` show commits where the number of occurrences change
+* `git log --author <name>` returns commits authored by &lt;name&gt;
+
+#### `pull`
+* `git pull` pulls all changes down including newly created remote branches
+* `git pull origin <remote-branch>` pulls down all changes from that branch
+* `git pull origin master` pulls down only changes from the master branch
 
 #### `rebase`
-Rebasing in interactive mode `-i` allows you to reorder, delete, edit and squash commits together  
-`git rebase -i HEAD~3` allows you to rebase the top 3 commits  
-`git rebase master` from inside a branch applies your commits on top of the master (pull the master before this)  
+* `git rebase -i HEAD~3` allows you to rebase the top 3 commits  
+    * Rebasing in interactive mode `-i` allows you to reorder, delete, edit and squash commits together  
+* `git rebase master` from inside a branch applies your commits on top of the master (pull the master before this)  
 
 #### `send-email`
-`git send-email <patch-file>` sends an email with the &lt;patch-file&gt; (interactively requests sendee)  
-`git send-email *.patch` sends all patches (make sure all old patches are deleted)  
-`--to <address>` sends patch email to &lt;address&gt;  
-`--cc <address>` sends patch email and CCs &lt;address&gt;  
-
-#### Miscellaneous Commands
-`git add --patch` allows you to split commits  
-`git branch-info` returns details of all branches on master  
-`git pull` pulls all changes from whatever branch you are inside  
+* `git send-email <patch-file>` sends an email with the &lt;patch-file&gt; (interactively requests sendee)  
+* `git send-email *.patch` sends all patches (make sure all old patches are deleted)  
+* `--to <address>` sends patch email to &lt;address&gt;  
+* `--cc <address>` sends patch email and CCs &lt;address&gt;  
 
 ## Sending Patches to Mailing List
 1. Make sure the branch has all changes from master before sending patches and make sure all changes have been added and incorporated into the latest commit (or more if necessary)  
@@ -98,3 +121,5 @@ Rebasing in interactive mode `-i` allows you to reorder, delete, edit and squash
 2. `git pull` from master to get all of the changes  
 3. `git checkout <branch>` to go back to the branch  
 4. `git rebase master` to apply changes branch changes on top of master within branch  
+
+## Splitting Commits  
