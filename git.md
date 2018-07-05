@@ -102,6 +102,8 @@
 * `git rebase -i HEAD~3` allows you to rebase the top 3 commits  
     * Rebasing in interactive mode `-i` allows you to reorder, delete, edit and squash commits together  
 * `git rebase master` from inside a branch applies your commits on top of the master (pull the master before this)  
+* `git rebase --abort` quits out of a rebase
+* `git rebase --continue` continues the next command in the rebase after you are done making changes
 
 #### `reset`
 Tread with caution so you don't lose changes forever by accident
@@ -141,4 +143,10 @@ Tread with caution so you don't lose changes forever by accident
 4. `git rebase master` to apply changes branch changes on top of master within branch  
 
 ## Splitting Commits  
-// TODO
+1. `git rebase -i HEAD~4` or however back you need to go
+2. Mark the relevant commit as "edit"
+3. `git reset HEAD^` to uncommit the changes
+4. `git add --patch` to add some hunks and not others
+5. `git commit` and add a message (be careful not to use the "-a" flag or it will add everything)
+6. Repeat 4. and 5. until everything has been committed
+7. `git rebase --continue`
