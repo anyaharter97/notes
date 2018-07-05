@@ -13,7 +13,9 @@
     * [`log`](git.md#log)
     * [`pull`](git.md#pull)
     * [`rebase`](git.md#rebase)
+    * [`reset`](git.md#reset)
     * [`send-email`](git.md#send-email)
+    * [`stash`](git.md#stash)
 * [Sending Patches to Mailing List](git.md#sending-patches-to-mailing-list)
 * [Incorporating Master Changes on Branch](git.md#incorporating-master-changes-on-branch)
 * [Splitting Commits](git.md#splitting-commits)
@@ -101,11 +103,27 @@
     * Rebasing in interactive mode `-i` allows you to reorder, delete, edit and squash commits together  
 * `git rebase master` from inside a branch applies your commits on top of the master (pull the master before this)  
 
+#### `reset`
+Tread with caution so you don't lose changes forever by accident
+* `git reset --hard HEAD~3` trashes the last three changes forever
+* `git reset HEAD^` undoes the last committed change but leaves changes as uncommitted (basically undoes the commit but otherwise changes nothing)
+
 #### `send-email`
 * `git send-email <patch-file>` sends an email with the &lt;patch-file&gt; (interactively requests sendee)  
 * `git send-email *.patch` sends all patches (make sure all old patches are deleted)  
 * `--to <address>` sends patch email to &lt;address&gt;  
 * `--cc <address>` sends patch email and CCs &lt;address&gt;  
+
+#### `stash`
+* `git stash` adds changes to the stash
+* `git stash --patch` allows you to select hunks to be stashed
+* `git stash push -m "<message>"` allows you to add the changes to the stash with a message
+* `git stash show` shows the details of the top stashed changes
+* `git stash list` lists all of the stashed changes
+* `git stash apply` takes the top stashed changes and revives them (leaves the changes in the stash)
+* `git stash pop` takes the top stashed changes, revives them, and removes them from the stack (if there is a merge conflict, it is not removed)
+* `git stash drop` removes the top stashed changes from the stash
+* `git stash clear` empties the stash
 
 ## Sending Patches to Mailing List
 1. Make sure the branch has all changes from master before sending patches and make sure all changes have been added and incorporated into the latest commit (or more if necessary)  
