@@ -2,6 +2,7 @@
 * [Directories](libvirt-dbus.md#directories)
 * [Building from Source](libvirt-dbus.md#building-from-source)
 * [Running from Source](libvirt-dbus.md#running-from-source)
+* [Testing](libvirt-dbus.md#testing)
 * [busctl](libvirt-dbus.md#busctl)
 	* [Command Structure](libvirt-dbus.md#command-structure)
 	* [Notable OPTIONS](libvirt-dbus.md#notable-options)
@@ -73,6 +74,13 @@ To run libvirt-dbus with a **session** bus connection, run the following command
 ```
 $  ./run src/libvirt-dbus --session
 ```
+
+### Testing
+The tests are in the form of pytests
+
+Each `test_{object}.py` file is executable and the test itself, you need to have one class there and every method that starts with "test_" is a test case
+
+You can run each test by executing `./run tests/test_connect.py` and it also takes some parameters, for example `./run tests/test_connect.py -v` will increase verbosity, you can also use `--help` as parameter
 
 ### busctl
 We will use busctl to send commands to libvirt-dbus (although gdbus is what is in the reference documentation for libvirt-dbus https://libvirt.org/dbus.html)
