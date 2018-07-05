@@ -1,9 +1,8 @@
 # libvirt
 * [Directories](libvirt.md#directories)
 * [Miscellaneous Commands](libvirt.md#miscellaneous-commands)
-* [Building and Running libvirt](libvirt.md#building-and-running-libvirt)
-	* [Building from Source](libvirt.md#building-from-source)
-	* [Running from Source](libvirt.md#running-from-source)
+* [Building from Source](libvirt.md#building-from-source)
+* [Running from Source](libvirt.md#running-from-source)
 * [Adding XML Test Cases](libvirt.md#adding-xml-test-cases)
 * [Comma Escaping](libvirt.md#comma-escaping)
 
@@ -26,8 +25,7 @@ The key identifying files are `autogen.sh` and (`configure.ac` or `configure.in`
 * `sudo vi /var/log/libvirt/qemu/f27.log` will give you the log for the VM specified, in this case f27  
 * `VIR_TEST_DEBUG=2 ./tests/qemuxml2argvtest 2>&1 | less` runs the test file with debugging so you can see the full expected and received and then redirects `stderr` output to `stdout` where you can page through it in `less` mode  
 
-### Building and Running libvirt
-#### Building from Source
+### Building from Source
 1. Run `./autogen.sh` which turns the configure file into a script (and maybe runs it?)
 
 2. Running `./configure` generates make files from the make file templates  
@@ -46,7 +44,7 @@ These scripts require some packages to run. Install these by running these two c
   NEVER run "sudo make" because then all of the make files will require root permissions.  
   Also, NEVER install it, always just run it from source (in this case, the git repo)  
 
-#### Running from Source
+### Running from Source
 1. There is already libvirt running on the Fedora distribution, so in order to run the version from git you have to stop the process...  
 `sudo systemctl stop libvirtd` stops the daemon libvirt process  
 (`sudo systemctl start libvirtd` starts it again)  

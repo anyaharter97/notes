@@ -85,8 +85,7 @@ The code for the clock has been moved to its own repository:
 * **[libvirt](libvirt.md)**
     * [Directories](libvirt.md#directories)
     * [Miscellaneous Commands](libvirt.md#miscellaneous-commands)
-    * [Building and Running libvirt](libvirt.md#building-and-running-libvirt)
-        * [Building from Source](libvirt.md#building-from-source)
-        * [Running from Source](libvirt.md#running-from-source)
+    * [Building from Source](libvirt.md#building-from-source)
+    * [Running from Source](libvirt.md#running-from-source)
     * [Adding XML Test Cases](libvirt.md#adding-xml-test-cases)
     * [Comma Escaping](libvirt.md#comma-escaping)
