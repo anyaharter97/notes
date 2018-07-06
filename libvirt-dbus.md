@@ -78,6 +78,8 @@ $  ./run src/libvirt-dbus --session
 ### Testing
 The tests are in the form of pytests
 
+The testing is done only for APIs that are implemented by "test" driver in libvirt (`src/test/test_driver.c`) because that driver is used to run the tests and not every API is implemented
+
 Each `test_{object}.py` file is executable and the test itself, you need to have one class there and every method that starts with "test_" is a test case
 
 You can run each test by executing `./run tests/test_connect.py` and it also takes some parameters, for example `./run tests/test_connect.py -v` will increase verbosity, you can also use `--help` as parameter
