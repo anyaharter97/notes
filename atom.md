@@ -4,6 +4,7 @@
 ## Packages to Install on Atom
 * markdown-table-editor
 * markdown-toc
+* language-diff
 * atom-ide-ui
 * atom-html-preview
 * ide-css
