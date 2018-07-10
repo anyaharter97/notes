@@ -2,12 +2,12 @@
 * [Directories](libvirt-dbus.md#directories)
 * [Building from Source](libvirt-dbus.md#building-from-source)
 * [Running from Source](libvirt-dbus.md#running-from-source)
-* [Testing](libvirt-dbus.md#testing)
 * [busctl](libvirt-dbus.md#busctl)
     * [Command Structure](libvirt-dbus.md#command-structure)
     * [Notable OPTIONS](libvirt-dbus.md#notable-options)
     * [Noteable COMMANDs](libvirt-dbus.md#noteable-commands)
     * [D-Bus Types](libvirt-dbus.md#d-bus-types)
+* [Testing](libvirt-dbus.md#testing)
 * [Adding an Interface](libvirt-dbus.md#adding-an-interface)
     * [Introducing the Interface](libvirt-dbus.md#introducing-the-interface)
     * [Properties](libvirt-dbus.md#properties)
@@ -77,14 +77,15 @@ To run libvirt-dbus with a **session** bus connection, run the following command
 $  ./run src/libvirt-dbus --session
 ```
 
-### Testing
-The tests are in the form of pytests
+>To see if it is running, run
+`ps axwww | grep libvirt-dbus`.
 
-The testing is done only for APIs that are implemented by "test" driver in libvirt (`src/test/test_driver.c`) because that driver is used to run the tests and not every API is implemented
+>From here you can see where it is running from (either `/usr/bin/libvirt-dbus` or `src/libvirt-dbus`).  
 
-Each `test_{object}.py` file is executable and the test itself, you need to have one class there and every method that starts with "test_" is a test case
-
-You can run each test by executing `./run tests/test_connect.py` and it also takes some parameters, for example `./run tests/test_connect.py -v` will increase verbosity, you can also use `--help` as parameter
+>To kill it, you can try running
+`killall libvirt-dbus`
+or if that fails
+`killall -9 <pid>`
 
 ### busctl
 We will use busctl to send commands to libvirt-dbus (although gdbus is what is in the reference documentation for libvirt-dbus https://libvirt.org/dbus.html)
@@ -99,7 +100,7 @@ busctl [OPTIONS...] {COMMAND} ...
 
 The COMMAND part of the string is usually made up of the name of the busctl command followed by a series of required and optional parameters:
 * `SERVICE`: which daemon you are interacting with (in this case `org.libvirt`)
-* `OBJECT`: the object path (`/org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b`)
+* `OBJECT`: the object path (`/org/libvirt/QEMU/domain/_90157a79_649c_4db6_9ebe_715ea57b336b` - domain object or `/org/libvirt/Test` - connect object)
 * `INTERFACE`: introspect, properties, or one of our own such as `org.libvirt.Domain`
 * `METHOD`: method name
 * `SIGNATURE`: type of argument
@@ -163,6 +164,15 @@ I have outlined the basics here
 | `v`       | VARIANT           |
 | `{` `}`   | DICT\_ENTRY       |
 | `h`       | UNIX_FD           |
+
+### Testing
+The tests are in the form of pytests
+
+The testing is done only for APIs that are implemented by "test" driver in libvirt (`src/test/test_driver.c`) because that driver is used to run the tests and not every API is implemented
+
+Each `test_{object}.py` file is executable and the test itself, you need to have one class there and every method that starts with "test_" is a test case
+
+You can run each test by executing `./run tests/test_connect.py` and it also takes some parameters, for example `./run tests/test_connect.py -v` will increase verbosity, you can also use `--help` as parameter
 
 ### Adding an Interface
 
