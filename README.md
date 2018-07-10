@@ -75,8 +75,10 @@ The code for the clock has been moved to its own repository:
         * [Introducing the Interface](libvirt-dbus.md#introducing-the-interface)
         * [Properties](libvirt-dbus.md#properties)
         * [Connect Methods](libvirt-dbus.md#connect-methods)
-        * [Events](libvirt-dbus.md#events)
-        * [Interface Methods](libvirt-dbus.md#interface-methods)
+    		* [Key Features](libvirt-dbus.md#key-features-connect-methods)
+    	* [Events](libvirt-dbus.md#events)
+    	* [Interface Methods](libvirt-dbus.md#interface-methods)
+    		* [Key Features](libvirt-dbus.md#key-features-interface-methods)
     * [Understanding `gdbus.h` in the Context of Interfaces](libvirt-dbus.md#understanding-gdbush-in-the-context-of-interfaces)
 * **[virt-manager](virt-manager.md)**
     * [virt-install](virt-manager.md#virt-install)
