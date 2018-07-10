@@ -104,6 +104,7 @@
 * `git rebase master` from inside a branch applies your commits on top of the master (pull the master before this)  
 * `git rebase --abort` quits out of a rebase
 * `git rebase --continue` continues the next command in the rebase after you are done making changes
+* `git rebase -x "make && make check" origin/master` rebases the current branch on top of origin master and calls "make && make check" for every commit that is applied on top of master
 
 #### `reset`
 Tread with caution so you don't lose changes forever by accident
