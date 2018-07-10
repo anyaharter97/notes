@@ -12,8 +12,10 @@
 	* [Introducing the Interface](libvirt-dbus.md#introducing-the-interface)
 	* [Properties](libvirt-dbus.md#properties)
 	* [Connect Methods](libvirt-dbus.md#connect-methods)
+		* [Key Features](libvirt-dbus.md#key-features-connect-methods)
 	* [Events](libvirt-dbus.md#events)
 	* [Interface Methods](libvirt-dbus.md#interface-methods)
+		* [Key Features](libvirt-dbus.md#key-features-interface-methods)
 * [Understanding `gdbus.h` in the Context of Interfaces](libvirt-dbus.md#understanding-gdbush-in-the-context-of-interfaces)
 
 D-Bus is a communication protocol
@@ -533,7 +535,11 @@ The reference documentation for this function is below for reference:
     ```
 
     * all properties are "read" by default unless there is a "Set" method in addition to the get method, in which case it is "readwrite" and the first annotation should reference both links (Domain(Get/Set)Autostart is a good example of implementing these)
-    * the second annotation line is required for all types except "b" which is gboolean
+    * the second annotation line is required for all types except "b" which is boolean
+		* if there are any properties that is type boolean, the following line should go underneath the line with the interface tag:
+		``` xml
+		<annotation name="org.freedesktop.DBus.Property.EmitsChangedSignal" value="false"/>
+		```
     * the type is corresponding to the [D-Bus Types](#d-bus-types)
         * `s`: string
 
@@ -649,6 +655,41 @@ The reference documentation for this function is below for reference:
         { 0 }
     };
     ```
+
+##### Key Features (Connect Methods)
+
+``` c
+static void
+virtDBusConnectMethodName(GVariant *inArgs [G_GNUC_UNUSED],
+						  GUnixFDList *inFDs G_GNUC_UNUSED,
+						  const gchar *objectPath G_GNUC_UNUSED,
+						  gpointer userData,
+						  GVariant **outArgs [G_GNUC_UNUSED],
+						  GUnixFDList **outFDs G_GNUC_UNUSED,
+						  GError **error)
+{
+	virtDBusConnect *connect = userData;
+
+	// if (inArgs)
+	gchar *arg1;
+	guint arg2;
+
+	g_variant_get(inArgs, "(&su)", &arg1, &arg2);
+	// endif
+
+	if (!virtDBusConnectOpen(connect, error))
+		return;
+
+	if (virConnectMethodName(connect->connection[, arg1, arg2]) < 0)
+		return virtDBusUtilSetLastVirtError(error);
+
+    // if (outArgs)
+	path = virtDBusUtilBusPathForVirNetwork(network, connect->domainPath);  
+
+    *outArgs = g_variant_new("(o)", path);
+	// endif
+}
+```
 
 #### Events
 
@@ -855,6 +896,42 @@ The reference documentation for this function is below for reference:
         { 0 }
     };
     ```
+
+##### Key Features (Interface Methods)
+
+``` c
+static void
+virtDBusInterfaceNameMethodName(GVariant *inArgs [G_GNUC_UNUSED],
+                                GUnixFDList *inFDs G_GNUC_UNUSED,
+                                const gchar *objectPath,
+                                gpointer userData,
+                                GVariant **outArgs [G_GNUC_UNUSED],
+                                GUnixFDList **outFDs G_GNUC_UNUSED,
+                                GError **error)
+{
+    virtDBusConnect *connect = userData;
+    g_autoptr(virInterfaceName) interfacename = NULL;
+    g_autofree gchar *argout = NULL;       // if (outArgs)
+    guint argin;                           // if (inArgs)
+
+    g_variant_get(inArgs, "(u)", &argin);   // if (inArgs)
+
+    interfacename = virtDBusInterfaceNameGetVirInterfaceName(connect, objectPath, error);
+    if (!interfacename)
+        return;
+
+    // if (outArgs)
+	argout = virInterfaceNameMethodName(interfacename, argin);
+    if (!argout)
+        return virtDBusUtilSetLastVirtError(error);
+
+    *outArgs = g_variant_new("(s)", argout);
+	// else
+    if (virInterfaceNameMethodName(interfacename) < 0)
+        virtDBusUtilSetLastVirtError(error);
+    // end
+}
+```
 
 ### Understanding `gdbus.h` in the Context of Interfaces
 `gdbus.c` connects the APIs we implement to the standard dbus API
