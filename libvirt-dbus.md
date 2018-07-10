@@ -658,38 +658,38 @@ The reference documentation for this function is below for reference:
 
 ##### Key Features (Connect Methods)
 
-	``` c
-	static void
-	virtDBusConnectMethodName(GVariant *inArgs [G_GNUC_UNUSED],
-							  GUnixFDList *inFDs G_GNUC_UNUSED,
-							  const gchar *objectPath G_GNUC_UNUSED,
-							  gpointer userData,
-							  GVariant **outArgs [G_GNUC_UNUSED],
-							  GUnixFDList **outFDs G_GNUC_UNUSED,
-							  GError **error)
-	{
-		virtDBusConnect *connect = userData;
+``` c
+static void
+virtDBusConnectMethodName(GVariant *inArgs [G_GNUC_UNUSED],
+						  GUnixFDList *inFDs G_GNUC_UNUSED,
+						  const gchar *objectPath G_GNUC_UNUSED,
+						  gpointer userData,
+						  GVariant **outArgs [G_GNUC_UNUSED],
+						  GUnixFDList **outFDs G_GNUC_UNUSED,
+						  GError **error)
+{
+	virtDBusConnect *connect = userData;
 
-		// if (inArgs)
-		gchar *arg1;
-		guint arg2;
+	// if (inArgs)
+	gchar *arg1;
+	guint arg2;
 
-		g_variant_get(inArgs, "(&su)", &arg1, &arg2);
-		// endif
+	g_variant_get(inArgs, "(&su)", &arg1, &arg2);
+	// endif
 
-		if (!virtDBusConnectOpen(connect, error))
-			return;
+	if (!virtDBusConnectOpen(connect, error))
+		return;
 
-		if (virConnectMethodName(connect->connection[, arg1, arg2]) < 0)
-			return virtDBusUtilSetLastVirtError(error);
+	if (virConnectMethodName(connect->connection[, arg1, arg2]) < 0)
+		return virtDBusUtilSetLastVirtError(error);
 
-	    // if (outArgs)
-		path = virtDBusUtilBusPathForVirNetwork(network, connect->domainPath);  
+    // if (outArgs)
+	path = virtDBusUtilBusPathForVirNetwork(network, connect->domainPath);  
 
-	    *outArgs = g_variant_new("(o)", path);
-		// endif
-	}
-	```
+    *outArgs = g_variant_new("(o)", path);
+	// endif
+}
+```
 
 #### Events
 
@@ -899,39 +899,39 @@ The reference documentation for this function is below for reference:
 
 ##### Key Features (Interface Methods)
 
-	``` c
-	static void
-	virtDBusInterfaceNameMethodName(GVariant *inArgs [G_GNUC_UNUSED],
-	                                GUnixFDList *inFDs G_GNUC_UNUSED,
-	                                const gchar *objectPath,
-	                                gpointer userData,
-	                                GVariant **outArgs [G_GNUC_UNUSED],
-	                                GUnixFDList **outFDs G_GNUC_UNUSED,
-	                                GError **error)
-	{
-	    virtDBusConnect *connect = userData;
-	    g_autoptr(virInterfaceName) interfacename = NULL;
-	    g_autofree gchar *argout = NULL;       // if (outArgs)
-	    guint argin;                           // if (inArgs)
+``` c
+static void
+virtDBusInterfaceNameMethodName(GVariant *inArgs [G_GNUC_UNUSED],
+                                GUnixFDList *inFDs G_GNUC_UNUSED,
+                                const gchar *objectPath,
+                                gpointer userData,
+                                GVariant **outArgs [G_GNUC_UNUSED],
+                                GUnixFDList **outFDs G_GNUC_UNUSED,
+                                GError **error)
+{
+    virtDBusConnect *connect = userData;
+    g_autoptr(virInterfaceName) interfacename = NULL;
+    g_autofree gchar *argout = NULL;       // if (outArgs)
+    guint argin;                           // if (inArgs)
 
-	    g_variant_get(inArgs, "(u)", &argin);   // if (inArgs)
+    g_variant_get(inArgs, "(u)", &argin);   // if (inArgs)
 
-	    interfacename = virtDBusInterfaceNameGetVirInterfaceName(connect, objectPath, error);
-	    if (!interfacename)
-	        return;
+    interfacename = virtDBusInterfaceNameGetVirInterfaceName(connect, objectPath, error);
+    if (!interfacename)
+        return;
 
-	    // if (outArgs)
-		argout = virInterfaceNameMethodName(interfacename, argin);
-	    if (!argout)
-	        return virtDBusUtilSetLastVirtError(error);
+    // if (outArgs)
+	argout = virInterfaceNameMethodName(interfacename, argin);
+    if (!argout)
+        return virtDBusUtilSetLastVirtError(error);
 
-	    *outArgs = g_variant_new("(s)", argout);
-		// else
-	    if (virInterfaceNameMethodName(interfacename) < 0)
-	        virtDBusUtilSetLastVirtError(error);
-	    // end
-	}
-	```
+    *outArgs = g_variant_new("(s)", argout);
+	// else
+    if (virInterfaceNameMethodName(interfacename) < 0)
+        virtDBusUtilSetLastVirtError(error);
+    // end
+}
+```
 
 ### Understanding `gdbus.h` in the Context of Interfaces
 `gdbus.c` connects the APIs we implement to the standard dbus API
