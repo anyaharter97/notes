@@ -30,7 +30,8 @@
 #### `add`
 * `git add <filename>` stages the changes for that filename  
 * `git add .` stages all changes  
-* `git add --patch` allows you to stage changes by hunk rather than by file    
+* `git add --patch` allows you to stage changes by hunk rather than by file
+* `git add -N <filename>` adds the new file to "Changes not staged for commit"
 
 #### `apply`
 * `git apply <patch>` applies the patch file to the current branch  
