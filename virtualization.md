@@ -16,19 +16,19 @@
 
 ### virt-manager Stack
 * virt-manager <=> virt-install code
-	* libvirt
-		* QEMU
-			* KVM
+    * libvirt
+        * QEMU
+            * KVM
 
 ### virsh Stack
 * virsh
-	* libvirt
-		* QEMU
-			* KVM
+    * libvirt
+        * QEMU
+            * KVM
 
 ### Cockpit Stack
 * Cockpit Machines
-	* libvirt-dbus
-		* libvirt
-			* QEMU
-				* KVM
+    * libvirt-dbus
+        * libvirt
+            * QEMU
+                * KVM

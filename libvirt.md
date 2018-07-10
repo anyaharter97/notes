@@ -12,8 +12,8 @@ The key identifying files are `autogen.sh` and (`configure.ac` or `configure.in`
 ### Directories
 * `src` is most of the source code  
   * `src/test` has all of the tests  
-		* `src/test/qemuxml2argvtest.c` is one of the big test files  
-		* `src/test/qemuxml2argvdata/name-escape.xml` is the file where we test escaping things  
+        * `src/test/qemuxml2argvtest.c` is one of the big test files  
+        * `src/test/qemuxml2argvdata/name-escape.xml` is the file where we test escaping things  
   * `src/conf` shared code that essentially parses the XML  
     * `domain_conf.c` parses the XML into a C structure  
   * `src/qemu` where most of the libvirt work happens  
