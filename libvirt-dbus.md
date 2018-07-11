@@ -83,7 +83,7 @@ $  ./run src/libvirt-dbus --session
 >From here you can see where it is running from (either `/usr/bin/libvirt-dbus` or `src/libvirt-dbus`).  
 
 >To kill it, you can try running
-`killall libvirt-dbus`
+`killall libvirt-dbus` or `sudo killall libvirt-dbus`
 or if that fails
 `killall -9 <pid>`
 

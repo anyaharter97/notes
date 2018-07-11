@@ -29,7 +29,7 @@ File ownership can be changed using the `chown` command.
 Use the keyword `sudo` before any command to run from root.  
 You can also use the command:
   ```
-  $  sudo -
+  $  su -
   $  # do a bunch of admin commands
   $  exit
   ```
