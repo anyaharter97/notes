@@ -66,7 +66,17 @@ Put the following xml into the `/etc/dbus-1/system.d/org.libvirt.conf` file so t
 
 </busconfig>
 ```
+Put the following code into a '/etc/polkit-1/rules.d/aharter.rules' file:
+``` js
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.libvirt.unix.manage" &&
+        subject.user == "aharter") {
+        return polkit.Result.YES;
+    }
+});
+```
 
+Normal Use:  
 To run libvirt-dbus with a **system** bus connection, run the following command from inside the top directory of the git repo
 ```
 $  ./run src/libvirt-dbus --system
