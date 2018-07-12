@@ -4,6 +4,7 @@
     * [`add`](git.md#add)
     * [`apply`](git.md#apply)
     * [`bisect`](git.md#bisect)
+    * [`blame`](git.md#blame)
     * [`branch`](git.md#branch)
     * [`branch-info`](git.mid#branch-info)
     * [`commit`](git.md#commit)
@@ -49,6 +50,9 @@
     * `git biesct good` if current commit is good
 6. Repeat steps 4. and 5. until it shows the commit message
 7. `git bisect reset` return to the commit checked out before the git bisect start
+
+#### `blame`
+* `git blame <filename>` shows the commits responsible for the current state of the file, line by line
 
 #### `branch`
 * `git branch` lists all of the branches

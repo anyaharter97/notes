@@ -14,6 +14,7 @@ The code for the clock has been moved to its own repository:
         * [`add`](git.md#add)
         * [`apply`](git.md#apply)
         * [`bisect`](git.md#bisect)
+        * [`blame`](git.md#blame)
         * [`branch`](git.md#branch)
         * [`branch-info`](git.mid#branch-info)
         * [`commit`](git.md#commit)
