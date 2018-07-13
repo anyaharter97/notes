@@ -402,7 +402,7 @@ There are three main parts of adding an interface to libvirt-dbus: introducing t
 
 Each interface module is laid out in the libvirt documentation (https://libvirt.org/html).
 
-For a given interface, these are the guidelines that I use to identify the properties, connect methods, events methods, and interface methods, all of which are represented as functions.
+For each property or method you implement, add a test case as defined in the [Testing](libvirt-dbus.md#testing) section.
 
 #### Introducing the Interface
 We will use NWFilter as an example.
