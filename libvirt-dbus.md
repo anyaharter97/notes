@@ -8,6 +8,11 @@
     * [Noteable COMMANDs](libvirt-dbus.md#noteable-commands)
     * [D-Bus Types](libvirt-dbus.md#d-bus-types)
 * [Testing](libvirt-dbus.md#testing)
+    * [Introducing the Test Suite](libvirt-dbus.md#introducing-the-test-suite)
+    * [Test Properties](libvirt-dbus.md#test-properties)
+    * [Test Connect Methods](libvirt-dbus.md#test-connect-methods)
+    * [Test Events](libvirt-dbus.md#test-events)
+    * [Test Interface Methods](libvirt-dbus.md#test-interface-methods)
 * [Adding an Interface](libvirt-dbus.md#adding-an-interface)
     * [Introducing the Interface](libvirt-dbus.md#introducing-the-interface)
     * [Properties](libvirt-dbus.md#properties)
@@ -184,6 +189,213 @@ Each `test_{object}.py` file is executable and the test itself, you need to have
 
 You can run each test by executing `./run tests/test_connect.py` and it also takes some parameters, for example `./run tests/test_connect.py -v` will increase verbosity, you can also use `--help` as parameter
 
+#### Introducing the Test Suite
+We will use Network as an example.
+
+You can only write tests for functions that are implemented in the libvirt `src/test/test_driver.c` file:
+
+``` c
+static virConnectDriver testConnectDriver = {
+    .localOnly = true,
+    .uriSchemes = (const char *[]){ "test", NULL },
+    .hypervisorDriver = &testHypervisorDriver,
+    .interfaceDriver = &testInterfaceDriver,
+    .networkDriver = &testNetworkDriver,
+    .nodeDeviceDriver = &testNodeDeviceDriver,
+    .nwfilterDriver = NULL,
+    .secretDriver = NULL,
+    .storageDriver = &testStorageDriver,
+};
+```
+
+If the driver is defined (ie. not NULL) in the above code, you can make a test suite for it. Each driver has their own block outlining the functions implemented and there are some variations from the way the test suite is designed if the ListAll function is not implemented:
+
+``` c
+static virNetworkDriver testNetworkDriver = {
+    .connectNumOfNetworks = testConnectNumOfNetworks, /* 0.3.2 */
+    .connectListNetworks = testConnectListNetworks, /* 0.3.2 */
+    .connectNumOfDefinedNetworks = testConnectNumOfDefinedNetworks, /* 0.3.2 */
+    .connectListDefinedNetworks = testConnectListDefinedNetworks, /* 0.3.2 */
+    .connectListAllNetworks = testConnectListAllNetworks, /* 0.10.2 */
+    .connectNetworkEventRegisterAny = testConnectNetworkEventRegisterAny, /* 1.2.1 */
+    .connectNetworkEventDeregisterAny = testConnectNetworkEventDeregisterAny, /* 1.2.1 */
+    .networkLookupByUUID = testNetworkLookupByUUID, /* 0.3.2 */
+    .networkLookupByName = testNetworkLookupByName, /* 0.3.2 */
+    .networkCreateXML = testNetworkCreateXML, /* 0.3.2 */
+    .networkDefineXML = testNetworkDefineXML, /* 0.3.2 */
+    .networkUndefine = testNetworkUndefine, /* 0.3.2 */
+    .networkUpdate = testNetworkUpdate, /* 0.10.2 */
+    .networkCreate = testNetworkCreate, /* 0.3.2 */
+    .networkDestroy = testNetworkDestroy, /* 0.3.2 */
+    .networkGetXMLDesc = testNetworkGetXMLDesc, /* 0.3.2 */
+    .networkGetBridgeName = testNetworkGetBridgeName, /* 0.3.2 */
+    .networkGetAutostart = testNetworkGetAutostart, /* 0.3.2 */
+    .networkSetAutostart = testNetworkSetAutostart, /* 0.3.2 */
+    .networkIsActive = testNetworkIsActive, /* 0.7.3 */
+    .networkIsPersistent = testNetworkIsPersistent, /* 0.7.3 */
+};
+```
+
+Once you have established that a test suite can be created, the following steps will help you introduce the test suite. The introduction must happen in conjunction with introducing a test, otherwise there will be unused functions which will not make check.
+
+1. Create a file in libvirt-dbus `tests/test_network.py`:
+
+    ``` python
+    #!/usr/bin/python3
+
+    import dbus
+    import libvirttest
+
+    class TestNetwork(libvirttest.BaseTestClass):
+        """ Tests for methods and properties of the Network interface
+        """
+
+        # TODO: add a test
+
+    if __name__ == '__main__':
+        libvirttest.run()
+    ```
+
+    If the ListAll method isn't implemented you need to `import pytest` as well, in preparation to use a pytest fixture function you will create later
+
+2. Add the file to the `tests/Makefile.am`:
+
+    ``` diff
+    @@ -5,7 +5,8 @@ test_helpers = \
+    test_programs = \
+        test_connect.py \
+        test_domain.py \
+    +   test_network.py \
+        test_storage.py
+    ```
+
+3. Add minimal_network_xml to tests/xmldata.py:
+
+    ``` python
+    minimal_network_xml = '''
+    <network>
+      <name>bar</name>
+      <uuid>004b96e12d78c30f5aa5f03c87d21e69</uuid>
+      <bridge name='brdefault'/>
+      <forward dev='eth0'/>
+      <ip address='192.168.122.1' netmask='255.255.255.0'>
+        <dhcp>
+          <range start='192.168.122.128' end='192.168.122.253'/>
+        </dhcp>
+      </ip>
+    </network>
+    '''
+    ```
+
+    >An example for simple domain xml can be found in libvirt `src/test/test_driver.c` if you grep for `static const char *defaultConnXML`
+
+4. Add a function to create or get a test object to `tests/libvirttest.py`. If the ListAll function is implemented in the libvirt test driver, the code looks like this:
+
+    ``` python
+    def get_test_network(self):
+    """Fetch information for the test network from test driver
+
+    Returns:
+        (dbus.proxies.ProxyObject, dbus.proxies.ProxyObject):
+        Test Network Object, Local proxy for the test Network Object.
+
+    """
+    path = self.connect.ListNetworks(0)[0]
+    obj = self.bus.get_object('org.libvirt', path)
+    return path, obj
+    ```
+
+    If the ListAll function is not implemented, you can get the path by using a CreateXML function to make a new object:
+
+    ``` python
+    @pytest.fixture
+    def node_device_create(self):
+        """ Fixture to define dummy node device on the test driver
+
+        This fixture should be used in the setup of every test
+        manipulating with node devices.
+        """
+        path = self.connect.NodeDeviceCreateXML(xmldata.minimal_node_device_xml, 0)
+        return path
+    ```
+
+#### Test Properties
+
+All of the property tests are within the same function which should be defined with the first one in `tests/test_network.py`:
+
+``` python
+def test_network_properties_type(self):
+    """ Ensure correct return type for Network properties
+    """
+    _, obj = self.get_test_network()
+    props = obj.GetAll('org.libvirt.Network', dbus_interface=dbus.PROPERTIES_IFACE)
+    assert isinstance(props['Active'], dbus.Boolean)
+    assert isinstance(props['Name'], dbus.String)
+```
+
+Every additional property adds an assert line in alphabetical order at the end of the function
+
+#### Test Connect Methods
+
+The LookupBy* method tests have a slightly different structure than the other test connect method functions:
+
+``` python
+@pytest.mark.parametrize("lookup_method_name,lookup_item", [
+    ("NetworkLookupByName", 'Name'),
+    ("NetworkLookupByUUID", 'UUID'),
+])
+def test_connect_network_lookup_by_property(self, lookup_method_name, lookup_item):
+    """Parameterized test for all NetworkLookupBy* API calls of Connect interface
+    """
+    original_path, obj = self.get_test_network()
+    prop = obj.Get('org.libvirt.Network', lookup_item, dbus_interface=dbus.PROPERTIES_IFACE)
+    path = getattr(self.connect, lookup_method_name)(prop)
+    assert original_path == path
+```
+
+#### Test Events
+
+You need to define a class for the event in `tests/libvirttest.py`:
+
+``` python
+class NetworkEvent(IntEnum):
+    DEFINED = 0
+    UNDEFINED = 1
+    STARTED = 2
+    STOPPED = 3
+```
+
+The function test_connect_network_create_xml in `tests/test_connect.py` is a good example of testing events. The network_started function, connection to the signal, and loops are related to the event testing:
+
+``` python
+def test_connect_network_create_xml(self):
+    def network_started(path, event):
+        if event != libvirttest.NetworkEvent.STARTED:
+            return
+        assert isinstance(path, dbus.ObjectPath)
+        self.loop.quit()
+
+    self.connect.connect_to_signal('NetworkEvent', network_started)
+
+    path = self.connect.NetworkCreateXML(xmldata.minimal_network_xml)
+    assert isinstance(path, dbus.ObjectPath)
+
+    self.main_loop()
+```
+
+#### Test Interface Methods
+
+It looks like the only interface functions that are tested  are ones with return values and create, destroy, undefine etc. functions.
+
+A simple example  is test_network_get_xml_description in `tests/test_network.py`:
+
+``` python
+def test_network_get_xml_description(self):
+    _,test_network = self.get_test_network()
+    interface_obj = dbus.Interface(test_network, 'org.libvirt.Network')
+    assert isinstance(interface_obj.GetXMLDesc(0), dbus.String)
+```
+
 ### Adding an Interface
 
 There are three main parts of adding an interface to libvirt-dbus: introducing the interface, implementing the properties, and implementing the methods (in the interface file and in `connect.c`).
@@ -297,27 +509,6 @@ We will use NWFilter as an example.
 
     #include <libvirt/libvirt.h>
 
-    static virNWFilterPtr
-    virtDBusNWFilterGetVirNWFilter(virtDBusConnect *connect,
-                                   const gchar *objectPath,
-                                   GError **error)
-    {
-        virNWFilterPtr nwfilter;
-
-        if (virtDBusConnectOpen(connect, error) < 0)
-            return NULL;
-
-        nwfilter = virtDBusUtilVirNWFilterFromBusPath(connect->connection,
-                                                      objectPath,
-                                                      connect->nwfilterPath);
-        if (!nwfilter) {
-            virtDBusUtilSetLastVirtError(error);
-            return NULL;
-        }
-
-        return nwfilter;
-    }
-
     static virtDBusGDBusPropertyTable virtDBusNWFilterPropertyTable[] = {
         { 0 }
     };
@@ -378,6 +569,31 @@ We will use NWFilter as an example.
                                      virtDBusNWFilterPropertyTable,
                                      connect);
     }
+    ```
+
+    The first interface method or property implemented should add the following method at the top of the `src/*.c` file:
+
+    ``` c
+        static virNWFilterPtr
+        virtDBusNWFilterGetVirNWFilter(virtDBusConnect *connect,
+                                       const gchar *objectPath,
+                                       GError **error)
+        {
+            virNWFilterPtr nwfilter;
+
+            if (virtDBusConnectOpen(connect, error) < 0)
+                return NULL;
+
+            nwfilter = virtDBusUtilVirNWFilterFromBusPath(connect->connection,
+                                                          objectPath,
+                                                          connect->nwfilterPath);
+            if (!nwfilter) {
+                virtDBusUtilSetLastVirtError(error);
+                return NULL;
+            }
+
+            return nwfilter;
+        }
     ```
 
 6. The contents of `src/nwfilter.h` should look like this:
