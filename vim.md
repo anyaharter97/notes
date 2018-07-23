@@ -165,3 +165,5 @@ Save typing by using `\zs` and `\ze` to set the start and end of a pattern. For 
 `:%s/Copyright \zs2007\ze All Rights Reserved/2008/`
 
 `:%s/I \(.*\) to eat \(.*\)\./I \1 to eat \2!/g`
+
+`%s/if (!virtDBusConnectOpen(connect, \(.*\)))/if (!virtDBusConnectOpen(connect, \1))/g`
