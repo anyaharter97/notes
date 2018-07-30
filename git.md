@@ -14,12 +14,14 @@
     * [`log`](git.md#log)
     * [`pull`](git.md#pull)
     * [`rebase`](git.md#rebase)
+    * [`remote`](git.md#remote)
     * [`reset`](git.md#reset)
     * [`send-email`](git.md#send-email)
     * [`stash`](git.md#stash)
 * [Sending Patches to Mailing List](git.md#sending-patches-to-mailing-list)
 * [Incorporating Master Changes on Branch](git.md#incorporating-master-changes-on-branch)
 * [Splitting Commits](git.md#splitting-commits)
+* [Adding a Remote](git.md#adding-a-remote)
 
 ## Configuration
 `~/.gitconfig` contains global git configurations  
@@ -78,6 +80,7 @@
 * `git commit -am "message"` commits changes using "message" as the commit message  
 * `git commit --amend` allows you to change the commit message for the most recent commit  
 * `git commit -a --amend` adds the most recent changes as part of the most recent commit  
+* `git commit --signoff` adds the signoff message at the bottom of the commit
 
 #### `checkout`
 * `git checkout -b <name>` creates a new branch &lt;name&gt;  
@@ -110,6 +113,10 @@
 * `git rebase --abort` quits out of a rebase
 * `git rebase --continue` continues the next command in the rebase after you are done making changes
 * `git rebase -x "make && make check" origin/master` rebases the current branch on top of origin master and calls "make && make check" for every commit that is applied on top of master
+
+#### `remote`
+* `git remote show origin` shows the origin for that repo
+* `git remote` shows the repos whose branches are tracked
 
 #### `reset`
 Tread with caution so you don't lose changes forever by accident
@@ -156,3 +163,9 @@ Tread with caution so you don't lose changes forever by accident
 5. `git commit` and add a message (be careful not to use the "-a" flag or it will add everything)
 6. Repeat 4. and 5. until everything has been committed
 7. `git rebase --continue`
+
+## Adding a Remote
+1. Fork the project on github
+2. Get the link to the fork from clicking the "Clone" button
+3. From inside the repo run `git remote add <name> <link>`
+4. To push changes run `git push -f <name>`
