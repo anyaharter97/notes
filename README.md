@@ -63,8 +63,8 @@ The code for the clock has been moved to its own repository:
     * [virt-manager Stack](virtualization.md#virt-manager-stack)
     * [virsh Stack](virtualization.md#virsh-stack)
     * [Cockpit Stack](virtualization.md#cockpit-stack)
-* **[Cockpit](cockpit.md)**
-    * [Cockpit Machines](cockpit.md#cockpit-machines)
+* **[Cockpit Machines](cockpit.md)**
+    * [Testing](cockpit.md#testing)
 * **[libvirt-dbus](libvirt-dbus.md)**
     * [Directories](libvirt-dbus.md#directories)
     * [Building from Source](libvirt-dbus.md#building-from-source)
