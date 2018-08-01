@@ -38,22 +38,23 @@ More details in `/test/README`
 
     * Alternatively, use my **~AWESOME~** script
 
-    `~/tmp/myscript`:
+    `/usr/bin/myscript`:
 
     ``` bash
     #!/usr/bin/env bash
 
-    echo "Starting test suite"
+    echo "Starting test suite '$1'"
 
-    ~/git/cockpit/test/verify/check-machines &> $PWD/Test-cockpit-check-machines-results.log
+    echo "---------------------------------------------------------"
+    echo " STATUS    #    NAME                            DURATION"
+    echo "---------------------------------------------------------"
 
-    echo "Finished test suite"
-
-    sed -rn "s/^((not )?ok) ([0-9]*) (.*) \(__main__.(.*)\) (.*)/\1\t\3\t\5.\4\t\6/p" "$PWD/Test-cockpit-check-machines-results.log" | column -t -s $'\t'
+    ~/git/cockpit/test/verify/$1 2>&1 | tee $PWD/Test-cockpit-$1-results.log \
+    | gawk '{gsub(/not ok/,"\033[0;31m FAILURE  \033[1;000m")}{gsub(/\<ok\>/,"\033[0;32m SUCCESS  \033[1;000m")}{gsub(/__main__/,"")}{gsub("\\.","")}{gsub("[0-9]+ ","&\t")}{gsub("# duration: ","\t")}/FAILURE|SUCCESS|FAILED/'
     ```
 
     by calling it as follows:
 
     ```
-    $  source ~/tmp/myscript
+    $  source myscript check-machines
     ```
