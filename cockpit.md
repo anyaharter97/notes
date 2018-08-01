@@ -58,3 +58,9 @@ More details in `/test/README`
     ```
     $  source myscript check-machines
     ```
+
+4. To test JavaScript syntax run the following command from the top level of the cockpit directory, which prints only 2 lines on success
+
+    ```
+    $  npm run eslint
+    ```
