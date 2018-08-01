@@ -43,14 +43,18 @@ More details in `/test/README`
     ``` bash
     #!/usr/bin/env bash
 
+    tabs 12 17 57
+
     echo "Starting test suite '$1'"
 
-    echo "---------------------------------------------------------"
-    echo " STATUS    #    NAME                            DURATION"
-    echo "---------------------------------------------------------"
+    echo "-----------------------------------------------------------------"
+    printf " STATUS\t#\tNAME\tDURATION\n"
+    echo "-----------------------------------------------------------------"
 
-    ~/path-to-cockpit/test/verify/$1 2>&1 | tee $PWD/Test-cockpit-$1-results.log \
+    ~/git/cockpit/test/verify/$1 2>&1 | tee $PWD/Test-cockpit-$1-results.log \
     | gawk '{gsub(/not ok/,"\033[0;31m FAILURE  \033[1;000m")}{gsub(/\<ok\>/,"\033[0;32m SUCCESS  \033[1;000m")}{gsub(/__main__/,"")}{gsub("\\.","")}{gsub("[0-9]+ ","&\t")}{gsub("# duration: ","\t")}/FAILURE|SUCCESS|FAILED/'
+
+    tabs 8
     ```
 
     by calling it as follows:
