@@ -49,7 +49,7 @@ More details in `/test/README`
     echo " STATUS    #    NAME                            DURATION"
     echo "---------------------------------------------------------"
 
-    ~/git/cockpit/test/verify/$1 2>&1 | tee $PWD/Test-cockpit-$1-results.log \
+    ~/path-to-cockpit/test/verify/$1 2>&1 | tee $PWD/Test-cockpit-$1-results.log \
     | gawk '{gsub(/not ok/,"\033[0;31m FAILURE  \033[1;000m")}{gsub(/\<ok\>/,"\033[0;32m SUCCESS  \033[1;000m")}{gsub(/__main__/,"")}{gsub("\\.","")}{gsub("[0-9]+ ","&\t")}{gsub("# duration: ","\t")}/FAILURE|SUCCESS|FAILED/'
     ```
 
