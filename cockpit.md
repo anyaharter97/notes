@@ -43,16 +43,24 @@ More details in `/test/README`
     ``` bash
     #!/usr/bin/env bash
 
-    tabs 12 17 57
+    tabs 11 17 57
 
     echo "Starting test suite '$1'"
 
     echo "-----------------------------------------------------------------"
-    printf " STATUS\t#\tNAME\tDURATION\n"
+    printf " STATUS\t #\tNAME\tDURATION\n"
     echo "-----------------------------------------------------------------"
 
-    ~/git/cockpit/test/verify/$1 2>&1 | tee $PWD/Test-cockpit-$1-results.log \
-    | gawk '{gsub(/not ok/,"\033[0;31m FAILURE  \033[1;000m")}{gsub(/\<ok\>/,"\033[0;32m SUCCESS  \033[1;000m")}{gsub(/__main__/,"")}{gsub("\\.","")}{gsub("[0-9]+ ","&\t")}{gsub("# duration: ","\t")}/FAILURE|SUCCESS|FAILED/'
+    today=`date '+%Y%m%d_%H%M%S'`
+    filename="$PWD/Test-cockpit-$1-results_$today.log"
+
+    ~/git/cockpit/test/verify/$1 2>&1 | tee $filename \
+    | gawk '{gsub(/not ok/,"\033[0;31m FAILURE  \033[1;000m")}{gsub(/\<ok\>/,"\033[0;32m SUCCESS  \033[1;000m")}{gsub(/__main__/,"")}{gsub("\\.","")}{gsub("[0-9]+ ","&\t")}{gsub("# duration: ","\t")}/FAILURE|SUCCESS/'
+
+
+    echo "-----------------------------------------------------------------"
+    gawk '{gsub("#","\033[0;33m")}{gsub("]","&\033[1;000m")}/FAILED/' $filename
+    echo "-----------------------------------------------------------------"
 
     tabs 8
     ```
