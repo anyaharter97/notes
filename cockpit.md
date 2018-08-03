@@ -65,7 +65,6 @@ More details in `/test/README`
     ```
 
     * Alternatively, use my **\~AWESOME\~** script ([`/usr/bin/myscript`](myscript)) by calling it as follows:
-
     ```
     $  source myscript check-machines
     ```
