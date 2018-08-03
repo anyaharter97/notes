@@ -7,6 +7,34 @@ Headless systems are VMs with no graphical interface
 
 *Cockpit-Machines* is the virt-plugin for Cockpit, the simple use case is VM management
 
+### Installing on your Local Machine
+1. Follow the instructions specific to your operating system at https://cockpit-project.org/running.html to install and set up cockpit
+
+2.
+
+`systemctl start cockpit`
+
+`~/git/cockpit/HACKING.md`
+
+
+clone git repo
+`mkdir build`
+`cd build`
+`npm install .`
+`../autogen.sh --prefix=/usr --enable-debug`
+
+`mkdir -p ~/.local/share/cockpit`
+`ln -sT /home/aharter/git/cockpit/dist/machines machines` <= inside local share
+`npm install -g webpack@1.13.2`
+`webpack --progress --watch --color`
+
+
+`git clean -fdx`
+`mkdir build`
+`cd build`
+`../autogen.sh --prefix=/usr --enable-debug`
+
+
 ### Testing
 More details in `/test/README`
 
@@ -36,40 +64,13 @@ More details in `/test/README`
     $  ./tests/verify/check-machines
     ```
 
-    * Alternatively, use my **~AWESOME~** script
-
-    `/usr/bin/myscript`:
-
-    ``` bash
-    #!/usr/bin/env bash
-
-    tabs 11 17 57
-
-    echo "Starting test suite '$1'"
-
-    echo "-----------------------------------------------------------------"
-    printf " STATUS\t #\tNAME\tDURATION\n"
-    echo "-----------------------------------------------------------------"
-
-    today=`date '+%Y%m%d_%H%M%S'`
-    filename="$PWD/Test-cockpit-$1-results_$today.log"
-
-    ~/git/cockpit/test/verify/$1 2>&1 | tee $filename \
-    | gawk '{gsub(/not ok/,"\033[0;31m FAILURE  \033[1;000m")}{gsub(/\<ok\>/,"\033[0;32m SUCCESS  \033[1;000m")}{gsub(/__main__/,"")}{gsub("\\.","")}{gsub("[0-9]+ ","&\t")}{gsub("# duration: ","\t")}/FAILURE|SUCCESS/'
-
-
-    echo "-----------------------------------------------------------------"
-    gawk '{gsub("#","\033[0;33m")}{gsub("]","&\033[1;000m")}/FAILED/' $filename
-    echo "-----------------------------------------------------------------"
-
-    tabs 8
-    ```
-
-    by calling it as follows:
+    * Alternatively, use my **~AWESOME~** script ([`/usr/bin/myscript`](myscript)) by calling it as follows:
 
     ```
     $  source myscript check-machines
     ```
+
+        * An additional **~AWESOME~** script takes the test output and prints the same format output ([`/usr/bin/myscript2`](myscript2))
 
 4. To test JavaScript syntax run the following command from the top level of the cockpit directory, which prints only 2 lines on success
 
