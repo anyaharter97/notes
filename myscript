@@ -1,1 +1,34 @@
-/home/aharter/tmp/myscript
+#!/usr/bin/env bash
+#
+# Developed by Anya Harter <aharter@redhat.com> on 2018-08-03
+# With help from Kevin Postlethwait <kpostlet@redhat.com>
+#
+# Pass in the name of the test suite to run
+#
+
+tabs 11 17 57
+
+echo "Starting test suite '$1'"
+
+echo "-----------------------------------------------------------------"
+printf " STATUS\t #\tNAME\tDURATION\n"
+echo "-----------------------------------------------------------------"
+
+today=`date '+%Y%m%d_%H%M%S'`
+filename="$PWD/Test-cockpit-$1-results_$today.log"
+
+~/git/cockpit/test/verify/$1 2>&1 | tee $filename \
+| gawk '{gsub(/not ok/,"\033[0;31m FAILURE  \033[1;000m")}{gsub(/\<ok\>/,"\033[0;32m SUCCESS  \033[1;000m")}{gsub(/__main__/,"")}{gsub("\\.","")}{gsub("[0-9]+ ","&\t")}{gsub("# duration: ","\t")}/FAILURE|SUCCESS/'
+
+test=`gawk '{gsub("#","\033[0;33m")}{gsub("]","&\033[1;000m")}/FAILED/' $1`
+
+if [ -z "$test" ]
+then
+    echo "-----------------------------------------------------------------"
+else
+    echo "-----------------------------------------------------------------"
+    gawk '{gsub("#","\033[0;33m")}{gsub("]","&\033[1;000m")}/FAILED/' $1
+    echo "-----------------------------------------------------------------"
+fi
+
+tabs 8
