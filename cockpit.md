@@ -8,32 +8,53 @@ Headless systems are VMs with no graphical interface
 *Cockpit-Machines* is the virt-plugin for Cockpit, the simple use case is VM management
 
 ### Installing on your Local Machine
+More details in `~/git/cockpit/HACKING.md` but this outlines how to set up Cockpit to run just the machines package from the git repo.
 1. Follow the instructions specific to your operating system at https://cockpit-project.org/running.html to install and set up cockpit
 
-2.
+2. Start the cockpit service using the command
 
-`systemctl start cockpit`
+    ```
+    $ systemctl start cockpit
+    ```
 
-`~/git/cockpit/HACKING.md`
+3. Create a fork of the git repo and then clone it onto your system
 
+4. Create a build directory in the top level of the git repo to keep your build separate from your system and build the project there using the following steps
 
-clone git repo
-`mkdir build`
-`cd build`
-`npm install .`
-`../autogen.sh --prefix=/usr --enable-debug`
+    ```
+    $  mkdir build
+    $  cd build
+    $  npm install .
+    $  ../autogen.sh --prefix=/usr --enable-debug
+    ```
 
-`mkdir -p ~/.local/share/cockpit`
-`ln -sT /home/aharter/git/cockpit/dist/machines machines` <= inside local share
-`npm install -g webpack@1.13.2`
-`webpack --progress --watch --color`
+    Don't ever run `make install` because it will mix in the cockpit from git and the one already on the system and makes everything super complicated.
 
+5. Create a link from the Cockpit Machines package in the distribution folder using the following steps
 
-`git clean -fdx`
-`mkdir build`
-`cd build`
-`../autogen.sh --prefix=/usr --enable-debug`
+    ```
+    $  mkdir -p ~/.local/share/cockpit
+    $  cd ~/.local/share/cockpit
+    $  ln -sT /aboslutepathtocockpit/dist/machines machines
+    ```
 
+6. Set up webpack to build Cockpit from the source files by running the following commands from the top of the git repo
+
+    ```
+    $  npm install -g webpack@1.13.2
+    $  webpack --progress --watch --color
+    ```
+
+    From now on, you should only have to run the second command to build the project. The --watch flag watches your files for changes and updates the browser accordingly. Without this flag, you would have to rerun the webpack command every time a change was made. Never run `git rebase master` with webpack running in watch mode because it can crash the program.
+
+7. If you run into problems, you can try the following steps to clean and rebuild the project
+
+    ```
+    $  git clean -fdx
+    $  mkdir build
+    $  cd build
+    $  ../autogen.sh --prefix=/usr --enable-debug
+    ```
 
 ### Testing
 More details in `/test/README`
@@ -69,7 +90,7 @@ More details in `/test/README`
         ```
         $  source myscript check-machines
         ```
-        
+
         * An additional **\~AWESOME\~** script takes the test output and prints the same format output ([`/usr/bin/myscript2`](myscript2))
 
 4. To test JavaScript syntax run the following command from the top level of the cockpit directory, which prints only 2 lines on success
