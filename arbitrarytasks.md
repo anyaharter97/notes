@@ -28,7 +28,7 @@
 5. Now any changes you make to that file in it's original location will be mapped back to the file inside `config` and you can commit and push them from there
 
 #### Getting Configure System File
-1. The command `rmp --eval "%configure"` basically gives you the config stuff compatible with the distribution you're running
+1. The command `rpm --eval "%configure"` basically gives you the config stuff compatible with the distribution you're running
 2. Copy and paste it into `~/bin/configuresystem.sh` with some extra stuff (below)
 ```sh
 #!/bin/bash

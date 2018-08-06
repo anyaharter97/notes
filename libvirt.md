@@ -26,13 +26,15 @@ The key identifying files are `autogen.sh` and (`configure.ac` or `configure.in`
 * `VIR_TEST_DEBUG=2 ./tests/qemuxml2argvtest 2>&1 | less` runs the test file with debugging so you can see the full expected and received and then redirects `stderr` output to `stdout` where you can page through it in `less` mode  
 
 ### Building from Source
-1. Run `./autogen.sh` which turns the configure file into a script (and maybe runs it?)
+1. Run `./autogen.sh` which turns the configure file into a script (and maybe runs it?). You might need to run the following command
+    ```
+    $  sudo yum install libtool autoconf
+    ```
 
 2. Running `./configure` generates make files from the make file templates  
 These scripts require some packages to run. Install these by running these two commands:
     ```
     $  sudo yum builddep libvirt
-    $  sudo yum install libtool autoconf
     ```
     * we created a `configuresystem.sh` script to run `./configure` with the appropriate parameters (see [Arbitrary Tasks Reference](reference_arbitrarytasks.md))
 3. There are a couple of notable "make" commands:
