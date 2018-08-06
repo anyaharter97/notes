@@ -1,4 +1,5 @@
 # Cockpit Machines
+* [Installing on your Local Machine](cockpit.md#installing-on-your-local-machine)
 * [Testing](cockpit.md#testing)
 
 Cockpit is a web-based linux host management interface  
