@@ -15,4 +15,11 @@
 * package-switch
 * color-picker
 * pigments
-* teletype
+* file-icons
+* autocomplete-html-entities
+* highlight-selected
+* minimap
+* minimap-highlight-selected
+* minimap-find-and-replace
+* minimap-pigments
+* minimap-selection
