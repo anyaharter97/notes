@@ -8,6 +8,7 @@ The code for the clock has been moved to its own repository:
     * [Getting Configure System File](arbitrarytasks.md#getting-configure-system-file)
 * **[Atom](atom.md)**
     * [Packages to Install on Atom](atom.md#packages-to-install-on-atom)
+    * [Keyboard Shortcuts](atom.md#keyboard-shortcuts)
 * **[Git](git.md)**
     * [Configuration](git.md#configuration)
     * [Commands](git.md#commands)
