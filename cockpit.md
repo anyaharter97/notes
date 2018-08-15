@@ -86,13 +86,13 @@ More details in `/test/README`
     * To run the full test suite use command
 
         ```
-        $ ./tests/verify/run-tests
+        $ ./test/verify/run-tests
         ```
 
     * To run the test suite for Cockpit Machines use command
 
         ```
-        $ ./tests/verify/check-machines
+        $ ./test/verify/check-machines
         ```
 
     * Alternatively, use my **\~AWESOME\~** script ([`/usr/bin/myscript`](myscript)) by calling it as follows:
