@@ -75,6 +75,12 @@
     done'"
     ```
 
+#### `clean`
+* `git clean -n` shows which files would be deleted by the `git clean` command  
+* `git clean -f` forces the command through (deletes untracked files)  
+* `git clean -d` deletes directories  
+* `git clean -X` deletes ignored files  
+
 #### `commit`
 * `git commit -a` stages all changes (but not for untracked files) and asks you for a commit message  
 * `git commit -am "message"` commits changes using "message" as the commit message  
@@ -85,6 +91,9 @@
 #### `checkout`
 * `git checkout -b <name>` creates a new branch &lt;name&gt;  
 * `git checkout <name>` opens branch &lt;name&gt; if it exists  
+
+#### `diff`
+* `git diff` shows the changes made since the most recent commit  
 
 #### `format-patch`
 * `git format-patch -1` creates a patch from the last commit  
@@ -128,6 +137,11 @@ Tread with caution so you don't lose changes forever by accident
 * `git send-email *.patch` sends all patches (make sure all old patches are deleted)  
 * `--to <address>` sends patch email to &lt;address&gt;  
 * `--cc <address>` sends patch email and CCs &lt;address&gt;  
+
+#### `show`
+* `git show` shows the changes made in the last commit  
+* `git show <commit>` shows the commit data and diff  
+* `git show <commit>~ <commit>` shows the difference between the commit's ancestor and the commit  
 
 #### `stash`
 * `git stash` adds changes to the stash
