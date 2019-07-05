@@ -23,6 +23,7 @@
     * [`stash`](git.md#stash)
 * [Sending Patches to Mailing List](git.md#sending-patches-to-mailing-list)
 * [Incorporating Master Changes on Branch](git.md#incorporating-master-changes-on-branch)
+* [Merging Branch into Master](git.md#merging-branch-into-master)
 * [Splitting Commits](git.md#splitting-commits)
 * [Adding a Remote](git.md#adding-a-remote)
 
@@ -171,6 +172,16 @@ Tread with caution so you don't lose changes forever by accident
 2. `git pull` from master to get all of the changes  
 3. `git checkout <branch>` to go back to the branch  
 4. `git rebase master` to apply changes branch changes on top of master within branch  
+
+## Merging Branch into Master
+1. `git checkout -b <branch>` to create and checkout a new branch  
+2. Make changes
+3. `git commit -am "<commit message> on <branch>"` to commit your changes  
+4. `git push origin <branch>` to push changes to the remote <branch> branch  
+5. `git checkout master` to move to master  
+6. `git merge <branch>` to merge the <branch> with master  
+7. `git push origin master` to push changes to master up to remote master branch  
+8. `git branch -d <branch>` to delete the <branch> when you're finished    
 
 ## Splitting Commits  
 1. `git rebase -i HEAD~4` or however back you need to go
