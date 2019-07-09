@@ -21,6 +21,7 @@
     * [`send-email`](git.md#send-email)
     * [`show`](git.md#show)
     * [`stash`](git.md#stash)
+* [`git add --patch` More Info](git.md#git-add-patch-more-info)
 * [Sending Patches to Mailing List](git.md#sending-patches-to-mailing-list)
 * [Incorporating Master Changes on Branch](git.md#incorporating-master-changes-on-branch)
 * [Merging Branch into Master](git.md#merging-branch-into-master)
@@ -157,6 +158,21 @@ Tread with caution so you don't lose changes forever by accident
 * `git stash pop` takes the top stashed changes, revives them, and removes them from the stack (if there is a merge conflict, it is not removed)
 * `git stash drop` removes the top stashed changes from the stash
 * `git stash clear` empties the stash
+
+## `git add --patch` More Info
+* `y` stage this hunk
+* `n` do not stage this hunk
+* `q` quit; do not stage this hunk or any of the remaining ones
+* `a` stage this hunk and all later hunks in the file
+* `d` do not stage this hunk or any of the later hunks in the file
+* `g` select a hunk to go to
+* `/` search for a hunk matching the given regex
+* `j` leave this hunk undecided, see next undecided hunk
+* `J` leave this hunk undecided, see next hunk
+* `K` leave this hunk undecided, see previous hunk
+* `s` split the current hunk into smaller hunks
+* `e` manually edit the current hunk
+* `?` print help
 
 ## Sending Patches to Mailing List
 1. Make sure the branch has all changes from master before sending patches and make sure all changes have been added and incorporated into the latest commit (or more if necessary)  
