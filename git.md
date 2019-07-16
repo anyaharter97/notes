@@ -28,6 +28,7 @@
 * [Merging Branch into Master](git.md#merging-branch-into-master)
 * [Splitting Commits](git.md#splitting-commits)
 * [Adding a Remote](git.md#adding-a-remote)
+* [Adding a Remote Branch](git.md#adding-a-remote-branch)
 
 ## Configuration
 `~/.gitconfig` contains global git configurations  
@@ -217,3 +218,8 @@ Tread with caution so you don't lose changes forever by accident
 2. Get the link to the fork from clicking the "Clone" button
 3. From inside the repo run `git remote add <name> <link>`
 4. To push changes run `git push -f <name>`
+
+## Adding a Remote Branch
+1. From within the main repo and in master branch...
+2. Run `git checkout -b <new-branch>` to create the new local branch
+3. Then `git push origin <new-branch>` to create the remote branch
