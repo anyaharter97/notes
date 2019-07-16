@@ -14,6 +14,7 @@
     * [`format-patch`](git.md#format-patch)
     * [`grep`](git.md#grep)
     * [`log`](git.md#log)
+    * [`merge`](git.md#merge)
     * [`pull`](git.md#pull)
     * [`rebase`](git.md#rebase)
     * [`remote`](git.md#remote)
@@ -115,6 +116,9 @@
 * `git log -S<string>` show commits where the number of occurrences change
 * `git log --author <name>` returns commits authored by &lt;name&gt;
 
+#### `merge`
+* `git merge <branch-a>` run from branch-b to merge the changes from branch-a onto branch-b
+
 #### `pull`
 * `git pull` pulls all changes down including newly created remote branches
 * `git pull origin <remote-branch>` pulls down all changes from that branch
@@ -123,7 +127,7 @@
 #### `rebase`
 * `git rebase -i HEAD~3` allows you to rebase the top 3 commits  
     * Rebasing in interactive mode `-i` allows you to reorder, delete, edit and squash commits together  
-* `git rebase master` from inside a branch applies your commits on top of the master (pull the master before this)  
+* !! better to use merge `git rebase master` from inside a branch applies your commits on top of the master (pull the master before this)  
 * `git rebase --abort` quits out of a rebase
 * `git rebase --continue` continues the next command in the rebase after you are done making changes
 * `git rebase -x "make && make check" origin/master` rebases the current branch on top of origin master and calls "make && make check" for every commit that is applied on top of master
@@ -187,7 +191,7 @@ Tread with caution so you don't lose changes forever by accident
 1. `git checkout master` to move to master  
 2. `git pull` from master to get all of the changes  
 3. `git checkout <branch>` to go back to the branch  
-4. `git rebase master` to apply changes branch changes on top of master within branch  
+4. `git merge master` to apply changes branch changes on top of master within branch  
 
 ## Merging Branch into Master
 1. `git checkout -b <branch>` to create and checkout a new branch  
