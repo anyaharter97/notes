@@ -64,13 +64,14 @@
 * `git blame <filename>` shows the commits responsible for the current state of the file, line by line
 
 #### `branch`
-* `git branch` lists all of the branches
+* `git branch` lists the branches
+* `git branch -a` lists all of the branches including remotes
 * `git branch <branch-name>` creates a new branch named &lt;branch-name&gt; from the current branch but does not switch to new branch  
 * `git branch -D <branch-name>` deletes branch  
 * `git branch -m <old-name> <new-name>` renames branch &lt;old-name&gt; to &lt;new-name&gt; (inside a branch, the &lt;old-name&gt; argument is unnecessary)
 
 #### `branch-info`
-* `git branch-info` returns details of all branches on master (alias configured in gitconfig)
+* `git branch-info` returns formatted details of most recent commit for each branch (alias configured in gitconfig)
 
     ```
     [alias]
