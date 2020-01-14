@@ -7,16 +7,20 @@
     * [`blame`](git.md#blame)
     * [`branch`](git.md#branch)
     * [`branch-info`](git.mid#branch-info)
+    * [`bundle`](git.md#bundle)
     * [`clean`](git.md#clean)
+    * [`clone`](git.md#clone)
     * [`commit`](git.md#commit)
     * [`checkout`](git.md#checkout)
     * [`diff`](git.md#diff)
     * [`format-patch`](git.md#format-patch)
     * [`grep`](git.md#grep)
     * [`log`](git.md#log)
+    * [`ls-files`](git.md#ls-files)
     * [`merge`](git.md#merge)
     * [`pull`](git.md#pull)
     * [`rebase`](git.md#rebase)
+    * [`reflog`](git.md#reflog)
     * [`remote`](git.md#remote)
     * [`reset`](git.md#reset)
     * [`send-email`](git.md#send-email)
@@ -83,11 +87,19 @@
     done'"
     ```
 
+#### `bundle`
+* `git bundle create <reponame>.bundle --all` creates a standalone image of the repo with all branches that can be [`clone`](git.md#clone)d elsewhere
+
 #### `clean`
 * `git clean -n` shows which files would be deleted by the `git clean` command  
 * `git clean -f` forces the command through (deletes untracked files)  
 * `git clean -d` deletes directories  
 * `git clean -X` deletes ignored files  
+
+#### `clone`
+* `git clone /path/to/.bundle` creates a local version of the repo using the image from the bundle  
+* `git clean http://github.com/project/link` creates a local version of the repo linked to the remote repo at that link
+    * The link can be attained by going to the project on github and clicking the "Clone or download" button
 
 #### `commit`
 * `git commit -a` stages all changes (but not for untracked files) and asks you for a commit message  
@@ -102,6 +114,7 @@
 
 #### `diff`
 * `git diff` shows the changes made since the most recent commit  
+* `git diff commithash1..commithash2` shows the changes made between the two commits 
 
 #### `format-patch`
 * `git format-patch -1` creates a patch from the last commit  
@@ -114,9 +127,10 @@
 * `git grep -B4 <string>` displays 4 lines of context before line with string
 
 #### `log`
+* `git ls-files` shows all files tracked by git in the directory the command is run from
+
+#### `ls-files`
 * `git log` show the git log
-* `git log -S<string>` show commits where the number of occurrences change
-* `git log --author <name>` returns commits authored by &lt;name&gt;
 
 #### `merge`
 * `git merge <branch-a>` run from branch-b to merge the changes from branch-a onto branch-b
@@ -125,6 +139,7 @@
 * `git pull` pulls all changes down including newly created remote branches
 * `git pull origin <remote-branch>` pulls down all changes from that branch
 * `git pull origin master` pulls down only changes from the master branch
+* `git pull /path/to/.git <branchname>` pulls changes to the branch specified from a .git file
 
 #### `rebase`
 * `git rebase -i HEAD~3` allows you to rebase the top 3 commits  
@@ -134,6 +149,9 @@
 * `git rebase --continue` continues the next command in the rebase after you are done making changes
 * `git rebase -x "make && make check" origin/master` rebases the current branch on top of origin master and calls "make && make check" for every commit that is applied on top of master
 
+#### `reflog`
+* `git reflog` shows all commits that are or were referenced in your local repo at any time, shows actions such as checkouts not visible with [`git log`](git.md#log) command
+
 #### `remote`
 * `git remote show origin` shows the origin for that repo
 * `git remote` shows the repos whose branches are tracked
@@ -141,7 +159,9 @@
 #### `reset`
 Tread with caution so you don't lose changes forever by accident
 * `git reset --hard HEAD~3` trashes the last three changes forever
+* `git reset --hard commithash` reverts back to the state at this commit (can be used to undo a merge -- use the [`reflog`](git.md#reflog) to find it)
 * `git reset HEAD^` undoes the last committed change but leaves changes as uncommitted (basically undoes the commit but otherwise changes nothing)
+* `git reset --soft HEAD~1` undoes the last committed change but leaves changes as uncommitted (basically undoes the commit but otherwise changes nothing)
 
 #### `send-email`
 * `git send-email <patch-file>` sends an email with the &lt;patch-file&gt; (interactively requests sendee)  
@@ -224,3 +244,11 @@ Tread with caution so you don't lose changes forever by accident
 1. From within the main repo and in master branch...
 2. Run `git checkout -b <new-branch>` to create the new local branch
 3. Then `git push origin <new-branch>` to create the remote branch
+
+## Importing Remote Changes from a Standalone Repo
+This is used when importing from an air-gap laptop / sneakernet  
+Confine all work in standalone remote to a single branch  
+1. Zip, tar, burn remote to transfer media
+2. Copy locally and unzip, revealing .git directory
+3. Run `git pull /path/to/.git <branchname>` to grab changes from that branch in the .git records
+
