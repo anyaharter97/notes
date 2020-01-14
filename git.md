@@ -35,7 +35,7 @@
 * [Adding a Remote Branch](git.md#adding-a-remote-branch)
 * [Remote Mirror Repository](git.md#remote-mirror-repository)
     * [Initial Set Up on Local (Create Bundle)](git.md#initial-set-up-on-local-create-bundle)
-    * [Intial Set Up on Air-Gap (Install Bundle)](git.md#intial-set-up-on-air-gap-install-bundle)
+    * [Initial Set Up on Air-Gap (Install Bundle)](git.md#initial-set-up-on-air-gap-install-bundle)
     * [Creating Delta Bundle on Local](git.md#creating-delta-bundle-on-local)
     * [Importing Delta Bundle on Air-Gap](git.md#importing-delta-bundle-on-air-gap)
     * [Moving Changes Back to Local](git.md#moving-changes-back-to-local)
@@ -269,7 +269,7 @@ The following sections detail set up and updates going from the live local versi
     * You can also specify a destination path for the bundle such as `git bundle create /path/to/put/<tag-name>.bundle --all`
 8. Burn this bundle to a disk or other transfer media
 
-### Intial Set Up on Air-Gap (Install Bundle)
+### Initial Set Up on Air-Gap (Install Bundle)
 1. If multiple air-gaps can be connected, make a shared location called "shareme" and run the following commands from inside
 2. On an air-gap laptop, copy the bundle off the disk (or other transfer media) to a "/shareme/bundles" folder
     * This folder is optional but sets up a good standard for keeping all bundles in one place
