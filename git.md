@@ -127,10 +127,10 @@
 * `git grep -B4 <string>` displays 4 lines of context before line with string
 
 #### `log`
-* `git ls-files` shows all files tracked by git in the directory the command is run from
+* `git log` show the commit log accessible from refs (ie. heads, tags, remotes)
 
 #### `ls-files`
-* `git log` show the git log
+* `git ls-files` shows all files tracked by git in the directory the command is run from
 
 #### `merge`
 * `git merge <branch-a>` run from branch-b to merge the changes from branch-a onto branch-b
