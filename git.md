@@ -33,6 +33,7 @@
 * [Splitting Commits](git.md#splitting-commits)
 * [Adding a Remote](git.md#adding-a-remote)
 * [Adding a Remote Branch](git.md#adding-a-remote-branch)
+* [Importing Remote Changes from a Standalone Repo](git.md#importing-remote-changes-from-a-standalone-repo)
 
 ## Configuration
 `~/.gitconfig` contains global git configurations  
