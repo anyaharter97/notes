@@ -34,6 +34,11 @@
 * [Adding a Remote](git.md#adding-a-remote)
 * [Adding a Remote Branch](git.md#adding-a-remote-branch)
 * [Remote Mirror Repository](git.md#remote-mirror-repository)
+    * [Initial Set Up on Local (Create Bundle)](git.md#initial-set-up-on-local-create-bundle)
+    * [Intial Set Up on Air-Gap (Install Bundle)](git.md#intial-set-up-on-air-gap-install-bundle)
+    * [Creating Delta Bundle on Local](git.md#creating-delta-bundle-on-local)
+    * [Importing Delta Bundle on Air-Gap](git.md#importing-delta-bundle-on-air-gap)
+    * [Moving Changes Back to Local](git.md#moving-changes-back-to-local)
 
 ## Configuration
 `~/.gitconfig` contains global git configurations  
@@ -247,8 +252,11 @@ Tread with caution so you don't lose changes forever by accident
 3. Then `git push origin <new-branch>` to create the remote branch
 
 ## Remote Mirror Repository
-This is used when you want a copy of a repo on an air-gap laptop / sneakernet. The following sections detail set up and updates going from the live local version to the standalone mirror and back.
-__Confine all work in standalone remote to a single branch. This branch should only be changed in the standalone environment so there are never conflicts moving changes back to local.__
+This is used when you want a copy of a repo on an air-gap laptop / sneakernet.  
+
+__All work on remote repo should be confined to a single branch (or merged into this single branch to consolidate the import).  Having deltas on the master branch requires bundle cleaning which is messy.  After cloning the original repo to start the remote repo, DO NOT CHANGE MASTER.__  
+
+The following sections detail set up and updates going from the live local version to the standalone mirror and back.  
 
 ### Initial Set Up on Local (Create Bundle)
 1. Pick a location to create a local copy of the repo. From there, run `git clone <location-of-remote-source-repo>`
