@@ -33,7 +33,7 @@
 * [Splitting Commits](git.md#splitting-commits)
 * [Adding a Remote](git.md#adding-a-remote)
 * [Adding a Remote Branch](git.md#adding-a-remote-branch)
-* [Importing Remote Changes from a Standalone Repo](git.md#importing-remote-changes-from-a-standalone-repo)
+* [Remote Mirror Repository](git.md#remote-mirror-repository)
 
 ## Configuration
 `~/.gitconfig` contains global git configurations  
@@ -246,10 +246,44 @@ Tread with caution so you don't lose changes forever by accident
 2. Run `git checkout -b <new-branch>` to create the new local branch
 3. Then `git push origin <new-branch>` to create the remote branch
 
-## Importing Remote Changes from a Standalone Repo
-This is used when importing from an air-gap laptop / sneakernet  
-Confine all work in standalone remote to a single branch  
-1. Zip, tar, burn remote to transfer media
-2. Copy locally and unzip, revealing .git directory
-3. Run `git pull /path/to/.git <branchname>` to grab changes from that branch in the .git records
+## Remote Mirror Repository
+This is used when you want a copy of a repo on an air-gap laptop / sneakernet. The following sections detail set up and updates going from the live local version to the standalone mirror and back.
+__Confine all work in standalone remote to a single branch. This branch should only be changed in the standalone environment so there are never conflicts moving changes back to local.__
+
+### Initial Set Up on Local (Create Bundle)
+1. Pick a location to create a local copy of the repo. From there, run `git clone <location-of-remote-source-repo>`
+2. `cd <repo-name>` to go to the top-most directory within the repo and create a tag by running `git tag <tag-name>`
+3. Push the tag up to remote by running `git push origin <tag-name>`
+4. `cd ..` to go back outside repo
+5. `git clone --mirror <location-of-remote-source-repo>` to create a bare metal copy of the source repo
+6. Enter the directory created by running `cd <repo-name>.git`
+7. Create a bundle by running `git bundle create <tag-name>.bundle --all`
+    * You can also specify a destination path for the bundle such as `git bundle create /path/to/put/<tag-name>.bundle --all`
+8. Burn this bundle to a disk or other transfer media
+
+### Intial Set Up on Air-Gap (Install Bundle)
+1. If multiple air-gaps can be connected, make a shared location called "shareme" and run the following commands from inside
+2. On an air-gap laptop, copy the bundle off the disk (or other transfer media) to a "/shareme/bundles" folder
+    * This folder is optional but sets up a good standard for keeping all bundles in one place
+3. From inside "shareme", run `git clone --mirror /bundles/<tag-name>.bundle <repo-name>.git` to create the mirror bare repo
+4. You have now created a parallel bare metal repo that can be cloned from any laptop with access to "shareme" using the `git clone /shareme/<repo-name>.git` command
+
+### Creating Delta Bundle on Local
+1. Make sure to `git pull` before starting to ensure all the latest changes are present
+2. Tag the current state by running `git tag <tag-name>` (make sure the tag-name is unique and informative as to the significance of this state)
+3. To create a bundle of deltas since the previous tag, run `git bundle create <tag-name>.bundle --branches --tags ^<previous-tag-name> <tag-name>`
+    * You can also specify a destination path for the bundle such as `git bundle create /path/to/put/<tag-name>.bundle`
+4. Burn this bundle to a disk or other transfer media
+
+### Importing Delta Bundle on Air-Gap
+1. On air-gap laptop, copy the bundle off the disk (or other transfer media) to "/shareme/bundles" folder
+2. From inside the repo, run `git pull /shareme/bundles/<tag-name>.bundle refs/heads/master master` to apply changes from the master branch in the bundle to the local master branch
+3. You can then push these changes to the air-gap remote stored in /shareme/ to be seen by other air-gaps on the closed network
+4. Remember to restrict all changes made in this environment to a single branch
+
+### Moving Changes Back to Local
+1. From the air-gap, zip up the bare repo using the following command (run from "shareme") `tar czf <desired-name>.tar.gz <repo-name>.git`
+2. Burn the tar-gz file to a disk or other transfer media
+3. Copy the tar-gz file locally and unzip (`tar xvzf <desired-name>.tar.gz`), revealing the `<repo-name>.git` directory
+4. Run `git pull /path/to/.git <branch-name>` to grab changes from the development branch in the air-gapped environment records
 
