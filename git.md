@@ -273,7 +273,7 @@ The following sections detail set up and updates going from the live local versi
 1. If multiple air-gaps can be connected, make a shared location called "shareme" and run the following commands from inside
 2. On an air-gap laptop, copy the bundle off the disk (or other transfer media) to a "/shareme/bundles" folder
     * This folder is optional but sets up a good standard for keeping all bundles in one place
-3. From inside "shareme", run `git clone --mirror /bundles/<tag-name>.bundle <repo-name>.git` to create the mirror bare repo
+3. From inside "shareme", run `git clone --mirror bundles/<tag-name>.bundle <repo-name>.git` to create the mirror bare repo
 4. You have now created a parallel bare metal repo that can be cloned from any laptop with access to "shareme" using the `git clone /shareme/<repo-name>.git` command
 
 ### Creating Delta Bundle on Local
