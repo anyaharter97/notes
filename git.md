@@ -104,7 +104,7 @@
 
 #### `clone`
 * `git clone /path/to/.bundle` creates a local version of the repo using the image from the bundle  
-* `git clean http://github.com/project/link` creates a local version of the repo linked to the remote repo at that link
+* `git clone http://github.com/project/link` creates a local version of the repo linked to the remote repo at that link
     * The link can be attained by going to the project on github and clicking the "Clone or download" button
 
 #### `commit`
